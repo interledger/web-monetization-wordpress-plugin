@@ -1,0 +1,356 @@
+import debounce from 'lodash.debounce';
+
+import { cx } from 'class-variance-authority';
+import { useEffect, useMemo, useRef, useState } from '@wordpress/element';
+
+import type { BannerConfig } from '../types/banner-config';
+import { ColorPicker } from './ColorPicker';
+import { FontSize } from './FontSize';
+import { controlOptions, FontsType } from '../presets';
+import eyeSvg from '../../../assets/images/eye.svg';
+import { Select } from './Select';
+
+declare const ajaxurl: string;
+
+const borderOptions = [
+	{ label: 'No border', value: 'none' },
+	{ label: 'Light rounding', value: 'rounded' },
+	{ label: 'Pill', value: 'pill' },
+];
+
+const defaultConfig: BannerConfig = {
+	title: 'Support me with Web Monetization!',
+	message:
+		'With Web Monetization, you can support me by making a one-time contribution or by sending small payments as you spend time on my site.',
+	bgColor: '#7f76b2',
+	textColor: '#ffffff',
+	position: 'bottom',
+	animation: true,
+	borderStyle: 'rounded',
+	font: 'Arial',
+	fontSize: 17,
+};
+const getWebMonetizationLinkHref = () => {
+	const userAgent = navigator.userAgent;
+	if (userAgent.includes('Firefox')) {
+		return 'https://addons.mozilla.org/en-US/firefox/addon/web-monetization-extension/';
+	} else if (
+		userAgent.includes('Chrome') &&
+		!userAgent.includes('Edg') &&
+		!userAgent.includes('OPR')
+	) {
+		return 'https://chromewebstore.google.com/detail/web-monetization/oiabcfomehhigdepbbclppomkhlknpii';
+	} else if (userAgent.includes('Edg')) {
+		return 'https://microsoftedge.microsoft.com/addons/detail/web-monetization/imjgemgmeoioefpmfefmffbboogighjl';
+	}
+	return 'https://webmonetization.org/';
+};
+
+export default function BannerConfigurator() {
+	const wmBannerConfig = JSON.parse(window.wm?.wmBannerConfig) || {};
+
+	const configData = {
+		...defaultConfig,
+		...(wmBannerConfig?.config || {}),
+	};
+
+	const [displayedControl, setDisplayedControl] = useState('background');
+
+	const [title, setTitle] = useState(configData.title);
+	const [message, setMessage] = useState(configData.message);
+	const [bgColor, setBgColor] = useState(configData.bgColor);
+	const [textColor, setTextColor] = useState(configData.textColor);
+	const [animation, setAnimation] = useState(configData.animation);
+	const [position, setPosition] = useState(configData.position);
+	const [borderStyle, setBorderStyle] = useState(configData.borderStyle);
+	const [font, setFont] = useState(configData.font);
+	const [fontSize, setFontSize] = useState(configData.fontSize);
+
+	const [triggerAnimation, setTriggerAnimation] = useState(false)
+
+	const config: BannerConfig = useMemo(
+		() => ({
+			title,
+			message,
+			bgColor,
+			textColor,
+			position,
+			animation,
+			borderStyle,
+			font,
+			fontSize,
+		}),
+		[
+			title,
+			message,
+			bgColor,
+			textColor,
+			position,
+			animation,
+			borderStyle,
+			font,
+			fontSize,
+		]
+	);
+
+	const lastSaved = useRef<BannerConfig>(config);
+	const nonce = wmBannerConfig?.nonce || '';
+
+	const debouncedSave = useMemo(
+		() =>
+			debounce((conf: BannerConfig) => {
+				if (
+					JSON.stringify(conf) ===
+					JSON.stringify(lastSaved.current)
+				) {
+					return;
+				}
+				fetch(ajaxurl, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded',
+					},
+					body: new URLSearchParams({
+						action: 'save_wm_banner_config',
+						config: JSON.stringify(conf),
+						_wpnonce: nonce,
+					}),
+				})
+					.then((res) => res.json())
+					.then((data) => {
+						if (data.success) {
+							lastSaved.current = conf;
+						}
+					});
+			}, 1000),
+		[nonce]
+	);
+
+	useEffect(() => {
+		debouncedSave(config);
+	}, [debouncedSave, config]); // track config changes
+
+	let borderRadius = '0';
+	if (borderStyle === 'pill') {
+		borderRadius = '999px';
+	} else if (borderStyle === 'rounded') {
+		borderRadius = '8px';
+	}
+
+	const monetizationLinkHref = getWebMonetizationLinkHref();
+
+	return (
+		<div
+			className="wm-banner-configurator"
+			style={{ maxWidth: '720px', marginTop: '2rem' }}
+		>
+			<h3 style={{ fontSize: '1.5rem', marginBottom: '1.5rem' }}>
+				Configure Web Monetization Banner
+			</h3>
+			<p>Let your visitors know they can use Web Monetization to support you. The banner only appears to visitors who haven't installed or configured the Web Monetization extension. You can  disable it anytime by unchecking the “Enable banner” option in
+				<a href="/wp-admin/admin.php?page=web-monetization-settings&tab=general"> General Settings.</a>
+			</p>
+			<div className="wm-gradient-container">
+				{animation && (
+					<div className="wm-banner-preview-button">
+						<img
+							onMouseEnter={() => setTriggerAnimation(true)}
+							onMouseLeave={() => setTriggerAnimation(false)}
+							className="cursor-progress"
+							src={eyeSvg}
+							alt="check"
+						/>
+					</div>
+				)}
+				<div className={`wm-banner-container ${position} `}>
+					<div
+						className={`wm-banner-preview ${borderStyle} ${triggerAnimation ? 'animation' : ''}`}
+						style={{
+							backgroundColor: bgColor,
+							color: textColor,
+							fontFamily: font,
+							fontSize: fontSize === 'small' ? '0.9rem' : '1rem',
+						}}
+					>
+						<h5
+							style={{
+								display: 'block',
+								fontSize: fontSize ? `${fontSize}px` : '16px',
+								marginBottom: '0.5rem',
+							}}
+						>
+							{title}
+						</h5>
+						<p
+							style={{
+								margin: 0,
+								fontSize: fontSize ? `${fontSize}px` : '16px',
+							}}
+						>
+							{message}
+						</p>
+						<br />
+						<span className="_wm_link">
+							<a
+								rel="noindex nofollow noreferrer"
+								target="_blank"
+								href={monetizationLinkHref}
+							>
+								Download the Web Monetization extension
+							</a>
+						</span>
+					</div>
+				</div>
+				<div className={cx('main-controls', bgColor)}>
+					<div className="main-controls__left">
+						{displayedControl === 'background' && (
+							<ColorPicker
+								label="Background color"
+								name="bannerBackgroundColor"
+								preset="background"
+								value={config?.bgColor || ''}
+								updateColor={(value) => setBgColor(value)}
+								className={cx(
+									displayedControl !== 'background' && 'hidden'
+								)}
+							/>
+						)}
+
+						{displayedControl === 'text' && (
+							<ColorPicker
+								label="Text color"
+								name="textColor"
+								preset="text"
+								value={config?.textColor || ''}
+								updateColor={(value) => {
+									setTextColor(value);
+								}}
+								className={cx(
+									displayedControl !== 'text' && 'hidden'
+								)}
+							/>
+						)}
+					</div>
+					<div className="main-controls__right">
+						<Select
+							placeholder="Background"
+							options={controlOptions}
+							defaultValue={controlOptions.find(
+								(opt) => opt.value === 'background'
+							)}
+							onChange={(value) =>
+								value && setDisplayedControl(value)
+							}
+						/>
+					</div>
+				</div>
+			</div>
+
+			<div className="wm-form">
+				<div className="wm-form-row">
+					<label htmlFor="wm-position">
+						Position
+						<select
+							id="wm-position"
+							value={position}
+							onChange={(e) =>
+								setPosition(
+									e.target.value as 'top' | 'bottom'
+								)
+							}
+						>
+							<option value="bottom">Bottom</option>
+							<option value="top">Top</option>
+						</select>
+					</label>
+
+					<label htmlFor="wm-animation">
+						Animation
+						<select
+							id="wm-animation"
+							value={animation ? 'yes' : 'no'}
+							onChange={(e) =>
+								setAnimation(e.target.value === 'yes')
+							}
+						>
+							<option value="yes">Yes</option>
+							<option value="no">No</option>
+						</select>
+					</label>
+
+					<label htmlFor="borderStyle">
+						Border Style
+						<select
+							id="borderStyle"
+							value={borderStyle}
+							onChange={(e) =>
+								setBorderStyle(
+									e.target.value as
+									| 'none'
+									| 'rounded'
+									| 'pill'
+								)
+							}
+						>
+							{borderOptions.map((opt) => (
+								<option key={opt.value} value={opt.value}>
+									{opt.label}
+								</option>
+							))}
+						</select>
+					</label>
+				</div>
+				<div className="wm-form-row">
+					<label htmlFor="wm-font">
+						Font
+						<select
+							id="wm-font"
+							value={font}
+							onChange={(e) => setFont(e.target.value)}
+						>
+							{FontsType.map((opt) => (
+								<option key={opt} value={opt}>
+									{opt}
+								</option>
+							))}
+						</select>
+					</label>
+
+					<FontSize
+						label="Font Size"
+						name="fontSize"
+						value={fontSize}
+						updateSize={(value) => {
+							setFontSize(value);
+						}}
+					/>
+
+					<label htmlFor="wm-banner-title">
+						Title
+						<input
+							id="wm-banner-title"
+							type="text"
+							value={title}
+							onChange={(e) => setTitle(e.target.value)}
+							className="regular-text"
+						/>
+					</label>
+				</div>
+
+				<div className="wm-form-row">
+					<label htmlFor="wm-banner-message">
+						Text
+						<textarea
+							id="wm-banner-message"
+							value={message}
+							onChange={(e) => setMessage(e.target.value)}
+							className="large-text"
+							rows={4}
+						/>
+					</label>
+				</div>
+				<div className="wm-form-row"></div>
+			</div>
+		</div>
+	);
+}

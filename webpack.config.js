@@ -18,7 +18,6 @@ module.exports = {
     path: __dirname + '/build',
   },
 
-  // Optional: add custom rules, e.g. SCSS without JS.
   module: {
     ...defaultConfig.module,
     rules: [

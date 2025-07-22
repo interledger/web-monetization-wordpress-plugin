@@ -1,8 +1,24 @@
 <?php
+/**
+ * User Meta Class for Web Monetization
+ *
+ * @package WebMonetization
+ */
+
 namespace WebMonetization\Admin;
 
+/**
+ * Class UserMeta
+ *
+ * Handles user meta functionality for Web Monetization.
+ * This includes rendering wallet address fields, saving user settings,
+ * and managing author monetization exclusions.
+ */
 class UserMeta {
 
+	/**
+	 * Register hooks for user meta functionality.
+	 */
 	public static function register_hooks(): void {
 		if ( ! get_option( 'wm_enable_authors' ) ) {
 			return;
@@ -12,28 +28,31 @@ class UserMeta {
 		add_action( 'edit_user_profile', array( self::class, 'render_wallet_address_field' ) );
 		add_action( 'edit_user_profile_update', array( self::class, 'save_exclude_checkbox' ) );
 
-
 		add_action( 'personal_options_update', array( self::class, 'save_wallet_address' ) );
 		add_action( 'edit_user_profile_update', array( self::class, 'save_wallet_address' ) );
 
-		add_filter( 'user_row_actions', [ self::class, 'add_user_row_action' ], 10, 2 );
-		add_action( 'admin_init', [ self::class, 'handle_toggle_exclude_action' ] );
+		add_filter( 'user_row_actions', array( self::class, 'add_user_row_action' ), 10, 2 );
+		add_action( 'admin_init', array( self::class, 'handle_toggle_exclude_action' ) );
 
-		add_action( 'restrict_manage_users', [ self::class, 'add_excluded_users_filter' ] );
-		add_filter( 'pre_get_users', [ self::class, 'filter_excluded_users_query' ] );
-
-
+		add_action( 'restrict_manage_users', array( self::class, 'add_excluded_users_filter' ) );
+		add_filter( 'pre_get_users', array( self::class, 'filter_excluded_users_query' ) );
 	}
 
+	/**
+	 * Add Excluded Users filter to user list.
+	 *
+	 * @param string $which The location of the filter (top or bottom).
+	 */
 	public static function add_excluded_users_filter( $which ) {
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( 'manage_options' ) || 'top' !== $which ) {
 			return;
 		}
 
-		$selected = $_GET['wm_excluded_filter'] ?? '';
-
+		$selected = isset( $_GET['wm_excluded_filter'] )
+			? sanitize_text_field( wp_unslash( $_GET['wm_excluded_filter'] ) )
+			: '';
 		?>
-		<select name="wm_excluded_filter">
+		<select name="wm_excluded_filter"  onchange="this.form.submit()">
 			<option value=""><?php esc_html_e( 'All Users', 'web-monetization' ); ?></option>
 			<option value="excluded" <?php selected( $selected, 'excluded' ); ?>><?php esc_html_e( 'Excluded Users Only', 'web-monetization' ); ?></option>
 			<option value="included" <?php selected( $selected, 'included' ); ?>><?php esc_html_e( 'Non-Excluded Users Only', 'web-monetization' ); ?></option>
@@ -41,22 +60,28 @@ class UserMeta {
 		<?php
 	}
 
+	/**
+	 * Filter the user query based on excluded users.
+	 *
+	 * @param WP_User_Query $query The user query.
+	 * @return WP_User_Query The modified user query.
+	 */
 	public static function filter_excluded_users_query( $query ) {
 		if ( ! is_admin() || ! isset( $_GET['wm_excluded_filter'] ) || ! current_user_can( 'manage_options' ) ) {
 			return $query;
 		}
 
-		$filter = $_GET['wm_excluded_filter'];
-		$excluded = get_option( 'wm_excluded_authors', [] );
+		$filter   = sanitize_text_field( wp_unslash( $_GET['wm_excluded_filter'] ) );
+		$excluded = get_option( 'wm_excluded_authors', array() );
 
-		if ( $filter === 'excluded' ) {
+		if ( 'excluded' === $filter ) {
 			if ( ! empty( $excluded ) ) {
 				$query->set( 'include', $excluded );
 			} else {
-				// No excluded users, show none
-				$query->set( 'include', [0] );
+				// No excluded users, show none.
+				$query->set( 'include', array( 0 ) );
 			}
-		} elseif ( $filter === 'included' ) {
+		} elseif ( 'included' === $filter ) {
 			if ( ! empty( $excluded ) ) {
 				$query->set( 'exclude', $excluded );
 			}
@@ -65,6 +90,12 @@ class UserMeta {
 		return $query;
 	}
 
+	/**
+	 * Check if author monetization is enabled for a user.
+	 *
+	 * @param int $user_id The user ID.
+	 * @return bool True if enabled, false otherwise.
+	 */
 	function is_author_monetization_enabled_for_user( int $user_id ): bool {
 		if ( ! get_option( 'wm_enable_authors' ) ) {
 			return false;
@@ -77,27 +108,38 @@ class UserMeta {
 
 
 	/**
-	 * Add Enable/Disable Web Monetization links to user row actions.
+	 * Add a row action to toggle author exclusion from monetization.
+	 *
+	 * @param array   $actions The existing row actions.
+	 * @param WP_User $user The user object.
+	 * @return array The modified row actions.
+	 * This method adds a custom action link to the user list for toggling
+	 * the exclusion of a user from Web Monetization.
+	 * It checks if the current user can edit the user and if author monetization is enabled
+	 * This allows administrators to easily manage which authors are allowed to use their own wallet addresses for Web Monetization.
 	 */
 	public static function add_user_row_action( $actions, $user ): array {
+
 		if ( ! current_user_can( 'edit_user', $user->ID ) || ! get_option( 'wm_enable_authors' ) ) {
 			return $actions;
 		}
-		// Exclude administrators
+		// Exclude administrators.
 		if ( in_array( 'administrator', (array) $user->roles, true ) ) {
 			return $actions;
 		}
 
-
-		$excluded = get_option( 'wm_excluded_authors', [] );
+		$excluded    = get_option( 'wm_excluded_authors', array() );
 		$is_excluded = in_array( $user->ID, $excluded, true );
 
 		$action_nonce = wp_create_nonce( 'wm_toggle_exclude_' . $user->ID );
 
-		$url = add_query_arg( [
-			'wm_toggle_exclude' => $user->ID,
-			'_wpnonce'          => $action_nonce,
-		], admin_url( 'users.php' ) );
+		$url = add_query_arg(
+			array(
+				'wm_toggle_exclude' => $user->ID,
+				'_wpnonce'          => $action_nonce,
+			),
+			admin_url( 'users.php' )
+		);
 
 		$label = $is_excluded ? __( 'Enable Web Monetization', 'web-monetization' ) : __( 'Disable Web Monetization', 'web-monetization' );
 
@@ -122,17 +164,17 @@ class UserMeta {
 			return;
 		}
 
-		$user_id = absint( $_GET['wm_toggle_exclude'] );
+		$user_id = absint( wp_unslash( $_GET['wm_toggle_exclude'] ) );
 
-		if ( ! wp_verify_nonce( $_GET['_wpnonce'], 'wm_toggle_exclude_' . $user_id ) ) {
+		if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'wm_toggle_exclude_' . $user_id ) ) {
 			wp_die( __( 'Invalid nonce.', 'web-monetization' ) );
 		}
 
-		$excluded = get_option( 'wm_excluded_authors', [] );
+		$excluded = get_option( 'wm_excluded_authors', array() );
 
 		if ( in_array( $user_id, $excluded, true ) ) {
 			// Enable WM: remove from excluded
-			$excluded = array_diff( $excluded, [ $user_id ] );
+			$excluded = array_diff( $excluded, array( $user_id ) );
 		} else {
 			// Disable WM: add to excluded
 			$excluded[] = $user_id;
@@ -140,7 +182,7 @@ class UserMeta {
 
 		update_option( 'wm_excluded_authors', array_values( $excluded ) );
 
-		wp_redirect( remove_query_arg( [ 'wm_toggle_exclude', '_wpnonce' ], wp_get_referer() ) );
+		wp_redirect( remove_query_arg( array( 'wm_toggle_exclude', '_wpnonce' ), wp_get_referer() ) );
 		exit;
 	}
 
@@ -172,6 +214,17 @@ class UserMeta {
 		<?php
 	}
 
+	/**
+	 * Save the exclude checkbox state for a user.
+	 *
+	 * @param int $user_id The user ID.
+	 * Saves the state of the exclude checkbox for the user.
+	 * If the user cannot edit the profile, the function returns early.
+	 * If the checkbox is checked, the user is added to the excluded authors list.
+	 * If the checkbox is unchecked, the user is removed from the excluded authors list.
+	 * The excluded authors list is stored in the 'wm_excluded_authors' option.
+	 * The function updates the option with the new list of excluded authors.
+	 */
 	public static function save_exclude_checkbox( int $user_id ): void {
 		if ( ! current_user_can( 'edit_user', $user_id ) ) {
 			return;
@@ -190,6 +243,15 @@ class UserMeta {
 		update_option( 'wm_excluded_authors', array_values( $excluded ) );
 	}
 
+	/**
+	 * Render the wallet address field for a user.
+	 *
+	 * @param WP_User $user The user object.
+	 * Renders the wallet address input field for the user profile.
+	 * This allows authors to set their own wallet address for Web Monetization.
+	 * If the user cannot edit the profile or if author monetization is disabled,
+	 * the function returns early without rendering anything.
+	 */
 	public static function render_wallet_address_field( $user ): void {
 		if ( ! current_user_can( 'edit_user', $user->ID ) ) {
 			return;
@@ -199,7 +261,7 @@ class UserMeta {
 			return;
 		}
 
-		$excluded = get_option( 'wm_excluded_authors', [] );
+		$excluded    = get_option( 'wm_excluded_authors', array() );
 		$is_excluded = in_array( $user->ID, $excluded, true );
 		if ( $is_excluded ) {
 			return;
@@ -214,14 +276,21 @@ class UserMeta {
 				<td>
 					<input type="text" name="wm_wallet_address" id="wm_wallet_address"
 						value="<?php echo esc_attr( $wallet ); ?>"
-						class="regular-text" placeholder="eg: https://wallet.example.com/author" />
-					<p class="description"><?php esc_html_e( 'Enter your wallet address to enable web monetization.', 'web-monetization' ); ?></p>
+						class="regular-text" placeholder="eg: https://walletprovider.com/MyWallet" />
+					<p class="description"><?php esc_html_e( 'Enter your wallet address to enable Web Monetization.', 'web-monetization' ); ?></p>
 				</td>
 			</tr>
 		</table>
 		<?php
 	}
 
+	/**
+	 * Save the wallet address for a user.
+	 *
+	 * @param int $user_id The user ID.
+	 * Saves the wallet address entered by the user in their profile.
+	 * If the user cannot edit the profile, the function returns early.
+	 */
 	public static function save_wallet_address( $user_id ): void {
 		if ( ! current_user_can( 'edit_user', $user_id ) ) {
 			return;

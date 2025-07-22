@@ -20,7 +20,7 @@ class Admin {
 	 * Constructor.
 	 */
 	public function register_hooks(): void {
-		
+
 		add_action( 'admin_head', array( $this, 'inline_logo_menu_icon' ) );
 		add_action( 'admin_menu', array( $this, 'register_menu' ) );
 		add_action( 'admin_init', array( SettingsPage::class, 'register_settings' ) );
@@ -40,7 +40,6 @@ class Admin {
 		add_action( 'save_post', array( $this, 'save_post' ), 10, 2 );
 
 		UserMeta::register_hooks();
-		
 	}
 	public function save_post( $post_id ): void {
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
@@ -50,12 +49,12 @@ class Admin {
 		if ( isset( $_POST['wm_wallet_address'] ) ) {
 			update_post_meta( $post_id, 'wm_wallet_address', sanitize_text_field( $_POST['wm_wallet_address'] ) );
 		}
-				
-		update_post_meta( $post_id, 'wm_disabled', sanitize_text_field( $_POST['wm_disabled'] ?? '' ) );		
+
+		update_post_meta( $post_id, 'wm_disabled', sanitize_text_field( $_POST['wm_disabled'] ?? '' ) );
 	}
 
-	public function plugin_row_actions( $links ){
-		array_unshift( $links, '<a href="/wp-admin/admin.php?page='.self::PAGE_SLUG.'">Settings</a>' );
+	public function plugin_row_actions( $links ) {
+		array_unshift( $links, '<a href="/wp-admin/admin.php?page=' . self::PAGE_SLUG . '">Settings</a>' );
 		return $links;
 	}
 
@@ -76,6 +75,16 @@ class Admin {
 	 * @param string $post_type The post type.
 	 */
 	public function add_wallet_address_meta_box( $post_type ): void {
+		global $post;
+		if ( current_user_can( 'author' ) && ! get_option( 'wm_enable_authors' ) ) {
+			return;
+
+		}
+		$excluded    = get_option( 'wm_excluded_authors', array() );
+		$is_excluded = in_array( $post->post_author, $excluded, false );
+		if ( $is_excluded ) {
+			return;
+		}
 		add_meta_box(
 			'wm_wallet_address',
 			__( 'Web Monetization', 'web-monetization' ),
@@ -85,10 +94,10 @@ class Admin {
 			'high'
 		);
 	}
-	
+
 	public function render_wallet_address_meta_box( $post ): void {
 		$wallet_address = get_post_meta( $post->ID, 'wm_wallet_address', true );
-		$wm_disabled     = get_post_meta( $post->ID, 'wm_disabled', true );
+		$wm_disabled    = get_post_meta( $post->ID, 'wm_disabled', true );
 
 		wp_nonce_field( 'wm_save_wallet_address', 'wm_wallet_address_nonce' );
 
@@ -110,7 +119,7 @@ class Admin {
 		if ( ! file_exists( $path ) ) {
 			echo '<!-- SVG file not found: ' . esc_html( $path ) . ' -->';
 			return '';
-		}	
+		}
 		return file_exists( $path ) ? file_get_contents( $path ) : '';
 	}
 
@@ -179,7 +188,6 @@ class Admin {
 			'1.0.0' . rand( 1, 1000 ),
 			true
 		);
-
 
 		wp_enqueue_style(
 			'wm-widget-style',

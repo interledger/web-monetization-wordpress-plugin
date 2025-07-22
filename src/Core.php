@@ -59,9 +59,6 @@ class Core {
 			}
 		);
 
-		
-
-
 		// Load text domain for translations.
 		load_plugin_textdomain( 'web-monetization', false, dirname( __DIR__, 1 ) . '/languages' );
 		// Initialize admin or public functionality based on context.
@@ -72,27 +69,7 @@ class Core {
 		// Register post meta for wallet address.
 		add_post_type_support( 'post', 'custom-fields' );
 
-		// // Register Gutenberg blocks if Gutenberg is active.
-		// if ( function_exists( 'register_block_type_from_metadata' ) ) {
-		// 	require_once __DIR__ . '/Blocks/WalletMeta/register.php';
-		// }
-
-		// // Register Elementor widget if Elementor is active.
-		// if ( did_action( 'elementor/loaded' ) ) {
-		// 	require_once __DIR__ . '/Elementor/WebMonetizationWidget.php';
-		// 	\Elementor\Plugin::instance()->widgets_manager->register( new \WebMonetization\Elementor\WebMonetizationWidget() );
-		// }
-
-		// // Register Beaver module if Beaver Builder is active.
-		// if ( class_exists( 'FLBuilder' ) ) {
-		// 	require_once __DIR__ . '/Beaver/WebMonetizationModule.php';
-		// }
-
-		// // Register Divi module if Divi is active.
-		// if ( class_exists( 'ET_Builder_Module' ) ) {
-		// 	require_once __DIR__ . '/Divi/WebMonetization.php';
-		// 	new \WebMonetization\Divi\WebMonetizationModule();
-		// }
+		// Register other block builders.
 	}
 
 	/**
@@ -104,44 +81,43 @@ class Core {
 		// Set default options.
 
 		$default_wm_banner_config = array(
-			"title" => "How to support?",
-			"message" => "You can support this page and my work by a one time donation or proportional to the time you spend on this website through web monetization.",
-			"bgColor" => "#7f76b2",
-			"textColor" => "#ffffff",
-			"position" => "bottom",
-			"animation" => true,
-			"borderStyle" => "rounded",
-			"font" => "Arial",
-			"fontSize" => 17
+			'title'       => 'How to support?',
+			'message'     => 'You can support this page and my work by a one time donation or proportional to the time you spend on this website through web monetization.',
+			'bgColor'     => '#7f76b2',
+			'textColor'   => '#ffffff',
+			'position'    => 'bottom',
+			'animation'   => true,
+			'borderStyle' => 'rounded',
+			'font'        => 'Arial',
+			'fontSize'    => 17,
 		);
 		if ( is_multisite() ) {
 			$sites = get_sites();
 			foreach ( $sites as $site ) {
 				switch_to_blog( $site->blog_id );
-				
+
 				add_option( 'wm_enabled', 0 );
 				add_option( 'wm_wallet_address', '' );
 				add_option( 'wm_enable_authors', 0 );
-				add_option( 'wm_multi_wallets_option', 'one' ); // Default to 'one' wallet per post
-				add_option( 'wm_post_type_settings', array() ); // Default to no specific post type settings
-				add_option( 'wm_banner_enabled', 1 ); // Default to enabled banner
-				add_option( 'wm_excluded_authors', array() ); // Default to no excluded authors
-				add_option( 'wm_banner_config', $default_wm_banner_config ); // Default banner configuration
+				add_option( 'wm_multi_wallets_option', 'one' ); // Default to 'one' wallet per post.
+				add_option( 'wm_post_type_settings', array() ); // Default to no specific post type settings.
+				add_option( 'wm_banner_enabled', 1 ); // Default to enabled banner.
+				add_option( 'wm_excluded_authors', array() ); // Default to no excluded authors.
+				add_option( 'wm_banner_config', $default_wm_banner_config ); // Default banner configuration.
 
 				restore_current_blog();
 			}
 		} else {
-			// Single site
+			// Single site.
 			add_option( 'wm_enabled', 0 );
 			add_option( 'wm_wallet_address', '' );
 			add_option( 'wm_enable_authors', 0 );
-			add_option( 'wm_multi_wallets_option', 'one' ); // Default to 'one' wallet per post
-			add_option( 'wm_post_type_settings', array()); // Default to no specific post type settings
-			add_option( 'wm_banner_enabled', 1 ); // Default to enabled banner
-			add_option( 'wm_excluded_authors', array() ); // Default to no excluded
-			add_option( 'wm_banner_config', $default_wm_banner_config ); // Default banner configuration
+			add_option( 'wm_multi_wallets_option', 'one' ); // Default to 'one' wallet per post.
+			add_option( 'wm_post_type_settings', array() ); // Default to no specific post type settings.
+			add_option( 'wm_banner_enabled', 1 ); // Default to enabled banner.
+			add_option( 'wm_excluded_authors', array() ); // Default to no excluded.
+			add_option( 'wm_banner_config', $default_wm_banner_config ); // Default banner configuration.
 		}
-		
 	}
 	/**
 	 * Deactivate the plugin.
@@ -164,7 +140,7 @@ class Core {
 				restore_current_blog();
 			}
 		} else {
-			// Single site
+			// Single site.
 			delete_option( 'wm_enabled' );
 			delete_option( 'wm_wallet_address' );
 			delete_option( 'wm_enable_authors' );
@@ -174,7 +150,5 @@ class Core {
 			delete_option( 'wm_excluded_authors' );
 			delete_option( 'wm_banner_config' );
 		}
-
 	}
-
 }

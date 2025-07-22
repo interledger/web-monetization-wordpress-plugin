@@ -27,7 +27,7 @@
     "l": "phpcs -e",
     "lint": "phpcs --standard=WordPress --ignore=vendor,node_modules --exclude=WordPress.Files.FileName .",
     "lint:fix": "phpcbf --standard=WordPress --ignore=vendor,node_modules --exclude=WordPress.Files.FileName .",
-    "phpstan": "phpstan analyse",
+    "phpstan": "phpstan analyse ./src",
     "post-install-cmd": [
       "@lint"
     ],

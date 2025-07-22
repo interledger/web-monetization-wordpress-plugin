@@ -1,0 +1,64 @@
+:root {
+	--wm-green-shade: #3abf84; // example value
+}
+
+#adminmenu {
+
+	#toplevel_page_web-monetization-settings {
+		a {
+			div.wp-menu-image {
+				&:before {
+					display: none;
+					content: '';
+				}
+				svg {
+					width: 20px;
+					height: 20px;
+					margin-top: 6px;
+					opacity: 0.8;
+					padding: 7px 0;
+				}
+			}
+		}
+		
+	}
+}
+
+
+	.toplevel_page-web-monetization .wp-menu-image svg {
+    color: #999; /* inactive */
+	}
+	.toplevel_page-web-monetization.current .wp-menu-image svg {
+			color: #007cba; /* active menu item */
+	}
+
+.wm-header {
+	padding: 1.5rem 0;
+	border-bottom: 4px solid var(--wm-green-shade);
+
+	.wm-header-inner {
+		display: flex;
+		align-items: center;
+		gap: 1.5rem;
+		width: 100%;
+		max-width: 1200px;
+
+		.wm-logo {
+			margin-left: 1.5rem;
+			cursor: pointer;
+			height: 40px;
+			width: auto;
+		}
+
+		.wm-title {
+			margin-left: 1.5rem;
+			font-size: 1.25rem;
+			font-weight: 600;
+			cursor: pointer;
+			color: #1d2327;
+		}
+	}
+}
+.wm-post-type-settings th{
+	padding-left: 10px;
+}
