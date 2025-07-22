@@ -1,0 +1,85 @@
+{
+  "name": "interledger-web-monetization-wordpress-plugin",
+  "version": "1.0.0",
+  "description": "Web Monetization plugin for WordPress",
+  "author": "Interledger Foundation",
+  "license": "GPL-2.0-or-later",
+  "keywords": [
+    "wordpress",
+    "web-monetization",
+    "plugin",
+    "interledger"
+  ],
+  "homepage": "https://interledger.org",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/interledger/web-monetization-wordpress-plugin"
+  },
+  "bugs": {
+    "url": "https://github.com/interledger/web-monetization-wordpress-plugin/issues"
+  },
+  "files": [
+    "assets/",
+    "build/",
+    "languages/",
+    "src/",
+    "vendor/",
+    "interledger-web-monetization-wordpress-plugin.php",
+    "README.md"
+  ],
+  "dependencies": {
+    "@wordpress/components": "^29.11.0",
+    "@wordpress/core-data": "^7.25.0",
+    "@wordpress/data": "^10.25.0",
+    "@wordpress/edit-post": "^8.25.0",
+    "@wordpress/element": "^6.25.0",
+    "@wordpress/plugins": "^7.25.0",
+    "@wordpress/scripts": "^30.16.0",
+    "class-variance-authority": "^0.7.1",
+    "lodash.debounce": "^4.0.8",
+    "react-click-away-listener": "^2.4.0",
+    "react-colorful": "^5.6.1",
+    "react-transition-group": "^4.4.5"
+  },
+  "devDependencies": {
+    "@babel/preset-typescript": "^7.27.1",
+    "@types/react": "^19.1.5",
+    "@types/react-dom": "^19.1.5",
+    "@types/wordpress__admin": "^5.8.4",
+    "@types/wordpress__components": "^23.0.12",
+    "@types/wordpress__data": "^6.0.2",
+    "@types/wordpress__edit-post": "^8.4.2",
+    "@types/wordpress__element": "^2.4.1",
+    "@types/wordpress__plugins": "^3.0.3",
+    "typescript": "^5.8.3"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "wp-scripts build",
+    "start": "wp-scripts start",
+    "format": "wp-scripts format",
+    "lint:css": "wp-scripts lint-style",
+    "lint:css-fix": "wp-scripts lint-style --fix",
+    "lint:js": "wp-scripts lint-js",
+    "lint:js-fix": "wp-scripts lint-js --fix",
+    "lint:md:docs": "wp-scripts lint-md-docs",
+    "lint:pkg-json": "wp-scripts lint-pkg-json",
+    "plugin-zip": "wp-scripts plugin-zip"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-react",
+        {
+          "runtime": "classic"
+        }
+      ],
+      "@babel/preset-typescript"
+    ]
+  }
+}

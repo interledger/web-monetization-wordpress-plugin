@@ -1,0 +1,20 @@
+# Folders and Grunt
+/build
+/releases
+/node_modules/
+npm-debug.lo
+/vendor
+/tests/phpunit
+/.idea
+/.vscode
+/tests/ci
+
+
+# Various file types to ignore when exporting.
+.DS_Store
+Thumbs.db
+cghooks.lock
+
+# Build assets
+/dist
+/assets/css
