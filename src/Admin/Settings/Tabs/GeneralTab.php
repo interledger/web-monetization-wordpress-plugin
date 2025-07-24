@@ -148,13 +148,13 @@ class GeneralTab {
 			'wm_multi_wallets_option',
 			$value,
 			array(
-				'one' => __( 'Only use one wallet (This option displays <strong>a single wallet address</strong> based on the following priority: article > post type >  author > site  )', 'web-monetization' ),
-				'all' => __( 'Show all wallets ( This option displays <strong>all wallet addresses that are defined</strong> including site, author, post type and article wallets)', 'web-monetization' ),
+				'one' => __( 'Only use one wallet (This option displays <strong>a single wallet address</strong> based on the following priority: article > post type >  author > site)', 'web-monetization' ),
+				'all' => __( 'Show all wallets (This option displays <strong>all wallet addresses that are defined</strong> including site, author, post type and article wallets)', 'web-monetization' ),
 			)
 		);
 		echo '<p class="description">' . __( 'Example:', 'web-monetization' ) . ' <br>' .
-			__( 'If you choose to only use one wallet and If the author has their own wallet address, only that one will be used.', 'web-monetization' ) . '<br>' .
-			__( 'If you choose to show all wallets and If all of the wallets are defined, they will all be included and used simultaneously.', 'web-monetization' ) .
+			__( 'If you choose to only use one wallet and if the author has their own wallet address, only that one will be used.', 'web-monetization' ) . '<br>' .
+			__( 'If you choose to show all wallets and if all of the wallets are defined, they will all be included and used simultaneously.', 'web-monetization' ) .
 		'</p>';
 	}
 
