@@ -127,32 +127,6 @@ class Core {
 	 * This method is called when the plugin is deactivated.
 	 */
 	public static function deactivate() {
-		if ( is_multisite() ) {
-			$sites = get_sites();
-			foreach ( $sites as $site ) {
-				switch_to_blog( $site->blog_id );
-				delete_option( 'wm_enabled' );
-				delete_option( 'wm_wallet_address' );
-				delete_option( 'wm_enable_authors' );
-				delete_option( 'wm_multi_wallets_option' );
-				delete_option( 'wm_post_type_settings' );
-				delete_option( 'wm_banner_enabled' );
-				delete_option( 'wm_excluded_authors' );
-				delete_option( 'wm_banner_config' );
-				delete_option( 'wm_banner_published' );
-				restore_current_blog();
-			}
-		} else {
-			// Single site.
-			delete_option( 'wm_enabled' );
-			delete_option( 'wm_wallet_address' );
-			delete_option( 'wm_enable_authors' );
-			delete_option( 'wm_multi_wallets_option' );
-			delete_option( 'wm_post_type_settings' );
-			delete_option( 'wm_banner_enabled' );
-			delete_option( 'wm_excluded_authors' );
-			delete_option( 'wm_banner_config' );
-			delete_option( 'wm_banner_published' );
-		}
+		// No specific actions needed on deactivation.
 	}
 }

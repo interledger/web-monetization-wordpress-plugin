@@ -200,7 +200,6 @@ class Admin {
 		wp_add_inline_script( 'jquery', <<<JS
 			document.addEventListener('DOMContentLoaded', function () {
 				const form = document.querySelector('form[id="webmonetization_general_form"]');
-				console.log("form", form);
 				if (!form) return;
 
 				let initialFormData = new FormData(form);
