@@ -104,6 +104,7 @@ class Core {
 				add_option( 'wm_banner_enabled', 1 ); // Default to enabled banner.
 				add_option( 'wm_excluded_authors', array() ); // Default to no excluded authors.
 				add_option( 'wm_banner_config', $default_wm_banner_config ); // Default banner configuration.
+				add_option( 'wm_banner_published', $default_wm_banner_config ); // Default to no published banner.
 
 				restore_current_blog();
 			}
@@ -117,6 +118,7 @@ class Core {
 			add_option( 'wm_banner_enabled', 1 ); // Default to enabled banner.
 			add_option( 'wm_excluded_authors', array() ); // Default to no excluded.
 			add_option( 'wm_banner_config', $default_wm_banner_config ); // Default banner configuration.
+			add_option( 'wm_banner_published', $default_wm_banner_config ); // Default to no published banner.
 		}
 	}
 	/**
@@ -137,6 +139,7 @@ class Core {
 				delete_option( 'wm_banner_enabled' );
 				delete_option( 'wm_excluded_authors' );
 				delete_option( 'wm_banner_config' );
+				delete_option( 'wm_banner_published' );
 				restore_current_blog();
 			}
 		} else {
@@ -149,6 +152,7 @@ class Core {
 			delete_option( 'wm_banner_enabled' );
 			delete_option( 'wm_excluded_authors' );
 			delete_option( 'wm_banner_config' );
+			delete_option( 'wm_banner_published' );
 		}
 	}
 }

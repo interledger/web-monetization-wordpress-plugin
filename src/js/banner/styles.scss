@@ -32,6 +32,7 @@
 		flex-wrap: wrap;
 		margin-top: 1rem;
 		gap: 1.5rem;
+		justify-content: space-between;
 
 		label {
 			flex: 1 1 15px; // min width, but grows
@@ -39,6 +40,24 @@
 
 		&.row-wide label:last-child {
 			flex: 2 1 60%; // last one stretches more
+		}
+		.status-message {
+			line-height: 2.15384615;
+    	min-height: 30px;
+			font-size: 0.875rem;
+			color: #4caf50; // green
+			&.status-error {
+				color: #f44336; // red
+			}
+			&.status-loading {
+				color: #ff9800; // orange
+			}
+		}
+		.reset-button {
+			margin-top: 20px;
+    	padding-top: 10px;
+    	line-height: 2.15384615;
+    	min-height: 30px;
 		}
 	}
 
@@ -264,7 +283,8 @@
 		padding: 1rem 1.5rem;
 		margin-top: 1rem;
 		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-
+		width: 100vw;
+		max-width: 100%;
 		overflow: hidden;
 		&.rounded {
 			border-radius: 8px;
@@ -282,6 +302,12 @@
 			margin-top: 0.5rem;
 			font-size: 0.85rem;
 			opacity: 0.85;
+		}
+
+		._wm_link,
+		._wm_link a {
+			display: flex;
+			color: inherit;
 		}
 	}
 
@@ -421,9 +447,6 @@
 		}
 	}
 }
-
-/* Border presets */
-//.wm-banner-preview
 
 .wm-banner-preview.pill {
 	border-radius: 999px;

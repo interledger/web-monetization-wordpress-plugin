@@ -66,7 +66,9 @@ export default function BannerConfigurator() {
 	const [font, setFont] = useState(configData.font);
 	const [fontSize, setFontSize] = useState(configData.fontSize);
 
-	const [triggerAnimation, setTriggerAnimation] = useState(false)
+	const [triggerAnimation, setTriggerAnimation] = useState(false);
+	const [publishStatus, setPublishStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+	const [publishMessage, setPublishMessage] = useState<string | null>(null);
 
 	const config: BannerConfig = useMemo(
 		() => ({
@@ -126,6 +128,60 @@ export default function BannerConfigurator() {
 		[nonce]
 	);
 
+	const publishConfig = async (conf: BannerConfig): Promise<{ success: boolean; message?: string }> => {
+		try {
+			const res = await fetch(ajaxurl, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				body: new URLSearchParams({
+					action: 'publish_wm_banner_config',
+					config: JSON.stringify(conf),
+					_wpnonce: nonce,
+				}),
+			});
+			const data = await res.json();
+			if (data.success) {
+				lastSaved.current = conf;
+				return { success: true };
+			}
+			return { success: false, message: data.message || 'Failed to save config' };
+		} catch (err) {
+			return { success: false, message: 'Network error' };
+		}
+	};
+
+	const handleSubmit = async () => {
+		setPublishStatus('loading');
+		setPublishMessage(null);
+
+		const result = await publishConfig(config);
+
+		if (result.success) {
+			setPublishStatus('success');
+			setPublishMessage('Banner configuration saved successfully!');
+			setTimeout(() => {
+				setPublishStatus('idle');
+				setPublishMessage(null);
+			}, 2000); // Reset after a while
+		} else {
+			setPublishStatus('error');
+			setPublishMessage(result.message || 'Error saving configuration');
+		}
+	};
+
+	const resetToDefault = () => {
+		setTitle(defaultConfig.title);
+		setMessage(defaultConfig.message);
+		setBgColor(defaultConfig.bgColor);
+		setTextColor(defaultConfig.textColor);
+		setPosition(defaultConfig.position);
+		setAnimation(defaultConfig.animation);
+		setBorderStyle(defaultConfig.borderStyle);
+		setFont(defaultConfig.font);
+		setFontSize(defaultConfig.fontSize);
+	};
 	useEffect(() => {
 		debouncedSave(config);
 	}, [debouncedSave, config]); // track config changes
@@ -349,7 +405,39 @@ export default function BannerConfigurator() {
 						/>
 					</label>
 				</div>
-				<div className="wm-form-row"></div>
+				<div className="wm-form-row">
+					<p className="submit">
+						<input
+							type="submit"
+							name="submit"
+							id="submit"
+							className="button-primary"
+							value={
+								publishStatus === 'loading'
+									? 'Publishing...'
+									: publishStatus === 'success'
+										? 'Changes Saved!'
+										: publishStatus === 'error'
+											? 'Retry Publish'
+											: 'Publish Changes'
+							}
+							disabled={publishStatus === 'loading'}
+							onClick={handleSubmit}
+						/>
+					</p>
+					{publishMessage && <p className={`submit status-message status-${publishStatus}`}>{publishMessage}</p>}
+
+					<p className='reset-button'>
+						<button
+							type="button"
+							className="button"
+							onClick={() => { resetToDefault(); }}
+						>
+							Reset
+						</button>
+					</p>
+				</div>
+
 			</div>
 		</div>
 	);

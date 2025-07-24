@@ -34,6 +34,7 @@ class Admin {
 		);
 
 		add_action( 'wp_ajax_save_wm_banner_config', array( WidgetSettingsTab::class, 'save_banner_config' ) );
+		add_action( 'wp_ajax_publish_wm_banner_config', array( WidgetSettingsTab::class, 'publish_banner_config' ) );
 
 		add_action( 'add_meta_boxes', array( $this, 'add_wallet_address_meta_box' ) );
 
@@ -194,6 +195,48 @@ class Admin {
 			plugin_dir_url( dirname( __DIR__, 1 ) ) . 'build/widget.css',
 			array(),
 			'1.0.0'
+		);
+
+		wp_add_inline_script( 'jquery', <<<JS
+			document.addEventListener('DOMContentLoaded', function () {
+				const form = document.querySelector('form[id="webmonetization_general_form"]');
+				console.log("form", form);
+				if (!form) return;
+
+				let initialFormData = new FormData(form);
+				let isDirty = false;
+
+				const compareFormData = () => {
+					const currentFormData = new FormData(form);
+					for (let [key, value] of currentFormData.entries()) {
+						if (initialFormData.get(key) !== value) {
+							return true;
+						}
+					}
+					return false;
+				};
+
+				const onChange = () => {
+					isDirty = compareFormData();
+				};
+
+				form.querySelectorAll('input, select, textarea').forEach((el) => {
+					el.addEventListener('change', onChange);
+					el.addEventListener('input', onChange);
+				});
+
+				window.addEventListener('beforeunload', (e) => {
+					if (isDirty) {
+						e.preventDefault();
+						e.returnValue = '';
+					}
+				});
+
+				form.addEventListener('submit', () => {
+					isDirty = false;
+				});
+			});
+			JS
 		);
 	}
 }

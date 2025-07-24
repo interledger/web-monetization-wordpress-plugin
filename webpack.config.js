@@ -8,7 +8,6 @@ module.exports = {
     admin: './src/js/admin.tsx',
     widget: './src/js/banner/index.tsx',
     'banner-style': './src/scss/banner.scss',
-    'wallet-meta': './src/Blocks/WalletMeta/index.tsx',
   },
 
   // Optional: customize output or loaders.

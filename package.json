@@ -25,7 +25,8 @@
     "src/",
     "vendor/",
     "interledger-web-monetization-wordpress-plugin.php",
-    "README.md"
+    "README.md",
+    "readme.txt"
   ],
   "dependencies": {
     "@wordpress/components": "^29.11.0",

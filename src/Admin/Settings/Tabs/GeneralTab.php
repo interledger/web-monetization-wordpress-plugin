@@ -86,7 +86,7 @@ class GeneralTab {
 	 */
 	public static function render(): void {
 		?>
-		<form method="post" action="options.php">
+		<form id="webmonetization_general_form" method="post" action="options.php">
 			<?php
 			settings_fields( 'webmonetization_general' );
 			do_settings_sections( 'webmonetization_general' );
@@ -148,7 +148,7 @@ class GeneralTab {
 			'wm_multi_wallets_option',
 			$value,
 			array(
-				'one' => __( 'Only use one wallet (This option displays <strong>a single wallet address</strong> based on the following priority: article > post type? >  author? > site  )', 'web-monetization' ),
+				'one' => __( 'Only use one wallet (This option displays <strong>a single wallet address</strong> based on the following priority: article > post type >  author > site  )', 'web-monetization' ),
 				'all' => __( 'Show all wallets ( This option displays <strong>all wallet addresses that are defined</strong> including site, author, post type and article wallets)', 'web-monetization' ),
 			)
 		);

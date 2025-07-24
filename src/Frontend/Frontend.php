@@ -28,14 +28,19 @@ class Frontend {
 	 * Render monetization link in page head.
 	 */
 	public function render_web_monetization_link(): void {
-		echo "<!-- render_web_monetization_link {$this->is_enabled()} -->\n";
 		if ( ! $this->is_enabled() ) {
 			return;
 		}
-
-		$link_tag = $this->generate_monetization_link_for_post( get_the_ID() );
-		if ( $link_tag ) {
-			echo $link_tag;
+		if ( is_singular() ) {
+			$link_tag = $this->generate_monetization_link_for_post(  get_the_ID() );
+			if ( $link_tag ) {
+				echo $link_tag;
+			}
+		} else {
+			$wallet = $this->get_wallet_for_front_page();
+			if ( $wallet ) {
+				echo "<link rel=\"monetization\" href=\"{$wallet}\" />\n";
+			}
 		}
 	}
 
@@ -102,7 +107,6 @@ class Frontend {
 	 * Generate monetization link for a post.
 	 */
 	public function generate_monetization_link_for_post( $post_id, $element_type = 'link' ): ?string {
-		echo "<!-- Web Monetization Plugin {$this->is_enabled()} -->\n";
 
 		if ( ! $this->is_enabled() ) {
 			return null;
@@ -114,7 +118,6 @@ class Frontend {
 		}
 
 		$wallets = $this->get_wallets_for_post( $post );
-		echo '<!-- Web Monetization Plugin Wallets: ' . json_encode( $wallets ) . " -->\n";
 		if ( empty( $wallets['list'] ) ) {
 			return null;
 		}
@@ -147,7 +150,6 @@ class Frontend {
 		$disabled = get_post_meta( $post->ID, 'wm_disabled', true ) === '1';
 
 		if ( $disabled ) {
-			echo "<!-- Web Monetization Plugin Post Disabled: {$post->ID} -->\n";
 			return array(
 				'list'     => array(),
 				'disabled' => true,
@@ -157,12 +159,10 @@ class Frontend {
 
 		if ( get_option( 'wm_enable_authors', false ) ) {
 			$excluded = get_option( 'wm_excluded_authors', array() );
-			echo '<!-- Web Monetization Plugin Excluded Authors: ' . var_export( $excluded, true ) . ' ' . var_export( array_values( $excluded ), true ) . " -->\n";
 			if ( in_array( $post->post_author, $excluded ) ) {
 				$author_disabled = 1;
 			}
 		}
-		echo "<!-- Web Monetization Plugin Author Disabled: {$author_disabled}    post author: {$post->post_author} -->\n";
 
 		if ( ! $author_disabled ) {
 			// Post-specific wallet
@@ -197,6 +197,24 @@ class Frontend {
 			'list'     => $list,
 			'disabled' => $disabled,
 		);
+	}
+
+	/**
+	 * Get wallet for front page.
+	 *
+	 * @return string|null
+	 */
+	private function get_wallet_for_front_page(): ?string {
+		if ( ! $this->is_enabled() ) {
+			return null;
+		}
+
+		$site_wallet = get_option( 'wm_wallet_address', '' );
+		if ( $site_wallet ) {
+			return esc_url( $this->clean_wallet_address( $site_wallet ), 'https' );
+		}
+
+		return null;
 	}
 
 	/**
@@ -237,7 +255,7 @@ class Frontend {
 			'wm-banner-script',
 			'wm',
 			array(
-				'wmBannerConfig' => get_option( 'wm_banner_config', array() ),
+				'wmBannerConfig' => get_option( 'wm_banner_published', array() ),
 				'wmEnabled'      => get_option( 'wm_enabled', 0 ),
 				'wmBuildUrl'     => plugin_dir_url( dirname( __DIR__, 1 ) ) . 'build/',
 			)

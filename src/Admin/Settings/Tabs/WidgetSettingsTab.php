@@ -53,4 +53,18 @@ class WidgetSettingsTab {
 		update_option( 'wm_banner_config', $config );
 		wp_send_json_success();
 	}
+	/**
+	 * Publish the banner configuration.
+	 */
+	public static function publish_banner_config() {
+		check_ajax_referer( 'wm_save_banner_config' );
+		$config = json_decode( wp_unslash( $_POST['config'] ?? '{}' ), true );
+		if ( ! is_array( $config ) ) {
+			wp_send_json_error( 'Invalid config' );
+		}
+
+		update_option( 'wm_banner_published', $config );
+		wp_send_json_success();
+	}
+
 }
