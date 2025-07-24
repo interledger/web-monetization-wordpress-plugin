@@ -27,10 +27,8 @@ class Admin {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_assets' ) );
 
 		add_action(
-			'plugin_action_links_web-monetization-wordpress-plugin/interledger-web-monetization-wordpress-plugin.php',
-			array( $this, 'plugin_row_actions' ),
-			10,
-			3
+			'plugin_action_links_'. plugin_basename( plugin_dir_path( dirname( dirname( __FILE__ ))) . '/interledger-web-monetization-wordpress-plugin.php' ),
+			array( $this, 'plugin_row_actions' )
 		);
 
 		add_action( 'wp_ajax_save_wm_banner_config', array( WidgetSettingsTab::class, 'save_banner_config' ) );
@@ -197,7 +195,9 @@ class Admin {
 			'1.0.0'
 		);
 
-		wp_add_inline_script( 'jquery', <<<JS
+		wp_add_inline_script(
+			'jquery',
+			<<<JS
 			document.addEventListener('DOMContentLoaded', function () {
 				const form = document.querySelector('form[id="webmonetization_general_form"]');
 				if (!form) return;
@@ -236,6 +236,92 @@ class Admin {
 				});
 			});
 			JS
+		);
+
+		add_action(
+			'admin_footer',
+			function () {
+				?>
+		<script>
+			// Payment pointer validation helper
+			function normalizeWAPrefix(pointer) {
+				return pointer.startsWith('$') ? 'https://' + pointer.substring(1) : pointer;
+			}
+
+			function validateWalletAddress(wa) {
+				if (!wa) return true;
+				if (typeof wa !== 'string') return false;
+				
+				if (wa.includes(' ')) {
+					return false;
+				}
+				try {
+					const url = new URL(normalizeWAPrefix(wa));
+					if (url.protocol !== 'https:') {
+						throw new Error('Payment pointer must use HTTPS protocol');
+					}
+					if (!url.hostname) {
+						throw new Error('Payment pointer must have a valid hostname');
+					}
+					if (url.pathname && !url.pathname.startsWith('/')) {
+						throw new Error('Payment pointer path must start with a slash');
+					}
+					if (url.pathname === '/') {
+						throw new Error('Payment pointer path must not be empty');
+					}
+					if (url.search || url.hash) {
+						throw new Error('Payment pointer must not contain query parameters or fragments');
+					}
+					return true;
+				} catch (err) {
+					return false;
+				}
+			}
+
+			document.addEventListener('DOMContentLoaded', function () {
+				// Select all relevant inputs
+				const walletInputs = [
+					...document.querySelectorAll('#wm_wallet_address'),
+					...document.querySelectorAll('input[name^="wm_post_type_settings"][name$="[wallet]"]')
+				];
+
+				walletInputs.forEach((input, index) => {
+					// Ensure unique feedback ID or element
+					const feedbackId = input.id
+						? input.id + '_feedback'
+						: 'wallet_feedback_' + index;
+
+					let feedback = document.getElementById(feedbackId);
+					if (!feedback) {
+						feedback = document.createElement('p');
+						feedback.id = feedbackId;
+						feedback.style.marginTop = '4px';
+						input.insertAdjacentElement('afterend', feedback);
+					}
+
+					// Validation function
+					function showValidation() {
+						const value = input.value;
+						const isValid = validateWalletAddress(value);
+
+						if (isValid) {
+							input.style.borderColor = '';
+							feedback.textContent = '';
+						} else {
+							input.style.borderColor = 'red';
+							feedback.textContent = 'Invalid Wallet Address format.';
+							feedback.style.color = 'red';
+							feedback.style.fontSize = '0.9em';
+						}
+					}
+
+					// Bind event
+					input.addEventListener('input', showValidation);
+				});
+			});
+		</script>
+		<?php
+		}
 		);
 	}
 }
