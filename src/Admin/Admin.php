@@ -44,12 +44,18 @@ class Admin {
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return;
 		}
-
+		if ( wp_is_post_revision( $post_id ) || wp_is_post_autosave( $post_id ) ) {
+			return;
+		}
 		if ( isset( $_POST['wm_wallet_address'] ) ) {
 			update_post_meta( $post_id, 'wm_wallet_address', sanitize_text_field( $_POST['wm_wallet_address'] ) );
 		}
 
-		update_post_meta( $post_id, 'wm_disabled', sanitize_text_field( $_POST['wm_disabled'] ?? '' ) );
+		if ( isset( $_POST['wm_disabled'] ) ) {
+			update_post_meta( $post_id, 'wm_disabled', '1' );
+		} elseif ( isset( $_POST['_wp_http_referer'] ) ) {
+			delete_post_meta( $post_id, 'wm_disabled' );
+		}
 	}
 
 	public function plugin_row_actions( $links ) {
@@ -108,7 +114,7 @@ class Admin {
 		echo '<p>';
 		echo '<label for="wm_disabled">';
 		echo '<input type="checkbox" id="wm_disabled" name="wm_disabled" value="1" ' . checked( $wm_disabled === '1', true, false ) . ' />';
-		echo ' ' . __( 'Disable Web Monetization for this post', 'web-monetization' );
+		echo ' ' . __( 'Disable Web Monetization for this post ', 'web-monetization' );
 		echo '</label>';
 		echo '</p>';
 	}
@@ -253,6 +259,12 @@ class Admin {
 				if (typeof wa !== 'string') return false;
 				
 				if (wa.includes(' ')) {
+					return false;
+				}
+				// Check for disallowed special characters
+				// Allow only alphanumerics and URL-safe characters
+				const allowedChars = /^[a-zA-Z0-9\-._~:/?#[@\]!$&()*+,;=%]+$/;
+				if (!allowedChars.test(wa)) {
 					return false;
 				}
 				try {
