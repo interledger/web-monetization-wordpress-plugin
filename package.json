@@ -25,6 +25,7 @@
     "src/",
     "vendor/",
     "interledger-web-monetization-wordpress-plugin.php",
+    "uninstall.php",
     "README.md",
     "readme.txt"
   ],
