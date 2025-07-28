@@ -5,7 +5,7 @@ module.exports = {
   // Explicitly set entry points.
   entry: {
     frontend: './src/js/frontend.tsx',
-    admin: './src/js/admin.tsx',
+    admin: './src/js/admin.ts',
     widget: './src/js/banner/index.tsx',
     'banner-style': './src/scss/banner.scss',
   },
