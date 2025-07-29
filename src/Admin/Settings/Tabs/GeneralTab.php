@@ -156,7 +156,8 @@ class GeneralTab {
 			__(
 				'Let your authors enter their own wallet address.'
 			) .
-			'<br> <p  class="description">' . __( 'Admins can disallow specific authors from the ',
+			'<br> <p  class="description">' . __(
+				'Admins can disallow specific authors from the ',
 				'web-monetization'
 			) .
 			'<a href="' . admin_url( 'users.php' ) . '">' . __( 'Users page', 'web-monetization' ) . '</a> </p>' . $excluded_users_notice
@@ -242,9 +243,9 @@ class GeneralTab {
 			$key   = $post_type->name;
 			$label = $post_type->labels->singular_name;
 
-			$enabled = isset( $settings[ $key ]['enabled'] ) ? (bool) $settings[ $key ]['enabled'] : false;
-			$wallet  = isset( $settings[ $key ]['wallet'] ) ? $settings[ $key ]['wallet'] : '';
-			$isConnected  = isset( $settings[ $key ]['connected'] ) ? $settings[ $key ]['connected']  === '1' : false;
+			$enabled     = isset( $settings[ $key ]['enabled'] ) ? (bool) $settings[ $key ]['enabled'] : false;
+			$wallet      = isset( $settings[ $key ]['wallet'] ) ? $settings[ $key ]['wallet'] : '';
+			$is_connected = isset( $settings[ $key ]['connected'] ) ? $settings[ $key ]['connected'] === '1' : false;
 
 			$wa_placeholder = 'https://walletprovider.com/MyWallet';
 
@@ -263,12 +264,12 @@ class GeneralTab {
 				esc_attr( $key ),
 				esc_attr( $wallet ),
 				esc_attr( $wa_placeholder ),
-				$isConnected ? 'readonly' : ''
+				$is_connected ? 'readonly' : ''
 			);
 			printf(
 				'<input type="hidden" name="wm_post_type_settings[%1$s][connected]" value="%2$s">',
 				esc_attr( $key ),
-				esc_attr( $isConnected ? '1' : '0' )
+				esc_attr( $is_connected ? '1' : '0' )
 			);
 			echo '</td>';
 			echo '</tr>';
