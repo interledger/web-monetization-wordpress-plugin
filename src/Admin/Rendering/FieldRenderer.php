@@ -33,13 +33,14 @@ class FieldRenderer {
 		}
 	}
 
-	public static function render_text_input( string $id, string $name, string $value, string $placeholder = '' ): void {
+	public static function render_text_input( string $id, string $name, string $value, string $placeholder = '' , $readOnly = false ): void {
 		printf(
-			'<input type="text" id="%1$s" name="%2$s" value="%3$s" placeholder="%4$s" class="regular-text">',
+			'<input type="text" id="%1$s" name="%2$s" value="%3$s" placeholder="%4$s" class="regular-text" %5$s>',
 			esc_attr( $id ),
 			esc_attr( $name ),
 			esc_attr( $value ),
-			esc_attr( $placeholder )
+			esc_attr( $placeholder ),
+			$readOnly ? 'readonly' : ''
 		);
 	}
 

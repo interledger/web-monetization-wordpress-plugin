@@ -33,12 +33,46 @@ class Admin {
 
 		add_action( 'wp_ajax_save_wm_banner_config', array( WidgetSettingsTab::class, 'save_banner_config' ) );
 		add_action( 'wp_ajax_publish_wm_banner_config', array( WidgetSettingsTab::class, 'publish_banner_config' ) );
+		add_action( 'wp_ajax_save_wallet_connection',  array( $this, 'save_wallet_connection_callback' ) );
+
 
 		add_action( 'add_meta_boxes', array( $this, 'add_wallet_address_meta_box' ) );
 
 		add_action( 'save_post', array( $this, 'save_post' ), 10, 2 );
 
 		UserMeta::register_hooks();
+	}
+
+
+	public function save_wallet_connection_callback(): void {
+		check_ajax_referer( 'wallet_connect_nonce' , 'nonce' );
+
+		$wallet_field = isset( $_POST['wallet_field'] ) ? sanitize_text_field( wp_unslash( $_POST['wallet_field'] ) ) : '';
+		if ( empty( $wallet_field ) ) {
+			wp_send_json_error( 'Invalid wallet address' );
+		}
+		if(strpos( $wallet_field, 'wm_post_type_settings' ) === 0) {
+			$this->update_connected_option( 'wm_post_type_settings' ,  $wallet_field);
+		} else {
+			update_option( $wallet_field . '_connected', '1' );
+		}
+		
+		wp_send_json_success();
+	}
+
+	private function update_connected_option( string $option_name, string $string_field ): void {
+		
+		$settings = get_option( 'wm_post_type_settings', array() );
+
+		preg_match_all('/\[([^\]]+)\]/', $string_field, $matches);
+		$keys = $matches[1]; // ['post', 'wallet']
+
+		$type = $keys[0] ?? '';
+
+		if ( '' !== $type && isset( $settings[ $type ] ) ) {
+			$settings[ $type ]['connected'] = '1';
+			update_option( 'wm_post_type_settings', $settings );
+		}
 	}
 
 	/**
@@ -237,6 +271,15 @@ class Admin {
 						'config' => $config,
 					)
 				),
+			),
+			'after'
+		);
+		wp_localize_script(
+			'wm-admin-script',
+			'walletConnectData',
+			array(
+				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+				'nonce'   => wp_create_nonce( 'wallet_connect_nonce' ),
 			),
 			'after'
 		);

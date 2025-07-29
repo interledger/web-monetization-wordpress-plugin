@@ -62,3 +62,17 @@
 .wm-post-type-settings th{
 	padding-left: 10px;
 }
+
+#webmonetization_general_form {
+	.wallet-ui-wrapper {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		margin-left: 4px;
+	}
+	.wallet-feedback {
+		margin: 0;
+		padding: 0;
+	}
+
+}

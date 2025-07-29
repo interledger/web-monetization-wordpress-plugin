@@ -116,18 +116,19 @@ class GeneralTab {
 	 */
 	public static function render_field_wallet_address(): void {
 		$wallet       = get_option( 'wm_wallet_address', '' );
-		$is_connected = get_option( 'wm_wallet_connected', '' ) === '1';
+		$is_connected = get_option( 'wm_wallet_address_connected', '' ) === '1';
 
 		FieldRenderer::render_text_input(
 			'wm_wallet_address',
 			'wm_wallet_address',
 			$wallet,
-			'e.g. https://walletprovider.com/MyWallet'
+			'e.g. https://walletprovider.com/MyWallet',
+			$is_connected
 		);
 
 		FieldRenderer::render_hidden_input(
-			'wm_wallet_connected',
-			'wm_wallet_connected',
+			'wm_wallet_address_connected',
+			'wm_wallet_address_connected',
 			$is_connected ? '1' : '0'
 		);
 	}
@@ -241,6 +242,7 @@ class GeneralTab {
 
 			$enabled = isset( $settings[ $key ]['enabled'] ) ? (bool) $settings[ $key ]['enabled'] : false;
 			$wallet  = isset( $settings[ $key ]['wallet'] ) ? $settings[ $key ]['wallet'] : '';
+			$isConnected  = isset( $settings[ $key ]['connected'] ) ? $settings[ $key ]['connected']  === '1' : false;
 
 			$wa_placeholder = 'https://walletprovider.com/MyWallet';
 
@@ -255,10 +257,16 @@ class GeneralTab {
 			echo '</td>';
 			echo '<td>';
 			printf(
-				'<input type="text" name="wm_post_type_settings[%1$s][wallet]" value="%2$s" class="regular-text" placeholder="e.g. %3$s">',
+				'<input type="text" name="wm_post_type_settings[%1$s][wallet]" value="%2$s" class="regular-text" placeholder="e.g. %3$s" %4$s>',
 				esc_attr( $key ),
 				esc_attr( $wallet ),
-				esc_attr( $wa_placeholder )
+				esc_attr( $wa_placeholder ),
+				$isConnected ? 'readonly' : ''
+			);
+			printf(
+				'<input type="hidden" name="wm_post_type_settings[%1$s][connected]" value="%2$s">',
+				esc_attr( $key ),
+				esc_attr( $isConnected ? '1' : '0' )
 			);
 			echo '</td>';
 			echo '</tr>';

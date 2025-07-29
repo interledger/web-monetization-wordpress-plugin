@@ -18,6 +18,7 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 	require __DIR__ . '/vendor/autoload.php';
 }
 
+define( 'WEB_MONETIZATION_PLUGIN_VERSION', '1.0.0' );
 define( 'WEB_MONETIZATION_PLUGIN_DIR', plugin_dir_url( __FILE__ ) );
 define( 'WEB_MONETIZATION_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 
