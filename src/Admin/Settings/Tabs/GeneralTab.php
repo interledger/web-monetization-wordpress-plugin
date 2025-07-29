@@ -154,10 +154,12 @@ class GeneralTab {
 			'wm_enable_authors',
 			$value,
 			__(
-				'Let your authors enter their own wallet address. You can manually disable this setting for a specific user from the ',
+				'Let your authors enter their own wallet address.'
+			) .
+			'<br> <p  class="description">' . __( 'Admins can disallow specific authors from the ',
 				'web-monetization'
 			) .
-			'<a href="' . admin_url( 'users.php' ) . '">' . __( 'Users page', 'web-monetization' ) . '</a>' . $excluded_users_notice
+			'<a href="' . admin_url( 'users.php' ) . '">' . __( 'Users page', 'web-monetization' ) . '</a> </p>' . $excluded_users_notice
 		);
 	}
 

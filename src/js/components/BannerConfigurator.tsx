@@ -160,7 +160,7 @@ export default function BannerConfigurator() {
 
 		if (result.success) {
 			setPublishStatus('success');
-			setPublishMessage('Banner configuration saved successfully!');
+			setPublishMessage('Banner configuration published successfully!');
 			setTimeout(() => {
 				setPublishStatus('idle');
 				setPublishMessage(null);
@@ -416,10 +416,10 @@ export default function BannerConfigurator() {
 								publishStatus === 'loading'
 									? 'Publishing...'
 									: publishStatus === 'success'
-										? 'Changes Saved!'
+										? 'Changes Published'
 										: publishStatus === 'error'
 											? 'Retry Publish'
-											: 'Publish Changes'
+											: 'Publish Banner Changes'
 							}
 							disabled={publishStatus === 'loading'}
 							onClick={handleSubmit}
