@@ -41,7 +41,7 @@ function createElements(input: HTMLInputElement, index: number) {
   feedback.style.fontSize = '0.9em';
 
   const connectBtn = document.createElement('button');
-  connectBtn.textContent = 'Connect Wallet';
+  connectBtn.textContent = 'Verify Wallet Address';
   connectBtn.type = 'button';
   connectBtn.className = 'button button-secondary';
 
@@ -52,7 +52,7 @@ function createElements(input: HTMLInputElement, index: number) {
   editLink.style.display = 'none';
 
   const check = document.createElement('span');
-  check.textContent = '✅ Connected';
+  check.textContent = '✅ Wallet Verified';
   check.style.marginLeft = '8px';
   check.style.color = 'green';
   check.style.display = 'none';
@@ -72,7 +72,9 @@ function setConnectingState(
   connectBtn: HTMLButtonElement,
 ) {
   connectBtn.disabled = isConnecting;
-  connectBtn.textContent = isConnecting ? 'Connecting...' : 'Connect Wallet';
+  connectBtn.textContent = isConnecting
+    ? 'Connecting...'
+    : 'Verify Wallet Address';
 }
 
 async function fetchWalletDetails(url: string): Promise<any> {
@@ -85,7 +87,7 @@ async function fetchWalletDetails(url: string): Promise<any> {
   return await response.json();
 }
 
-function validateWalletData(data) {
+function validateWalletData(data: any): void {
   if (
     !data ||
     typeof data !== 'object' ||
@@ -272,7 +274,6 @@ document.addEventListener('DOMContentLoaded', () => {
       '#wm_wallet_address, input[name^="wm_post_type_settings"][name$="[wallet]"]',
     ),
   );
-
   walletInputs.forEach((input, index) => {
     setupWalletField(input, index);
   });

@@ -95,6 +95,10 @@ class Admin {
 			update_post_meta( $post_id, 'wm_wallet_address', sanitize_text_field( wp_unslash( $_POST['wm_wallet_address'] ) ) );
 		}
 
+		if ( isset( $_POST['wm_wallet_address_connected'] ) ) {
+			update_post_meta( $post_id, 'wm_wallet_address_connected', sanitize_text_field( wp_unslash( $_POST['wm_wallet_address_connected'] ) ) );
+		}
+
 		if ( isset( $_POST['wm_disabled'] ) ) {
 			update_post_meta( $post_id, 'wm_disabled', '1' );
 		} elseif ( isset( $_POST['_wp_http_referer'] ) ) {
@@ -151,7 +155,7 @@ class Admin {
 			return;
 		}
 		add_meta_box(
-			'wm_wallet_address',
+			'wm_wallet_address_meta_box',
 			__( 'Web Monetization', 'web-monetization' ),
 			array( $this, 'render_wallet_address_meta_box' ),
 			$post_type,
@@ -167,15 +171,20 @@ class Admin {
 	 */
 	public function render_wallet_address_meta_box( $post ): void {
 		$wallet_address = get_post_meta( $post->ID, 'wm_wallet_address', true );
+		$isConnected    = get_post_meta( $post->ID, 'wm_wallet_address_connected', true ) === '1';
 		$wm_disabled    = get_post_meta( $post->ID, 'wm_disabled', true );
 
 		wp_nonce_field( 'save_post', 'wm_wallet_address_post_nonce' );
 
 		echo '<p>';
 		echo '<label for="wm_wallet_address">' . esc_html__( 'Wallet Address:', 'web-monetization' ) . '</label>';
-		echo '<input type="text" id="wm_wallet_address" name="wm_wallet_address" value="' . esc_attr( $wallet_address ) . '" class="widefat" />';
+		echo '<input type="text" id="wm_wallet_address" name="wm_wallet_address" value="' . esc_attr( $wallet_address ) . '" class="widefat" '. ($isConnected ? ' readonly' : '').' />';
+		printf(
+			'<input type="hidden" id="wm_wallet_address_connected"  name="wm_wallet_address_connected" value="%1$s">',
+			esc_attr( $isConnected ? '1' : '0' )
+		);
 		echo '</p>';
-
+		
 		echo '<p>';
 		echo '<label for="wm_disabled">';
 		echo '<input type="checkbox" id="wm_disabled" name="wm_disabled" value="1" ' . checked( '1' === $wm_disabled, true, false ) . ' />';
@@ -247,7 +256,13 @@ class Admin {
 			WEB_MONETIZATION_PLUGIN_VERSION
 		);
 
-		if ( 'toplevel_page_web-monetization-settings' !== $hook ) {
+		$allowed_hooks = array(
+			'toplevel_page_web-monetization-settings',
+			'post.php',    // Editing a post
+			'post-new.php' // Creating a new post
+		);
+
+		if ( ! in_array( $hook, $allowed_hooks, true ) ) {
 			return;
 		}
 
