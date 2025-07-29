@@ -43,6 +43,15 @@ class FieldRenderer {
 		);
 	}
 
+	public static function render_hidden_input( string $id, string $name, string $value ): void {
+		printf(
+			'<input type="hidden" id="%1$s" name="%2$s" value="%3$s">',
+			esc_attr( $id ),
+			esc_attr( $name ),
+			esc_attr( $value )
+		);
+	}
+
 	public static function render_radio_switch( string $id, string $name, string $value, array $options ): void {
 		echo '<fieldset>';
 		foreach ( $options as $option_value => $label ) {

@@ -66,5 +66,4 @@ class WidgetSettingsTab {
 		update_option( 'wm_banner_published', $config );
 		wp_send_json_success();
 	}
-
 }

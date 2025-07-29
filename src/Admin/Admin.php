@@ -27,7 +27,7 @@ class Admin {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_assets' ) );
 
 		add_action(
-			'plugin_action_links_'. plugin_basename( plugin_dir_path( dirname( dirname( __FILE__ ))) . '/interledger-web-monetization-wordpress-plugin.php' ),
+			'plugin_action_links_' . plugin_basename( plugin_dir_path( dirname( __DIR__ ) ) . '/interledger-web-monetization-wordpress-plugin.php' ),
 			array( $this, 'plugin_row_actions' )
 		);
 
@@ -40,7 +40,17 @@ class Admin {
 
 		UserMeta::register_hooks();
 	}
+
+	/**
+	 * Save post WM meta data.
+	 *
+	 * @param int $post_id The post ID.
+	 */
 	public function save_post( $post_id ): void {
+		if ( ! isset( $_POST['wm_wallet_address_post_nonce'] ) ||
+			! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['wm_wallet_address_post_nonce'] ) ), 'save_post' ) ) {
+			return;
+		}
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return;
 		}
@@ -48,7 +58,7 @@ class Admin {
 			return;
 		}
 		if ( isset( $_POST['wm_wallet_address'] ) ) {
-			update_post_meta( $post_id, 'wm_wallet_address', sanitize_text_field( $_POST['wm_wallet_address'] ) );
+			update_post_meta( $post_id, 'wm_wallet_address', sanitize_text_field( wp_unslash( $_POST['wm_wallet_address'] ) ) );
 		}
 
 		if ( isset( $_POST['wm_disabled'] ) ) {
@@ -58,20 +68,32 @@ class Admin {
 		}
 	}
 
+	/**
+	 * Add a link to the plugin settings page in the plugin row actions.
+	 *
+	 * @param array $links The existing plugin action links.
+	 * @return array The modified plugin action links.
+	 */
 	public function plugin_row_actions( $links ) {
 		array_unshift( $links, '<a href="/wp-admin/admin.php?page=' . self::PAGE_SLUG . '">Settings</a>' );
 		return $links;
 	}
 
+
+	/**
+	 * Register the admin menu for the Web Monetization settings.
+	 *
+	 * @return void
+	 */
 	public static function register_menu(): void {
 		add_menu_page(
-			__( 'Web Monetization Settings', 'web-monetization' ), // Page title
-			__( 'Web Monetization', 'web-monetization' ),          // Menu title
-			'manage_options',                             // Capability
-			self::PAGE_SLUG,                              // Menu slug
-			array( SettingsPage::class, 'render' ),                      // Callback to render page
-			'', // Path to SVG icon
-			60                                             // Menu position (optional)
+			__( 'Web Monetization Settings', 'web-monetization' ),
+			__( 'Web Monetization', 'web-monetization' ),
+			'manage_options',
+			self::PAGE_SLUG,
+			array( SettingsPage::class, 'render' ),
+			'', // Path to SVG icon.
+			60                                             // Menu position (optional).
 		);
 	}
 	/**
@@ -81,12 +103,16 @@ class Admin {
 	 */
 	public function add_wallet_address_meta_box( $post_type ): void {
 		global $post;
-		if ( current_user_can( 'author' ) && ! get_option( 'wm_enable_authors' ) ) {
+		if (
+			current_user_can( 'publish_posts' ) &&
+			! current_user_can( 'edit_others_posts' ) &&
+			! get_option( 'wm_enable_authors' )
+		) {
 			return;
-
 		}
+
 		$excluded    = get_option( 'wm_excluded_authors', array() );
-		$is_excluded = in_array( $post->post_author, $excluded, false );
+		$is_excluded = in_array( $post->post_author, $excluded, true );
 		if ( $is_excluded ) {
 			return;
 		}
@@ -100,43 +126,74 @@ class Admin {
 		);
 	}
 
+	/**
+	 * Render the wallet address meta box on the post edit screen.
+	 *
+	 * @param \WP_Post $post The post object.
+	 */
 	public function render_wallet_address_meta_box( $post ): void {
 		$wallet_address = get_post_meta( $post->ID, 'wm_wallet_address', true );
 		$wm_disabled    = get_post_meta( $post->ID, 'wm_disabled', true );
 
-		wp_nonce_field( 'wm_save_wallet_address', 'wm_wallet_address_nonce' );
+		wp_nonce_field( 'save_post', 'wm_wallet_address_post_nonce' );
 
 		echo '<p>';
-		echo '<label for="wm_wallet_address">' . __( 'Wallet Address:', 'web-monetization' ) . '</label>';
+		echo '<label for="wm_wallet_address">' . esc_html__( 'Wallet Address:', 'web-monetization' ) . '</label>';
 		echo '<input type="text" id="wm_wallet_address" name="wm_wallet_address" value="' . esc_attr( $wallet_address ) . '" class="widefat" />';
 		echo '</p>';
 
 		echo '<p>';
 		echo '<label for="wm_disabled">';
-		echo '<input type="checkbox" id="wm_disabled" name="wm_disabled" value="1" ' . checked( $wm_disabled === '1', true, false ) . ' />';
-		echo ' ' . __( 'Disable Web Monetization for this post ', 'web-monetization' );
+		echo '<input type="checkbox" id="wm_disabled" name="wm_disabled" value="1" ' . checked( '1' === $wm_disabled, true, false ) . ' />';
+		echo ' ' . esc_html__( 'Disable Web Monetization for this post ', 'web-monetization' );
+
 		echo '</label>';
 		echo '</p>';
 	}
 
-
-	private function get_inline_svg( $path ) {
-		if ( ! file_exists( $path ) ) {
-			echo '<!-- SVG file not found: ' . esc_html( $path ) . ' -->';
+	/**
+	 * Get inline SVG content.
+	 *
+	 * @param string $path The path to the SVG file.
+	 * @return string The SVG content or an empty string if the file does not exist.
+	 */
+	private function get_inline_svg( string $path ): string {
+		if ( ! file_exists( $path ) || ! is_file( $path ) ) {
 			return '';
 		}
-		return file_exists( $path ) ? file_get_contents( $path ) : '';
+		$contents = file( $path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES );
+		return is_array( $contents ) ? implode( "\n", $contents ) : '';
 	}
 
+
+	/**
+	 * Inline SVG logo for the admin menu icon.
+	 * This function replaces the default menu icon with a custom SVG logo.
+	 *
+	 * @return void
+	 */
 	public function inline_logo_menu_icon(): void {
-		if ( get_current_screen()->base === 'toplevel_page_web-monetization' ) {
+		if ( 'toplevel_page_web-monetization' !== get_current_screen()->base ) {
 			echo '<style>#adminmenu li a.toplevel_page_web-monetization-settings .wp-menu-image:before { display: none; }</style>';
 		}
 		echo '<script>
 			document.addEventListener("DOMContentLoaded", function() {
 				const img = document.querySelector("#adminmenu li a.toplevel_page_web-monetization-settings .wp-menu-image");
 				if (img) {
-					img.innerHTML = `' . $this->get_inline_svg( WEB_MONETIZATION_PLUGIN_PATH . 'assets/images/wm_logo_mono.svg' ) . '`;
+					img.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 37 25" width="20" height="20" fill="currentColor">
+						<path d="M28.49 20.49l-.01 2.15H2.42l.03-14.54h3.45V5.7H.1v1.51l-.04 16.76h.01v.14l28.42.05h2.35v-4.5H28.49Z"/>
+						<path d="M8.95 22.61H2.42v2.37h6.53V22.61Z"/>
+						<path d="M2.42 24.97l.01-6.53H.06l-.01 6.53H2.42Z"/>
+						<path d="M2.43 18.43l.01-6.53H.07l-.01 6.53H2.43Z"/>
+						<path d="M15.45 22.61H8.92v2.37h6.53V22.61Z"/>
+						<path d="M21.99 22.62h-6.53v2.37h6.53v-2.37Z"/>
+						<path d="M28.52 22.64h-6.53v2.37h6.53v-2.37Z"/>
+						<path d="M30.84 25.01l.01-5.62h-2.37l-.01 5.62h2.37Z"/>
+						<path d="M5.32 19.9h30.77l.04-19.25H5.36L5.32 19.9Z"/>
+						<path d="M10.54 11.77h.2c.77.01 1.39-.61 1.39-1.38v-.2c.01-.77-.61-1.39-1.39-1.39h-.2a1.38 1.38 0 0 0-1.39 1.38v.2c0 .76.61 1.38 1.39 1.39Z"/>
+						<path d="M20.73 15.15a4.79 4.79 0 1 0 0-9.58 4.79 4.79 0 0 0 0 9.58Z"/>
+						<path d="M30.72 11.8h.2c.77.01 1.39-.61 1.39-1.38v-.2a1.39 1.39 0 0 0-1.39-1.39h-.2a1.38 1.38 0 0 0-1.39 1.38v.2c0 .76.62 1.38 1.39 1.39Z"/>
+					</svg>`;
 				}
 			});
 		</script>';
@@ -153,11 +210,10 @@ class Admin {
 			'wm-admin-style',
 			plugin_dir_url( dirname( __DIR__, 1 ) ) . 'build/admin.css',
 			array(),
-			'1.0.0'
+			WEB_MONETIZATION_PLUGIN_VERSION
 		);
-		// Only enqueue on your plugin's settings page
 
-		if ( $hook !== 'toplevel_page_web-monetization-settings' ) {
+		if ( 'toplevel_page_web-monetization-settings' !== $hook ) {
 			return;
 		}
 
@@ -165,7 +221,7 @@ class Admin {
 			'wm-admin-script',
 			plugin_dir_url( dirname( __DIR__, 1 ) ) . 'build/admin.js',
 			array(),
-			'1.0.0',
+			WEB_MONETIZATION_PLUGIN_VERSION,
 			false
 		);
 
@@ -190,7 +246,7 @@ class Admin {
 			'wm-widget',
 			plugin_dir_url( dirname( __DIR__, 1 ) ) . 'build/widget.js',
 			array( 'wp-components', 'wp-element', 'wp-i18n' ),
-			'1.0.0' . rand( 1, 1000 ),
+			WEB_MONETIZATION_PLUGIN_VERSION,
 			true
 		);
 
@@ -198,51 +254,7 @@ class Admin {
 			'wm-widget-style',
 			plugin_dir_url( dirname( __DIR__, 1 ) ) . 'build/widget.css',
 			array(),
-			'1.0.0'
+			WEB_MONETIZATION_PLUGIN_VERSION
 		);
-
-		wp_add_inline_script(
-			'jquery',
-			<<<JS
-			document.addEventListener('DOMContentLoaded', function () {
-				const form = document.querySelector('form[id="webmonetization_general_form"]');
-				if (!form) return;
-
-				let initialFormData = new FormData(form);
-				let isDirty = false;
-
-				const compareFormData = () => {
-					const currentFormData = new FormData(form);
-					for (let [key, value] of currentFormData.entries()) {
-						if (initialFormData.get(key) !== value) {
-							return true;
-						}
-					}
-					return false;
-				};
-
-				const onChange = () => {
-					isDirty = compareFormData();
-				};
-
-				form.querySelectorAll('input, select, textarea').forEach((el) => {
-					el.addEventListener('change', onChange);
-					el.addEventListener('input', onChange);
-				});
-
-				window.addEventListener('beforeunload', (e) => {
-					if (isDirty) {
-						e.preventDefault();
-						e.returnValue = '';
-					}
-				});
-
-				form.addEventListener('submit', () => {
-					isDirty = false;
-				});
-			});
-			JS
-		);
-
 	}
 }

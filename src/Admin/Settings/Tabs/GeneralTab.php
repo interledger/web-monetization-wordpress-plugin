@@ -4,6 +4,7 @@
  *
  * @package WebMonetization
  */
+
 namespace WebMonetization\Admin\Settings\Tabs;
 
 use WebMonetization\Admin\Rendering\FieldRenderer;
@@ -88,6 +89,7 @@ class GeneralTab {
 		?>
 		<form id="webmonetization_general_form" method="post" action="options.php">
 			<?php
+
 			settings_fields( 'webmonetization_general' );
 			do_settings_sections( 'webmonetization_general' );
 			submit_button();
@@ -96,6 +98,9 @@ class GeneralTab {
 		<?php
 	}
 
+	/**
+	 * Render the "Enable Web Monetization" field.
+	 */
 	public static function render_field_enabled(): void {
 		$value = get_option( 'wm_enabled', 1 );
 		FieldRenderer::render_checkbox(
@@ -106,16 +111,30 @@ class GeneralTab {
 		);
 	}
 
+	/**
+	 * Render the "Wallet Address" field.
+	 */
 	public static function render_field_wallet_address(): void {
-		$value = get_option( 'wm_wallet_address', '' );
+		$wallet       = get_option( 'wm_wallet_address', '' );
+		$is_connected = get_option( 'wm_wallet_connected', '' ) === '1';
+
 		FieldRenderer::render_text_input(
 			'wm_wallet_address',
 			'wm_wallet_address',
-			$value,
+			$wallet,
 			'e.g. https://walletprovider.com/MyWallet'
+		);
+
+		FieldRenderer::render_hidden_input(
+			'wm_wallet_connected',
+			'wm_wallet_connected',
+			$is_connected ? '1' : '0'
 		);
 	}
 
+	/**
+	 * Render the "Enable Authors" field.
+	 */
 	public static function render_field_enable_authors(): void {
 		$value = get_option( 'wm_enable_authors', 0 );
 
@@ -141,6 +160,9 @@ class GeneralTab {
 		);
 	}
 
+	/**
+	 * Render the "Multi Wallets behavior" field.
+	 */
 	public static function render_field_multi_wallets(): void {
 		$value = get_option( 'wm_multi_wallets_option', 'one' );
 		FieldRenderer::render_radio_switch(
@@ -158,6 +180,9 @@ class GeneralTab {
 		'</p>';
 	}
 
+	/**
+	 * Render the "Enable Banner" field.
+	 */
 	public static function render_field_banner_enabled(): void {
 		$value = get_option( 'wm_banner_enabled', 1 );
 		FieldRenderer::render_checkbox(
@@ -170,6 +195,9 @@ class GeneralTab {
 		);
 	}
 
+	/**
+	 * Render the post type settings.
+	 */
 	public static function render_post_type_settings(): void {
 		$settings      = get_option( 'wm_post_type_settings', array() );
 		$content_types = get_post_types( array( 'public' => true ), 'objects' );

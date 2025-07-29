@@ -32,7 +32,7 @@ class Frontend {
 			return;
 		}
 		if ( is_singular() ) {
-			$link_tag = $this->generate_monetization_link_for_post(  get_the_ID() );
+			$link_tag = $this->generate_monetization_link_for_post( get_the_ID() );
 			if ( $link_tag ) {
 				echo $link_tag;
 			}

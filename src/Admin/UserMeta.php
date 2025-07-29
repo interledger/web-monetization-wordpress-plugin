@@ -47,8 +47,9 @@ class UserMeta {
 		if ( ! current_user_can( 'manage_options' ) || 'top' !== $which ) {
 			return;
 		}
-
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$selected = isset( $_GET['wm_excluded_filter'] )
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			? sanitize_text_field( wp_unslash( $_GET['wm_excluded_filter'] ) )
 			: '';
 		?>
@@ -67,10 +68,11 @@ class UserMeta {
 	 * @return WP_User_Query The modified user query.
 	 */
 	public static function filter_excluded_users_query( $query ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( ! is_admin() || ! isset( $_GET['wm_excluded_filter'] ) || ! current_user_can( 'manage_options' ) ) {
 			return $query;
 		}
-
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$filter   = sanitize_text_field( wp_unslash( $_GET['wm_excluded_filter'] ) );
 		$excluded = get_option( 'wm_excluded_authors', array() );
 
@@ -89,23 +91,6 @@ class UserMeta {
 
 		return $query;
 	}
-
-	/**
-	 * Check if author monetization is enabled for a user.
-	 *
-	 * @param int $user_id The user ID.
-	 * @return bool True if enabled, false otherwise.
-	 */
-	function is_author_monetization_enabled_for_user( int $user_id ): bool {
-		if ( ! get_option( 'wm_enable_authors' ) ) {
-			return false;
-		}
-
-		$excluded = get_option( 'wm_excluded_authors', array() );
-
-		return ! in_array( $user_id, $excluded, true );
-	}
-
 
 	/**
 	 * Add a row action to toggle author exclusion from monetization.
@@ -141,7 +126,7 @@ class UserMeta {
 			admin_url( 'users.php' )
 		);
 
-		$label = $is_excluded ? __( 'Enable Web Monetization', 'web-monetization' ) : __( 'Disable Web Monetization', 'web-monetization' );
+		$label = $is_excluded ? esc_html__( 'Enable Web Monetization', 'web-monetization' ) : esc_html__( 'Disable Web Monetization', 'web-monetization' );
 
 		$actions['wm_toggle_exclude'] = sprintf(
 			'<a href="%s">%s</a>',
@@ -173,16 +158,16 @@ class UserMeta {
 		$excluded = get_option( 'wm_excluded_authors', array() );
 
 		if ( in_array( $user_id, $excluded, true ) ) {
-			// Enable WM: remove from excluded
+			// Enable WM: remove from excluded.
 			$excluded = array_diff( $excluded, array( $user_id ) );
 		} else {
-			// Disable WM: add to excluded
+			// Disable WM: add to excluded.
 			$excluded[] = $user_id;
 		}
 
 		update_option( 'wm_excluded_authors', array_values( $excluded ) );
 
-		wp_redirect( remove_query_arg( array( 'wm_toggle_exclude', '_wpnonce' ), wp_get_referer() ) );
+		wp_safe_redirect( remove_query_arg( array( 'wm_toggle_exclude', '_wpnonce' ), wp_get_referer() ) );
 		exit;
 	}
 
@@ -232,6 +217,7 @@ class UserMeta {
 
 		$excluded = get_option( 'wm_excluded_authors', array() );
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( isset( $_POST['wm_exclude_author'] ) ) {
 			if ( ! in_array( $user_id, $excluded, true ) ) {
 				$excluded[] = $user_id;
@@ -295,6 +281,7 @@ class UserMeta {
 		if ( ! current_user_can( 'edit_user', $user_id ) ) {
 			return;
 		}
+		
 
 		if ( isset( $_POST['wm_wallet_address'] ) ) {
 			update_user_meta(

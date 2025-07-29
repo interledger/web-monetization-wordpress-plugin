@@ -4,6 +4,7 @@
  *
  * @package WebMonetization
  */
+
 namespace WebMonetization\Admin\Settings;
 
 use WebMonetization\Admin\Settings\Tabs\GeneralTab;
@@ -20,14 +21,18 @@ class SettingsPage {
 
 	const PAGE_SLUG = 'web-monetization-settings';
 
-
-
+	/**
+	 * Register the settings page and its tabs.
+	 */
 	public static function register_settings(): void {
 		GeneralTab::register();
 		WidgetSettingsTab::register();
 		AboutTab::register();
 	}
 
+	/**
+	 * Render the settings page.
+	 */
 	public static function render(): void {
 		$current_tab = $_GET['tab'] ?? 'general';
 		$tabs        = array(
@@ -64,6 +69,9 @@ class SettingsPage {
 		echo '</div>';
 	}
 
+	/**
+	 * Render the header for the settings page.
+	 */
 	public static function renderHeader(): void {
 		echo '<div class="wm-header">
 				<div class="wm-header-inner">
@@ -79,10 +87,25 @@ class SettingsPage {
 			</div>';
 	}
 
+	/**
+	 * Render the settings section heading.
+	 *
+	 * @param string $title       The title of the section.
+	 * @param string $description The description of the section.
+	 */
 	function render_settings_section_heading( string $title, string $description ): void {
 		echo '<h2>' . esc_html( $title ) . '</h2>';
 		echo '<p class="description">' . esc_html( $description ) . '</p>';
 	}
+
+	/**
+	 * Render a text input field.
+	 *
+	 * @param string $id          The ID of the input field.
+	 * @param string $name        The name of the input field.
+	 * @param string $value       The value of the input field.
+	 * @param string $placeholder The placeholder text for the input field.
+	 */
 	function render_text_input_field( $id, $name, $value, $placeholder = '' ): void {
 		printf(
 			'<input type="text" id="%1$s" name="%2$s" value="%3$s" placeholder="%4$s" class="regular-text">',
@@ -93,6 +116,13 @@ class SettingsPage {
 		);
 	}
 
+	/**
+	 * Render a hidden input field.
+	 *
+	 * @param string $id    The ID of the input field.
+	 * @param string $name  The name of the input field.
+	 * @param string $value The value of the input field.
+	 */
 	function render_radio_switch_field( string $id, string $name, string $value, array $options ): void {
 		echo '<fieldset>';
 		foreach ( $options as $option_value => $label ) {
@@ -105,35 +135,5 @@ class SettingsPage {
 			);
 		}
 		echo '</fieldset>';
-	}
-
-	function render_settings_section( string $title, string $description ): void {
-		echo '<div class="wm-settings-section">';
-		echo '<h2>' . esc_html( $title ) . '</h2>';
-		echo '<p class="description">' . esc_html( $description ) . '</p>';
-		echo '</div>';
-	}
-	function render_settings_section_end(): void {
-		echo '</div>';
-	}
-	function render_settings_section_start( string $title, string $description ): void {
-		echo '<div class="wm-settings-section">';
-		echo '<h2>' . esc_html( $title ) . '</h2>';
-		echo '<p class="description">' . esc_html( $description ) . '</p>';
-		echo '<div class="wm-settings-section-content">';
-	}
-	function render_settings_section_start_end( string $title, string $description ): void {
-		echo '<div class="wm-settings-section">';
-		echo '<h2>' . esc_html( $title ) . '</h2>';
-		echo '<p class="description">' . esc_html( $description ) . '</p>';
-		echo '<div class="wm-settings-section-content">';
-		echo '</div>';
-		echo '</div>';
-		echo '<div class="wm-settings-section">';
-		echo '<h2>' . esc_html( $title ) . '</h2>';
-		echo '<p class="description">' . esc_html( $description ) . '</p>';
-		echo '<div class="wm-settings-section-content">';
-		echo '</div>';
-		echo '</div>';
 	}
 }
