@@ -13,6 +13,22 @@ namespace WebMonetization\Frontend;
  * Handles the frontend functionality of the Web Monetization plugin.
  */
 class Frontend {
+
+	/**
+	 * Allowed HTML tags for monetization links.
+	 *
+	 * @var array
+	 */
+	private array $allowed_tags = array(
+		'link' => array(
+			'rel'            => true,
+			'href'           => true,
+			'type'           => true,
+			'title'          => true,
+			'media'          => true,
+			'data-wm-source' => true,
+		),
+	);
 	/**
 	 * Register hooks for the frontend.
 	 */
@@ -35,9 +51,10 @@ class Frontend {
 			return;
 		}
 		if ( is_singular() ) {
+			// For singular pages, generate monetization link for the post.
 			$link_tag = $this->generate_monetization_link_for_post( get_the_ID() );
 			if ( $link_tag ) {
-				echo wp_kses_post( $link_tag );
+				echo wp_kses( $link_tag, $this->allowed_tags );
 			}
 		} else {
 			$wallet = $this->get_wallet_for_front_page();
@@ -58,7 +75,7 @@ class Frontend {
 
 		$link_tag = $this->generate_monetization_link_for_post( $post->ID, 'atom:link' );
 		if ( $link_tag ) {
-			echo wp_kses_post( $link_tag );
+			echo wp_kses( $link_tag, $this->allowed_tags );
 		}
 	}
 
@@ -73,7 +90,7 @@ class Frontend {
 
 		$link_tag = $this->generate_monetization_link_for_post( $post->ID, 'atom:link' );
 		if ( $link_tag ) {
-			echo wp_kses_post( $link_tag );
+			echo wp_kses( $link_tag, $this->allowed_tags );
 		}
 	}
 
