@@ -96,7 +96,7 @@ class Core {
 			foreach ( $sites as $site ) {
 				switch_to_blog( $site->blog_id );
 
-				add_option( 'wm_enabled', 0 );
+				add_option( 'wm_enabled', 1 );
 				add_option( 'wm_wallet_address', '' );
 				add_option( 'wm_enable_authors', 0 );
 				add_option( 'wm_multi_wallets_option', 'one' ); // Default to 'one' wallet per post.
@@ -110,7 +110,7 @@ class Core {
 			}
 		} else {
 			// Single site.
-			add_option( 'wm_enabled', 0 );
+			add_option( 'wm_enabled', 1 );
 			add_option( 'wm_wallet_address', '' );
 			add_option( 'wm_enable_authors', 0 );
 			add_option( 'wm_multi_wallets_option', 'one' ); // Default to 'one' wallet per post.

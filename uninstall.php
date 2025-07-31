@@ -6,6 +6,7 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 
 delete_option( 'wm_enabled' );
 delete_option( 'wm_wallet_address' );
+delete_option( 'wm_wallet_address_connected' );
 delete_option( 'wm_enable_authors' );
 delete_option( 'wm_multi_wallets_option' );
 delete_option( 'wm_post_type_settings' );
