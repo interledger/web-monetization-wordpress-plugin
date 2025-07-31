@@ -107,7 +107,7 @@ class GeneralTab {
 			'wm_enabled',
 			'wm_enabled',
 			$value,
-			__( 'Enable Web Monetization globally.', 'web-monetization' )
+			esc_html__( 'Enable Web Monetization globally.', 'web-monetization' )
 		);
 	}
 
@@ -143,24 +143,31 @@ class GeneralTab {
 		$excluded_users        = get_option( 'wm_excluded_authors', array() );
 		if ( ! empty( $excluded_users ) ) {
 			$is_only_one_author_excluded = count( $excluded_users ) === 1;
+			$multiple_authors_text = sprintf(
+				esc_html__( 'are %d authors', 'web-monetization' ),
+				count( $excluded_users )
+			);
 			$excluded_users_notice       = ' <br><span class="description">' .
-				__( 'Note: There ', 'web-monetization' ) .
-				( $is_only_one_author_excluded ? __( 'is 1 user', 'web-monetization' ) : __( 'are ' . count( $excluded_users ) . ' users', 'web-monetization' ) ) .
-				__( ' excluded from Web Monetization. You can view them on the - filtered - ', 'web-monetization' ) .
-				'<a href="' . admin_url( 'users.php?wm_excluded_filter=excluded' ) . '">Users page</a>' . '</span>';
+				esc_html__( 'Note: There ', 'web-monetization' ) .
+				( $is_only_one_author_excluded ?
+					esc_html__( 'is 1 author', 'web-monetization' ) :
+					$multiple_authors_text
+				) .
+				esc_html__( ' excluded from Web Monetization. You can view them on the - filtered - ', 'web-monetization' ) .
+				'<a href="' . admin_url( 'users.php?wm_excluded_filter=excluded' ) . '">Users page</a></span>';
 		}
 		FieldRenderer::render_checkbox(
 			'wm_enable_authors',
 			'wm_enable_authors',
 			$value,
-			__(
+			esc_html__(
 				'Let your authors enter their own wallet address.'
 			) .
-			'<br> <p  class="description">' . __(
+			'<br> <p  class="description">' . esc_html__(
 				'Admins can disallow specific authors from the ',
 				'web-monetization'
 			) .
-			'<a href="' . admin_url( 'users.php' ) . '">' . __( 'Users page', 'web-monetization' ) . '</a> </p>' . $excluded_users_notice
+			'<a href="' . admin_url( 'users.php' ) . '">' . esc_html__( 'Users page', 'web-monetization' ) . '</a> </p>' . $excluded_users_notice
 		);
 	}
 
@@ -174,13 +181,13 @@ class GeneralTab {
 			'wm_multi_wallets_option',
 			$value,
 			array(
-				'one' => __( 'Only use one wallet (This option displays <strong>a single wallet address</strong> based on the following priority: article > post type >  author > site)', 'web-monetization' ),
-				'all' => __( 'Show all wallets (This option displays <strong>all wallet addresses that are defined</strong> including site, author, post type and article wallets)', 'web-monetization' ),
+				'one' => wp_kses_post( 'Only use one wallet (This option displays <strong>a single wallet address</strong> based on the following priority: article > post type >  author > site)', 'web-monetization' ),
+				'all' => wp_kses_post( 'Use all wallets (This option displays <strong>all wallet addresses that are defined</strong> including site, author, post type and article wallets)', 'web-monetization' ),
 			)
 		);
-		echo '<p class="description">' . __( 'Example:', 'web-monetization' ) . ' <br>' .
-			__( 'If you choose to only use one wallet and if the author has their own wallet address, only that one will be used.', 'web-monetization' ) . '<br>' .
-			__( 'If you choose to show all wallets and if all of the wallets are defined, they will all be included and used simultaneously.', 'web-monetization' ) .
+		echo '<p class="description">' . esc_html__( 'Example:', 'web-monetization' ) . ' <br>' .
+			esc_html__( 'If you choose to only use one wallet and if the author has their own wallet address, only that one will be used.', 'web-monetization' ) . '<br>' .
+			esc_html__( 'If you choose to use all wallets and if all of the wallets are defined, they will all be included and used simultaneously.', 'web-monetization' ) .
 		'</p>';
 	}
 
@@ -243,9 +250,9 @@ class GeneralTab {
 			$key   = $post_type->name;
 			$label = $post_type->labels->singular_name;
 
-			$enabled     = isset( $settings[ $key ]['enabled'] ) ? (bool) $settings[ $key ]['enabled'] : false;
-			$wallet      = isset( $settings[ $key ]['wallet'] ) ? $settings[ $key ]['wallet'] : '';
-			$is_connected = isset( $settings[ $key ]['connected'] ) ? $settings[ $key ]['connected'] === '1' : false;
+			$enabled      = isset( $settings[ $key ]['enabled'] ) ? (bool) $settings[ $key ]['enabled'] : false;
+			$wallet       = isset( $settings[ $key ]['wallet'] ) ? $settings[ $key ]['wallet'] : '';
+			$is_connected = isset( $settings[ $key ]['connected'] ) ? '1' === $settings[ $key ]['connected'] : false;
 
 			$wa_placeholder = 'https://walletprovider.com/MyWallet';
 

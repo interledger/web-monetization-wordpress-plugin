@@ -1,10 +1,10 @@
 <?php
-
 /**
  * WebMonetization Admin Class
  *
  * @package WebMonetization
  */
+
 namespace WebMonetization\Admin\Settings\Tabs;
 
 /**

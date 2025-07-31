@@ -152,7 +152,7 @@ class UserMeta {
 		$user_id = absint( wp_unslash( $_GET['wm_toggle_exclude'] ) );
 
 		if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'wm_toggle_exclude_' . $user_id ) ) {
-			wp_die( __( 'Invalid nonce.', 'web-monetization' ) );
+			wp_die( esc_html__( 'Invalid nonce.', 'web-monetization' ) );
 		}
 
 		$excluded = get_option( 'wm_excluded_authors', array() );
@@ -183,6 +183,7 @@ class UserMeta {
 
 		$excluded    = get_option( 'wm_excluded_authors', array() );
 		$is_excluded = in_array( $user->ID, $excluded, true );
+
 		?>
 		<h2><?php esc_html_e( 'Web Monetization Settings', 'web-monetization' ); ?></h2>
 		<table class="form-table" role="presentation">
@@ -192,6 +193,7 @@ class UserMeta {
 					<label for="wm_exclude_author">
 						<input type="checkbox" name="wm_exclude_author" id="wm_exclude_author" value="1" <?php checked( $is_excluded ); ?> />
 						<?php esc_html_e( 'Prevent this author from using their own wallet address (site fallback will be used).', 'web-monetization' ); ?>
+						<?php wp_nonce_field( 'wm_toggle_exclude_' . $user->ID, 'wm_toggle_exclude_nonce' ); ?>
 					</label>
 				</td>
 			</tr>
@@ -214,10 +216,14 @@ class UserMeta {
 		if ( ! current_user_can( 'edit_user', $user_id ) ) {
 			return;
 		}
-
+		if ( ! isset( $_POST['wm_toggle_exclude_nonce'] ) ||
+			! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['wm_toggle_exclude_nonce'] ) ), 'wm_toggle_exclude_' . $user_id ) ) {
+			return;
+		}
 		$excluded = get_option( 'wm_excluded_authors', array() );
-
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! is_array( $excluded ) ) {
+			$excluded = array();
+		}
 		if ( isset( $_POST['wm_exclude_author'] ) ) {
 			if ( ! in_array( $user_id, $excluded, true ) ) {
 				$excluded[] = $user_id;
@@ -263,6 +269,7 @@ class UserMeta {
 					<input type="text" name="wm_wallet_address" id="wm_wallet_address"
 						value="<?php echo esc_attr( $wallet ); ?>"
 						class="regular-text" placeholder="eg: https://walletprovider.com/MyWallet" />
+					<?php wp_nonce_field( 'wm_save_wallet_address', 'wm_wallet_address_nonce' ); ?>
 					<p class="description"><?php esc_html_e( 'Enter your wallet address to enable Web Monetization.', 'web-monetization' ); ?></p>
 				</td>
 			</tr>
@@ -281,7 +288,10 @@ class UserMeta {
 		if ( ! current_user_can( 'edit_user', $user_id ) ) {
 			return;
 		}
-		
+		if ( ! isset( $_POST['wm_wallet_address_nonce'] ) ||
+			! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['wm_wallet_address_nonce'] ) ), 'wm_save_wallet_address' ) ) {
+			return;
+		}
 
 		if ( isset( $_POST['wm_wallet_address'] ) ) {
 			update_user_meta(

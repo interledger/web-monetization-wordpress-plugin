@@ -33,8 +33,7 @@ class Admin {
 
 		add_action( 'wp_ajax_save_wm_banner_config', array( WidgetSettingsTab::class, 'save_banner_config' ) );
 		add_action( 'wp_ajax_publish_wm_banner_config', array( WidgetSettingsTab::class, 'publish_banner_config' ) );
-		add_action( 'wp_ajax_save_wallet_connection',  array( $this, 'save_wallet_connection_callback' ) );
-
+		add_action( 'wp_ajax_save_wallet_connection', array( $this, 'save_wallet_connection_callback' ) );
 
 		add_action( 'add_meta_boxes', array( $this, 'add_wallet_address_meta_box' ) );
 
@@ -43,29 +42,41 @@ class Admin {
 		UserMeta::register_hooks();
 	}
 
-
+	/**
+	 * Save the wallet connection via AJAX.
+	 *
+	 * @return void
+	 */
 	public function save_wallet_connection_callback(): void {
-		check_ajax_referer( 'wallet_connect_nonce' , 'nonce' );
+		check_ajax_referer( 'wallet_connect_nonce', 'nonce' );
 
 		$wallet_field = isset( $_POST['wallet_field'] ) ? sanitize_text_field( wp_unslash( $_POST['wallet_field'] ) ) : '';
 		if ( empty( $wallet_field ) ) {
 			wp_send_json_error( 'Invalid wallet address' );
 		}
-		if(strpos( $wallet_field, 'wm_post_type_settings' ) === 0) {
-			$this->update_connected_option( 'wm_post_type_settings' ,  $wallet_field);
+		if ( strpos( $wallet_field, 'wm_post_type_settings' ) === 0 ) {
+			$this->update_connected_option( 'wm_post_type_settings', $wallet_field );
 		} else {
 			update_option( $wallet_field . '_connected', '1' );
 		}
-		
+
 		wp_send_json_success();
 	}
 
+	/**
+	 * Update the connected option for a specific post type.
+	 *
+	 * @param string $option_name The option name.
+	 * @param string $string_field The string field.
+	 *
+	 * @return void
+	 */
 	private function update_connected_option( string $option_name, string $string_field ): void {
-		
+
 		$settings = get_option( 'wm_post_type_settings', array() );
 
-		preg_match_all('/\[([^\]]+)\]/', $string_field, $matches);
-		$keys = $matches[1]; // ['post', 'wallet']
+		preg_match_all( '/\[([^\]]+)\]/', $string_field, $matches );
+		$keys = $matches[1];
 
 		$type = $keys[0] ?? '';
 
@@ -171,17 +182,17 @@ class Admin {
 	 */
 	public function render_wallet_address_meta_box( $post ): void {
 		$wallet_address = get_post_meta( $post->ID, 'wm_wallet_address', true );
-		$isConnected    = get_post_meta( $post->ID, 'wm_wallet_address_connected', true ) === '1';
+		$is_connected   = get_post_meta( $post->ID, 'wm_wallet_address_connected', true ) === '1';
 		$wm_disabled    = get_post_meta( $post->ID, 'wm_disabled', true );
 
 		wp_nonce_field( 'save_post', 'wm_wallet_address_post_nonce' );
 
 		echo '<p>';
 		echo '<label for="wm_wallet_address">' . esc_html__( 'Wallet Address:', 'web-monetization' ) . '</label>';
-		echo '<input type="text" id="wm_wallet_address" name="wm_wallet_address" value="' . esc_attr( $wallet_address ) . '" class="widefat" '. ($isConnected ? ' readonly' : '').' />';
+		echo '<input type="text" id="wm_wallet_address" name="wm_wallet_address" value="' . esc_attr( $wallet_address ) . '" class="widefat" ' . ( $is_connected ? ' readonly' : '' ) . ' />';
 		printf(
 			'<input type="hidden" id="wm_wallet_address_connected"  name="wm_wallet_address_connected" value="%1$s">',
-			esc_attr( $isConnected ? '1' : '0' )
+			esc_attr( $is_connected ? '1' : '0' )
 		);
 		echo '</p>';
 		
@@ -258,8 +269,8 @@ class Admin {
 
 		$allowed_hooks = array(
 			'toplevel_page_web-monetization-settings',
-			'post.php',    // Editing a post
-			'post-new.php' // Creating a new post
+			'post.php',
+			'post-new.php',
 		);
 
 		if ( ! in_array( $hook, $allowed_hooks, true ) ) {
