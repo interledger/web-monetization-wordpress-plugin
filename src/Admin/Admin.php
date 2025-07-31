@@ -270,6 +270,7 @@ class Admin {
 			'toplevel_page_web-monetization-settings',
 			'post.php',
 			'post-new.php',
+			'profile.php',
 		);
 
 		if ( ! in_array( $hook, $allowed_hooks, true ) ) {

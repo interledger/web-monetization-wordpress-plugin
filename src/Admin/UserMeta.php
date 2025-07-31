@@ -259,7 +259,8 @@ class UserMeta {
 			return;
 		}
 
-		$wallet = get_user_meta( $user->ID, 'wm_wallet_address', true );
+		$wallet       = get_user_meta( $user->ID, 'wm_wallet_address', true );
+		$is_connected = get_user_meta( $user->ID, 'wm_wallet_address_connected', true ) === '1';
 		?>
 		<h2><?php esc_html_e( 'Web Monetization', 'web-monetization' ); ?></h2>
 		<table class="form-table" role="presentation">
@@ -268,7 +269,13 @@ class UserMeta {
 				<td>
 					<input type="text" name="wm_wallet_address" id="wm_wallet_address"
 						value="<?php echo esc_attr( $wallet ); ?>"
-						class="regular-text" placeholder="eg: https://walletprovider.com/MyWallet" />
+						class="regular-text" placeholder="eg: https://walletprovider.com/MyWallet" <?php echo $is_connected ? 'readonly' : ''; ?> />
+					<?php
+					printf(
+						'<input type="hidden" id="wm_wallet_address_connected" name="wm_wallet_address_connected" value="%1$s">',
+						esc_attr( $is_connected ? '1' : '0' )
+					);
+					?>
 					<?php wp_nonce_field( 'wm_save_wallet_address', 'wm_wallet_address_nonce' ); ?>
 					<p class="description"><?php esc_html_e( 'Enter your wallet address to enable Web Monetization.', 'web-monetization' ); ?></p>
 				</td>
@@ -298,6 +305,13 @@ class UserMeta {
 				$user_id,
 				'wm_wallet_address',
 				sanitize_text_field( wp_unslash( $_POST['wm_wallet_address'] ) )
+			);
+		}
+		if ( isset( $_POST['wm_wallet_address_connected'] ) ) {
+			update_user_meta(
+				$user_id,
+				'wm_wallet_address_connected',
+				sanitize_text_field( wp_unslash( $_POST['wm_wallet_address_connected'] ) )
 			);
 		}
 	}
