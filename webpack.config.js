@@ -1,3 +1,9 @@
+/**
+ * Web Monetization WordPress Plugin
+ *
+ * @package   WebMonetization
+ */
+
 const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
 
 module.exports = {

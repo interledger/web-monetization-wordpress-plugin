@@ -4,6 +4,7 @@
  *
  * @package WebMonetization
  */
+
 namespace WebMonetization\Admin\Settings\Tabs;
 
 /**
@@ -42,10 +43,13 @@ class WidgetSettingsTab {
 		<div id="wm-banner-app"></div>
 		<?php
 	}
+	/**
+	 * Save the banner configuration.
+	 */
 	public static function save_banner_config() {
 		check_ajax_referer( 'wm_save_banner_config' );
 
-		$config = json_decode( wp_unslash( $_POST['config'] ?? '{}' ), true );
+		$config = json_decode( sanitize_text_field( wp_unslash( $_POST['config'] ?? '{}' ) ), true );
 		if ( ! is_array( $config ) ) {
 			wp_send_json_error( 'Invalid config' );
 		}
@@ -58,7 +62,7 @@ class WidgetSettingsTab {
 	 */
 	public static function publish_banner_config() {
 		check_ajax_referer( 'wm_save_banner_config' );
-		$config = json_decode( wp_unslash( $_POST['config'] ?? '{}' ), true );
+		$config = json_decode( sanitize_text_field( wp_unslash( $_POST['config'] ?? '{}' ) ), true );
 		if ( ! is_array( $config ) ) {
 			wp_send_json_error( 'Invalid config' );
 		}

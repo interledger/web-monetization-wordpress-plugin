@@ -9,10 +9,11 @@
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: web-monetization
  * Domain Path: /languages
- * Package:     WebMonetization
+ *
+ * @package     WebMonetization
  */
 
-defined( 'ABSPATH' ) || exit; // Prevent direct access
+defined( 'ABSPATH' ) || exit;
 
 if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 	require __DIR__ . '/vendor/autoload.php';
@@ -25,7 +26,6 @@ define( 'WEB_MONETIZATION_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 add_action(
 	'plugins_loaded',
 	function () {
-		// Boot up the core plugin class
 		WebMonetization\Core::init();
 	}
 );

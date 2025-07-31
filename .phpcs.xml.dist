@@ -2,4 +2,5 @@
 <ruleset name="Web Monetization Standards">
   <rule ref="WordPress"/>
   <exclude name="WordPress.Files.FileName"/>
+  <exclude-pattern>*/build/*.*</exclude-pattern>
 </ruleset>

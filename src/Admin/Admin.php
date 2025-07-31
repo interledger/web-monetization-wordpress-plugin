@@ -195,7 +195,6 @@ class Admin {
 			esc_attr( $is_connected ? '1' : '0' )
 		);
 		echo '</p>';
-		
 		echo '<p>';
 		echo '<label for="wm_disabled">';
 		echo '<input type="checkbox" id="wm_disabled" name="wm_disabled" value="1" ' . checked( '1' === $wm_disabled, true, false ) . ' />';

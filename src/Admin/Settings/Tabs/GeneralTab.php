@@ -143,11 +143,12 @@ class GeneralTab {
 		$excluded_users        = get_option( 'wm_excluded_authors', array() );
 		if ( ! empty( $excluded_users ) ) {
 			$is_only_one_author_excluded = count( $excluded_users ) === 1;
-			$multiple_authors_text = sprintf(
+			$multiple_authors_text       = sprintf(
+				/* translators: %d is the number of excluded authors */
 				esc_html__( 'are %d authors', 'web-monetization' ),
 				count( $excluded_users )
 			);
-			$excluded_users_notice       = ' <br><span class="description">' .
+			$excluded_users_notice .= ' <br><span class="description">' .
 				esc_html__( 'Note: There ', 'web-monetization' ) .
 				( $is_only_one_author_excluded ?
 					esc_html__( 'is 1 author', 'web-monetization' ) :
@@ -236,7 +237,7 @@ class GeneralTab {
 				$supported_types[] = $post_type;
 			}
 		}
-		echo '<p class="description">' . __( 'Enable Web Monetization per post type and provide a wallet address.', 'web-monetization' ) . '</p>';
+		echo '<p class="description">' . esc_html__( 'Enable Web Monetization per post type and provide a wallet address.', 'web-monetization' ) . '</p>';
 
 		echo '<br><table class="widefat striped wm-post-type-settings">';
 		echo '<thead>';

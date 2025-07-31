@@ -1,5 +1,13 @@
 <?php
-// If uninstall not called from WordPress, exit
+/**
+ * Uninstall the Web Monetization plugin.
+ *
+ * This file is called when the plugin is uninstalled.
+ * It removes all options and metadata related to the plugin.
+ *
+ * @package WebMonetization
+ */
+
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }

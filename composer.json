@@ -26,8 +26,8 @@
   },
   "scripts": {
     "l": "phpcs -e",
-    "lint": "phpcs --standard=WordPress --ignore=vendor,node_modules --exclude=WordPress.Files.FileName .",
-    "lint:fix": "phpcbf --standard=WordPress --ignore=vendor,node_modules --exclude=WordPress.Files.FileName .",
+    "lint": "phpcs --standard=WordPress --ignore=vendor,node_modules,*/build/*.* --exclude=WordPress.Files.FileName .",
+    "lint:fix": "phpcbf --standard=WordPress --ignore=vendor,node_modules,*/build/*.* --exclude=WordPress.Files.FileName .",
     "phpstan": "phpstan analyse ./src",
     "post-install-cmd": [
       "@lint"
