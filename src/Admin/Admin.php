@@ -55,9 +55,9 @@ class Admin {
 			wp_send_json_error( 'Invalid wallet address' );
 		}
 		if ( strpos( $wallet_field, 'wm_post_type_settings' ) === 0 ) {
-			$this->update_connected_option( 'wm_post_type_settings', $wallet_field );
+			$this->update_wm_post_type_settings_option( $wallet_field );
 		} else {
-			update_option( $wallet_field . '_connected', '1' );
+			$this->update_wm_wallet_address_connected_list_option( $wallet_field );
 		}
 
 		wp_send_json_success();
@@ -66,12 +66,11 @@ class Admin {
 	/**
 	 * Update the connected option for a specific post type.
 	 *
-	 * @param string $option_name The option name.
 	 * @param string $string_field The string field.
 	 *
 	 * @return void
 	 */
-	private function update_connected_option( string $option_name, string $string_field ): void {
+	private function update_wm_post_type_settings_option( string $string_field ): void {
 
 		$settings = get_option( 'wm_post_type_settings', array() );
 
@@ -83,6 +82,23 @@ class Admin {
 		if ( '' !== $type && isset( $settings[ $type ] ) ) {
 			$settings[ $type ]['connected'] = '1';
 			update_option( 'wm_post_type_settings', $settings );
+		}
+	}
+
+		/**
+		 * Update the connected option for a specific post type.
+		 *
+		 * @param string $string_field The string field.
+		 *
+		 * @return void
+		 */
+	private function update_wm_wallet_address_connected_list_option( string $string_field ): void {
+
+		$settings = get_option( 'wm_wallet_address_connected_list', array() );
+
+		if ( '' !== $string_field ) {
+			$settings[ $string_field ] = '1';
+			update_option( 'wm_wallet_address_connected_list', $settings );
 		}
 	}
 

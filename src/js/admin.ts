@@ -4,19 +4,29 @@ function normalizeWAPrefix(pointer: string): string {
   return pointer.startsWith('$') ? 'https://' + pointer.substring(1) : pointer;
 }
 
-export function validateWalletAddress(wa: string | null): boolean {
+export function validateWalletAddresses(
+  name: string,
+  wa: string | null,
+): boolean {
   if (!wa) return true;
   if (typeof wa !== 'string') return false;
 
-  if (wa.includes(' ')) {
-    return false;
+  if (name === 'wm_wallet_address') {
+    const addresses = wa.trim().split(/\s+/); // Split on one or more spaces.
+    return addresses.every(validateSingleWalletAddress);
+  } else {
+    // For post type settings, allow only a single address.
+    return validateSingleWalletAddress(wa);
   }
+}
+
+function validateSingleWalletAddress(wa: string): boolean {
+  if (!wa || typeof wa !== 'string') return false;
+  if (wa.includes(' ')) return false;
 
   // Only allow URL-safe characters
   const allowedChars = /^[a-zA-Z0-9\-._~:/?#[@\]!$&()*+,;=%]+$/;
-  if (!allowedChars.test(wa)) {
-    return false;
-  }
+  if (!allowedChars.test(wa)) return false;
 
   try {
     const url = new URL(normalizeWAPrefix(wa));
@@ -31,6 +41,7 @@ export function validateWalletAddress(wa: string | null): boolean {
     return false;
   }
 }
+
 function createElements(input: HTMLInputElement, index: number) {
   const wrapper = document.createElement('div');
   wrapper.className = 'wallet-ui-wrapper';
@@ -84,7 +95,7 @@ async function fetchWalletDetails(url: string): Promise<any> {
   if (!response.ok) {
     throw new Error('Wallet request failed');
   }
-  return await response.json();
+  return { url: response.url, response: await response.json() };
 }
 
 function validateWalletData(data: any): void {
@@ -182,7 +193,7 @@ function showValidation(
   feedback: HTMLParagraphElement,
 ): boolean {
   const value = input.value;
-  const isValid = validateWalletAddress(value);
+  const isValid = validateWalletAddresses(input.name, input.value);
 
   if (isValid) {
     input.style.borderColor = '';
@@ -220,17 +231,28 @@ function setupWalletField(input: HTMLInputElement, index: number) {
   input.addEventListener('input', validateAndToggleButton);
 
   connectBtn.addEventListener('click', async () => {
-    const pointer = input.value.trim();
-    const url = normalizeWAPrefix(pointer);
+    const rawInput = input.value.trim();
+    const pointers = rawInput.split(/\s+/); // split on spaces
 
     setConnectingState(true, connectBtn);
     feedback.textContent = '';
 
     try {
-      const data = await fetchWalletDetails(url);
-      validateWalletData(data);
+      const normalizedPointers: string[] = [];
 
-      await saveWalletConnection(data.id, input.name);
+      for (const pointer of pointers) {
+        const pointerUrl = normalizeWAPrefix(pointer);
+        const { url, response } = await fetchWalletDetails(pointerUrl);
+        validateWalletData(response);
+
+        // Save normalized pointer
+        normalizedPointers.push(url);
+
+        // Save to server
+        await saveWalletConnection(response.id, url);
+      }
+
+      input.value = normalizedPointers.join(' ');
 
       handleUIAfterSuccess(input, check, editLink, connectBtn);
       feedback.textContent = '';

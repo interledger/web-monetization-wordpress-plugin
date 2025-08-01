@@ -151,14 +151,19 @@ class Frontend {
 
 		if ( 'all' === $mode ) {
 			foreach ( $wallets['list'] as $source => $wallet ) {
-				$url     = esc_url( $this->clean_wallet_address( $wallet ), 'https' );
-				$output .= "<{$element_type} rel=\"monetization\" href=\"{$url}\" data-wm-source=\"{$source}\" />\n";
+				$output .= $this->render_monetization_link( $wallet, $source );
 			}
 		} else {
 			foreach ( array( 'article', 'author', 'post_type', 'site' ) as $key ) {
 				if ( isset( $wallets['list'][ $key ] ) ) {
-					$url     = esc_url( $this->clean_wallet_address( $wallets['list'][ $key ] ), 'https' );
-					$output .= "<{$element_type} rel=\"monetization\" href=\"{$url}\" data-wm-source=\"{$key}\" />\n";
+					if ( 'site' === $key && 0 < strpos( $wallets['list'][ $key ], ' ' ) ) {
+						$wallets = explode( ' ', $wallets['list'][ $key ] );
+						foreach ( $wallets as $wallet ) {
+							$output .= $this->render_monetization_link( $wallet, $key, $element_type );
+						}
+					} else {
+						$output .= $this->render_monetization_link( $wallets['list'][ $key ], $key, $element_type );
+					}
 					break;
 				}
 			}
@@ -166,6 +171,18 @@ class Frontend {
 		return $output;
 	}
 
+	/**
+	 * Render monetization link.
+	 *
+	 * @param string $wallet The wallet address.
+	 * @param string $source The source of the wallet (e.g., 'article', 'author', 'post_type', 'site').
+	 * @param string $element_type The type of element to generate (e.g., 'link', 'atom:link').
+	 * @return string The rendered monetization link.
+	 */
+	private function render_monetization_link( string $wallet, string $source, string $element_type = 'link' ): string {
+		$url = esc_url( $this->clean_wallet_address( $wallet ), 'https' );
+		return "<{$element_type} rel=\"monetization\" href=\"{$url}\" data-wm-source=\"{$source}\" />" . PHP_EOL;
+	}
 	/**
 	 * Get wallets for a post with logic.
 	 *
