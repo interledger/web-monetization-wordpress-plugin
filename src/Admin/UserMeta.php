@@ -248,7 +248,9 @@ class UserMeta {
 		if ( ! current_user_can( 'edit_user', $user->ID ) ) {
 			return;
 		}
-
+		if ( in_array( 'administrator', (array) $user->roles, true ) ) {
+			return;
+		}
 		if ( ! get_option( 'wm_enable_authors' ) ) {
 			return;
 		}
