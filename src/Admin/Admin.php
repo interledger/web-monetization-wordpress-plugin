@@ -27,7 +27,7 @@ class Admin {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_assets' ) );
 
 		add_action(
-			'plugin_action_links_' . plugin_basename( plugin_dir_path( dirname( __DIR__ ) ) . '/interledger-web-monetization-wordpress-plugin.php' ),
+			'plugin_action_links_' . plugin_basename( plugin_dir_path( dirname( __DIR__ ) ) . '/web-monetization-wordpress-plugin.php' ),
 			array( $this, 'plugin_row_actions' )
 		);
 
