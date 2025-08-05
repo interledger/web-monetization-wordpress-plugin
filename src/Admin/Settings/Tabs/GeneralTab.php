@@ -22,6 +22,7 @@ class GeneralTab {
 	public static function register(): void {
 		register_setting( 'webmonetization_general', 'wm_enabled' );
 		register_setting( 'webmonetization_general', 'wm_wallet_address' );
+		register_setting( 'webmonetization_general', 'wm_wallet_address_connected' );
 		register_setting( 'webmonetization_general', 'wm_enable_authors' );
 		register_setting( 'webmonetization_general', 'wm_multi_wallets_option' );
 		register_setting( 'webmonetization_general', 'wm_post_type_settings' );
