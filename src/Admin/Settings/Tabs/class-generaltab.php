@@ -27,6 +27,17 @@ class GeneralTab {
 		register_setting( 'webmonetization_general', 'wm_multi_wallets_option' );
 		register_setting( 'webmonetization_general', 'wm_post_type_settings' );
 		register_setting( 'webmonetization_general', 'wm_banner_enabled' );
+		register_setting( 'webmonetization_general', 'wm_wallet_address' );
+		register_setting( 'webmonetization_general', 'wm_enable_country_wallets' );
+		register_setting( 'webmonetization_general', 'wm_wallet_address_overrides' );
+		register_setting(
+			'webmonetization_settings_group',
+			'wm_wallet_address_overrides',
+			array(
+				'type'              => 'array',
+				'sanitize_callback' => array( self::class, 'sanitize_wallet_overrides' ),
+			)
+		);
 
 		add_settings_section(
 			'webmonetization_general_section',
@@ -81,7 +92,156 @@ class GeneralTab {
 			'webmonetization_general',
 			'webmonetization_general_section'
 		);
+
+		add_settings_field(
+			'wm_enable_country_wallets',
+			__( 'Enable country-specific wallet addresses', 'web-monetization' ),
+			array( self::class, 'render_field_enable_country_wallets' ),
+			'webmonetization_general',
+			'webmonetization_general_section'
+		);
+
+			add_settings_field(
+				'wm_wallet_address_overrides',
+				__( 'Country-Based Wallet Overrides', 'web-monetization' ),
+				array( self::class, 'render_field_country_wallet_overrides' ),
+				'webmonetization_general',
+				'webmonetization_general_section'
+			);
 	}
+
+	public static function sanitize_wallet_overrides( $input ) {
+		$output = array();
+
+		if (
+			is_array( $input ) &&
+			isset( $input['country'], $input['wallet'] ) &&
+			is_array( $input['country'] ) &&
+			is_array( $input['wallet'] )
+		) {
+			foreach ( $input['country'] as $i => $country ) {
+				$code   = strtoupper( sanitize_text_field( $country ) );
+				$wallet = sanitize_text_field( $input['wallet'][ $i ] ?? '' );
+
+				if ( $code && $wallet ) {
+					$output[ $code ] = $wallet;
+				}
+			}
+		}
+
+		return $output;
+	}
+
+	/**
+	 * Render the "Enable country-specific wallet addresses" field.
+	 */
+	public static function render_field_enable_country_wallets(): void {
+		$value = get_option( 'wm_enable_country_wallets', 0 );
+
+		$geoip_available = function_exists( 'geoip_detect2_get_info_from_current_ip' );
+		FieldRenderer::render_checkbox(
+			'wm_enable_country_wallets',
+			'wm_enable_country_wallets',
+			$value,
+			esc_html__(
+				'Enable country-specific wallet addresses. If enabled, you can set different wallet addresses based on the visitor\'s country.' .
+				( $geoip_available ? '' : ' Note: GeoIP detection is not available.' ),
+				'web-monetization'
+			)
+		);
+	}
+
+	/**
+	 * Render a row for the country wallet overrides table.
+	 *
+	 * @param string|null $country The country code.
+	 * @param string|null $wallet  The wallet address.
+	 *
+	 * @return string HTML for the row.
+	 */
+	public static function render_field_country_wallet_overrides(): void {
+		$enabled = get_option( 'wm_enable_country_wallets', '0' ) === '1';
+
+		$wallet_overrides = get_option( 'wm_wallet_address_overrides', array() );
+		$geoip_available  = function_exists( 'geoip_detect2_get_info_from_current_ip' );
+		?>
+		<div id="wm_country_wallets_wrapper" style="<?php echo $enabled ? '' : 'display:none;'; ?>">
+
+		<?php if ( get_option( 'wm_enable_country_wallets' ) && ! $geoip_available ) : ?>
+			<div class="notice notice-warning inline">
+				<p>
+					<?php
+					printf(
+						wp_kses(
+							__( 'Country detection requires the <a href="%s" target="_blank" rel="noopener">GeoIP Detection plugin</a>.', 'web-monetization' ),
+							array(
+								'a' => array(
+									'href'   => array(),
+									'target' => array(),
+									'rel'    => array(),
+								),
+							)
+						),
+						esc_url( 'https://wordpress.org/plugins/geoip-detect/' )
+					);
+					?>
+				</p>
+			</div>
+		<?php endif; ?>
+
+		<table id="wallet-country-table" class="widefat striped wm-post-type-settings">
+			<thead>
+				<tr>
+					<th><?php esc_html_e( 'Country Code', 'web-monetization' ); ?></th>
+					<th><?php esc_html_e( 'Wallet Address', 'web-monetization' ); ?></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php
+				if ( ! empty( $wallet_overrides ) ) {
+					foreach ( $wallet_overrides as $country => $wallet ) {
+						echo self::render_wallet_country_row( $country, $wallet );
+					}
+				}
+				// Empty row
+				echo self::render_wallet_country_row();
+				?>
+			</tbody>
+		</table>
+
+		<p>
+			<button type="button" class="button" id="add-wallet-country-row"><?php esc_html_e( 'Add New Country Wallet', 'web-monetization' ); ?></button>
+		</p>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Render a single row for the country wallet overrides table.
+	 *
+	 * @param string $country The country code.
+	 * @param string $wallet  The wallet address.
+	 *
+	 * @return string HTML for the row.
+	 */
+	private static function render_wallet_country_row( string $country = '', array $wallet = array(
+		'country'   => '',
+		'wallet'    => '',
+		'connected' => '0',
+	) ): string {
+		ob_start();
+		?>
+		<tr>
+			<td><input type="text" name="wm_wallet_address_overrides[<?php echo esc_attr( strtoupper( $country ) ); ?>][country]" value="<?php echo esc_attr( strtoupper( $country ) ); ?>" maxlength="2" style="width: 80px;" /></td>
+			<td class="widefat row"><input type="text" name="wm_wallet_address_overrides[<?php echo esc_attr( strtoupper( $country ) ); ?>][wallet]" value="<?php echo esc_attr( $wallet['wallet'] ); ?>" style="width: 400px;" /></td>
+			<td><button type="button" class="button remove-row">×</button></td>
+		</tr>
+		<input type="hidden" name="wm_wallet_address_overrides[<?php echo esc_attr( strtoupper( $country ) ); ?>][connected]" value="<?php echo esc_attr( $wallet['connected'] ? '1' : '0' ); ?>" />
+		<?php
+		return ob_get_clean();
+	}
+
 
 	/**
 	 * Render the settings form.
@@ -259,7 +419,7 @@ class GeneralTab {
 			$wa_placeholder = 'https://walletprovider.com/MyWallet';
 
 			echo '<tr>';
-			echo '<td>';
+			echo '<td  style="width: 80px;" >';
 			printf(
 				'<label><input type="checkbox" name="wm_post_type_settings[%1$s][enabled]" value="1" %2$s> %3$s</label>',
 				esc_attr( $key ),
