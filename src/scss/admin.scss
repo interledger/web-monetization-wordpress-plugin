@@ -76,3 +76,27 @@
 	}
 
 }
+
+#wm_country_wallets_wrapper {
+	transition: all 0.3s ease;
+}
+#wallet-country-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 1rem;
+	th, td {
+		padding: 0.5rem;
+		text-align: left;
+	}
+	th {
+		&:first-child {
+			border-top-left-radius: 8px;
+			border-bottom-left-radius: 8px;
+			width: 90px;
+		}
+		&:last-child {
+			border-top-right-radius: 8px;
+			border-bottom-right-radius: 8px;
+		}
+	}
+}

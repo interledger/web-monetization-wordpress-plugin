@@ -19,7 +19,6 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 	require __DIR__ . '/vendor/autoload.php';
 }
 
-
 require_once __DIR__ . '/src/frontend/class-frontend.php';
 require_once __DIR__ . '/src/admin/rendering/class-fieldrenderer.php';
 require_once __DIR__ . '/src/admin/settings/class-settingspage.php';

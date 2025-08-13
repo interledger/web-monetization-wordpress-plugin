@@ -28,12 +28,18 @@ function validateSingleWalletAddress(wa: string): boolean {
   const allowedChars = /^[a-zA-Z0-9\-._~:/?#[@\]!$&()*+,;=%]+$/;
   if (!allowedChars.test(wa)) return false;
 
+  const hostnameRegex =
+    /^(?=.{1,253}$)(?!.*\.\.)([a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)(\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+  if (!hostnameRegex.test(wa.hostname)) {
+    return false; //throw new WalletValidationError('domain name is not valid');
+  }
+
   try {
     const url = new URL(normalizeWAPrefix(wa));
     if (url.protocol !== 'https:') return false;
     if (!url.hostname) return false;
     if (url.pathname && !url.pathname.startsWith('/')) return false;
-    if (url.pathname === '/') return false;
+    //if (url.pathname === '/') return false;
     if (url.search || url.hash) return false;
 
     return true;
@@ -42,7 +48,7 @@ function validateSingleWalletAddress(wa: string): boolean {
   }
 }
 
-function createElements(input: HTMLInputElement, index: number) {
+function createElements(input: HTMLInputElement) {
   const wrapper = document.createElement('div');
   wrapper.className = 'wallet-ui-wrapper';
   wrapper.style.marginTop = '8px';
@@ -143,8 +149,15 @@ function handleUIAfterSuccess(
   check.style.display = 'inline';
   editLink.style.display = 'inline';
   connectBtn.style.display = 'none';
-
-  if (input.name.startsWith('wm_post_type_settings')) {
+  if (input.name.startsWith('wm_wallet_address_overrides')) {
+    const countryCode = input.name.split('[')[1].split(']')[0];
+    const hiddenInput = document.querySelector(
+      `input[name="wm_wallet_address_overrides[${countryCode}][connected]"]`,
+    ) as HTMLInputElement;
+    if (hiddenInput) {
+      hiddenInput.value = '1';
+    }
+  } else if (input.name.startsWith('wm_post_type_settings')) {
     const postType = input.name.split('[')[1].split(']')[0];
     const hiddenInput = document.querySelector(
       `input[name="wm_post_type_settings[${postType}][connected]"]`,
@@ -170,7 +183,15 @@ function handleUIAfterFailure(
   feedback.textContent = 'Failed to connect to wallet.';
   feedback.style.color = 'red';
 
-  if (input.name.startsWith('wm_post_type_settings')) {
+  if (input.name.startsWith('wm_enable_country_wallets')) {
+    const countryCode = input.name.split('[')[1].split(']')[0];
+    const hiddenInput = document.querySelector(
+      `input[name="wm_enable_country_wallets[${countryCode}][connected]"]`,
+    ) as HTMLInputElement;
+    if (hiddenInput) {
+      hiddenInput.value = '0';
+    }
+  } else if (input.name.startsWith('wm_post_type_settings')) {
     const postType = input.name.split('[')[1].split(']')[0];
     const hiddenInput = document.querySelector(
       `input[name="wm_post_type_settings[${postType}][connected]"]`,
@@ -207,11 +228,8 @@ function showValidation(
   return isValid;
 }
 
-function setupWalletField(input: HTMLInputElement, index: number) {
-  const { connectBtn, editLink, check, feedback } = createElements(
-    input,
-    index,
-  );
+function setupWalletField(input: HTMLInputElement) {
+  const { connectBtn, editLink, check, feedback } = createElements(input);
 
   const validateAndToggleButton = () => {
     const isValid = showValidation(input, feedback);
@@ -269,6 +287,30 @@ function setupWalletField(input: HTMLInputElement, index: number) {
     check.style.display = 'none';
     editLink.style.display = 'none';
     connectBtn.style.display = 'inline-block';
+    if (input.name.startsWith('wm_wallet_address_overrides')) {
+      const countryCode = input.name.split('[')[1].split(']')[0];
+      const hiddenInput = document.querySelector(
+        `input[name="wm_wallet_address_overrides[${countryCode}][connected]"]`,
+      ) as HTMLInputElement;
+      if (hiddenInput) {
+        hiddenInput.value = '0';
+      }
+    } else if (input.name.startsWith('wm_post_type_settings')) {
+      const postType = input.name.split('[')[1].split(']')[0];
+      const hiddenInput = document.querySelector(
+        `input[name="wm_post_type_settings[${postType}][connected]"]`,
+      ) as HTMLInputElement;
+      if (hiddenInput) {
+        hiddenInput.value = '0';
+      }
+    } else if (input.name === 'wm_wallet_address') {
+      const hiddenInput = document.querySelector(
+        'input[name="wm_wallet_address_connected"]',
+      ) as HTMLInputElement;
+      if (hiddenInput) {
+        hiddenInput.value = '0';
+      }
+    }
   });
 }
 
@@ -293,11 +335,11 @@ function validateConnectedState(
 document.addEventListener('DOMContentLoaded', () => {
   const walletInputs = Array.from(
     document.querySelectorAll<HTMLInputElement>(
-      '#wm_wallet_address, input[name^="wm_post_type_settings"][name$="[wallet]"]',
+      '#wm_wallet_address, input[name^="wm_post_type_settings"][name$="[wallet]"], input[name^="wm_wallet_address_overrides"][name$="[wallet]"]',
     ),
   );
-  walletInputs.forEach((input, index) => {
-    setupWalletField(input, index);
+  walletInputs.forEach((input) => {
+    setupWalletField(input);
   });
 });
 
@@ -342,5 +384,65 @@ document.addEventListener('DOMContentLoaded', () => {
 
   form.addEventListener('submit', () => {
     isDirty = false;
+  });
+});
+document.addEventListener('DOMContentLoaded', () => {
+  const checkbox = document.querySelector<HTMLInputElement>(
+    'input[name="wm_enable_country_wallets"]',
+  );
+  const wrapper = document.getElementById('wm_country_wallets_wrapper');
+
+  if (checkbox && wrapper) {
+    checkbox.addEventListener('change', () => {
+      wrapper.style.display = checkbox.checked ? 'block' : 'none';
+    });
+  }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const table = document.getElementById(
+    'wallet-country-table',
+  ) as HTMLTableElement | null;
+  const addBtn = document.getElementById(
+    'add-wallet-country-row',
+  ) as HTMLButtonElement | null;
+  if (!table || !addBtn) return;
+
+  addBtn.addEventListener('click', () => {
+    const rows = table.querySelectorAll<HTMLTableRowElement>('tbody tr');
+    const lastRow = rows[rows.length - 1];
+    const newRow = lastRow.cloneNode(true) as HTMLTableRowElement;
+    newRow.style.display = 'table-row';
+    newRow.querySelectorAll<HTMLInputElement>('input').forEach((input) => {
+      input.value = '';
+      input.name = input.name.replace(/\[\]/, `[NEW_${rows.length}]`);
+    });
+
+    const par = newRow.querySelector<HTMLInputElement>('.wallet-ui-wrapper');
+    if (par) par.innerHTML = '';
+
+    newRow
+      .querySelectorAll<HTMLInputElement>('input[name$="[wallet]"]')
+      .forEach((input) => {
+        setupWalletField(input);
+      });
+
+    const tbody = table.querySelector('tbody');
+    if (tbody) {
+      tbody.appendChild(newRow);
+    }
+  });
+
+  table.addEventListener('click', (e: MouseEvent) => {
+    const target = e.target as HTMLElement | null;
+    if (!target) return;
+
+    if (target.classList.contains('remove-row')) {
+      const row = target.closest('tr') as HTMLTableRowElement | null;
+      const rows = table.querySelectorAll('tbody tr');
+      if (row && rows.length > 1) {
+        row.remove();
+      }
+    }
   });
 });

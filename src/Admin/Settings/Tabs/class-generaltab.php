@@ -101,34 +101,35 @@ class GeneralTab {
 			'webmonetization_general_section'
 		);
 
-			add_settings_field(
-				'wm_wallet_address_overrides',
-				__( 'Country-Based Wallet Overrides', 'web-monetization' ),
-				array( self::class, 'render_field_country_wallet_overrides' ),
-				'webmonetization_general',
-				'webmonetization_general_section'
-			);
+		add_settings_field(
+			'wm_wallet_address_overrides',
+			__( 'Country-Based Wallet Overrides', 'web-monetization' ),
+			array( self::class, 'render_field_country_wallet_overrides' ),
+			'webmonetization_general',
+			'webmonetization_general_section'
+		);
 	}
 
 	public static function sanitize_wallet_overrides( $input ) {
 		$output = array();
 
-		if (
-			is_array( $input ) &&
-			isset( $input['country'], $input['wallet'] ) &&
-			is_array( $input['country'] ) &&
-			is_array( $input['wallet'] )
-		) {
-			foreach ( $input['country'] as $i => $country ) {
-				$code   = strtoupper( sanitize_text_field( $country ) );
-				$wallet = sanitize_text_field( $input['wallet'][ $i ] ?? '' );
+		echo "<pre>".var_export( $input, true )."</pre>"; // Debugging line to check the input structure.
+		//die;
+		foreach( $input as $index => $wallet_data ) {
+			//$country = strtoupper( sanitize_text_field( $country ) );
+			$country  = sanitize_text_field( $wallet_data['country'] ?? sanitize_text_field( $index ) );
+			$wallet  = sanitize_text_field( $wallet_data['wallet'] ?? '' );
+			$connected = isset( $wallet_data['connected'] ) ? (bool) $wallet_data['connected'] : false;
 
-				if ( $code && $wallet ) {
-					$output[ $code ] = $wallet;
-				}
+			if ( $country && $wallet ) {
+				$output[ $country ] = array(
+					'wallet'    => $wallet,
+					'connected' => $connected ? '1' : '0',
+				);
 			}
 		}
 
+		//echo "<pre>".var_export( $output, true )."</pre>"; die;
 		return $output;
 	}
 
@@ -230,11 +231,12 @@ class GeneralTab {
 		'wallet'    => '',
 		'connected' => '0',
 	) ): string {
+		$is_connected = $wallet['connected'] === '1';
 		ob_start();
 		?>
-		<tr>
+		<tr style="<?php echo empty( $country ) ? 'display:none;' : ''; ?>">
 			<td><input type="text" name="wm_wallet_address_overrides[<?php echo esc_attr( strtoupper( $country ) ); ?>][country]" value="<?php echo esc_attr( strtoupper( $country ) ); ?>" maxlength="2" style="width: 80px;" /></td>
-			<td class="widefat row"><input type="text" name="wm_wallet_address_overrides[<?php echo esc_attr( strtoupper( $country ) ); ?>][wallet]" value="<?php echo esc_attr( $wallet['wallet'] ); ?>" style="width: 400px;" /></td>
+			<td class="widefat row"><input type="text" name="wm_wallet_address_overrides[<?php echo esc_attr( strtoupper( $country ) ); ?>][wallet]" value="<?php echo esc_attr( $wallet['wallet'] ); ?>" <?php echo $is_connected ? 'readonly' : ''; ?> style="width: 400px;" /></td>
 			<td><button type="button" class="button remove-row">×</button></td>
 		</tr>
 		<input type="hidden" name="wm_wallet_address_overrides[<?php echo esc_attr( strtoupper( $country ) ); ?>][connected]" value="<?php echo esc_attr( $wallet['connected'] ? '1' : '0' ); ?>" />
