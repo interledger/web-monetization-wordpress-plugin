@@ -104,21 +104,24 @@ class GeneralTab {
 		add_settings_field(
 			'wm_wallet_address_overrides',
 			__( 'Country-Based Wallet Overrides', 'web-monetization' ),
-			array( self::class, 'render_field_country_wallet_overrides' ),
+			array( self::class, 'render_field_country_wallet_overrides_echo' ),
 			'webmonetization_general',
 			'webmonetization_general_section'
 		);
 	}
 
+	/**
+	 * Sanitize the wallet overrides input.
+	 *
+	 * @param array $input The input data.
+	 * @return array Sanitized output.
+	 */
 	public static function sanitize_wallet_overrides( $input ) {
 		$output = array();
 
-		echo "<pre>".var_export( $input, true )."</pre>"; // Debugging line to check the input structure.
-		//die;
-		foreach( $input as $index => $wallet_data ) {
-			//$country = strtoupper( sanitize_text_field( $country ) );
-			$country  = sanitize_text_field( $wallet_data['country'] ?? sanitize_text_field( $index ) );
-			$wallet  = sanitize_text_field( $wallet_data['wallet'] ?? '' );
+		foreach ( $input as $index => $wallet_data ) {
+			$country   = sanitize_text_field( $wallet_data['country'] ?? sanitize_text_field( $index ) );
+			$wallet    = sanitize_text_field( $wallet_data['wallet'] ?? '' );
 			$connected = isset( $wallet_data['connected'] ) ? (bool) $wallet_data['connected'] : false;
 
 			if ( $country && $wallet ) {
@@ -129,7 +132,6 @@ class GeneralTab {
 			}
 		}
 
-		//echo "<pre>".var_export( $output, true )."</pre>"; die;
 		return $output;
 	}
 
@@ -140,31 +142,38 @@ class GeneralTab {
 		$value = get_option( 'wm_enable_country_wallets', 0 );
 
 		$geoip_available = function_exists( 'geoip_detect2_get_info_from_current_ip' );
+
+		$label = esc_html__( 'Enable country-specific wallet addresses. If enabled, you can set different wallet addresses based on the visitor\'s country.', 'your-text-domain' );
+		if ( ! $geoip_available ) {
+			$label .= ' ' . esc_html__( 'Note: GeoIP detection is not available.', 'your-text-domain' );
+		}
 		FieldRenderer::render_checkbox(
 			'wm_enable_country_wallets',
 			'wm_enable_country_wallets',
 			$value,
-			esc_html__(
-				'Enable country-specific wallet addresses. If enabled, you can set different wallet addresses based on the visitor\'s country.' .
-				( $geoip_available ? '' : ' Note: GeoIP detection is not available.' ),
-				'web-monetization'
-			)
+			$label
 		);
+	}
+
+	/**
+	 * Echo wrapper for render_field_country_wallet_overrides.
+	 */
+	public static function render_field_country_wallet_overrides_echo(): void {
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo self::render_field_country_wallet_overrides();
 	}
 
 	/**
 	 * Render a row for the country wallet overrides table.
 	 *
-	 * @param string|null $country The country code.
-	 * @param string|null $wallet  The wallet address.
-	 *
 	 * @return string HTML for the row.
 	 */
-	public static function render_field_country_wallet_overrides(): void {
+	public static function render_field_country_wallet_overrides(): string {
 		$enabled = get_option( 'wm_enable_country_wallets', '0' ) === '1';
 
 		$wallet_overrides = get_option( 'wm_wallet_address_overrides', array() );
 		$geoip_available  = function_exists( 'geoip_detect2_get_info_from_current_ip' );
+		ob_start();
 		?>
 		<div id="wm_country_wallets_wrapper" style="<?php echo $enabled ? '' : 'display:none;'; ?>">
 
@@ -174,6 +183,7 @@ class GeneralTab {
 					<?php
 					printf(
 						wp_kses(
+							// translators: %s is the URL to the GeoIP Detection plugin.
 							__( 'Country detection requires the <a href="%s" target="_blank" rel="noopener">GeoIP Detection plugin</a>.', 'web-monetization' ),
 							array(
 								'a' => array(
@@ -202,10 +212,11 @@ class GeneralTab {
 				<?php
 				if ( ! empty( $wallet_overrides ) ) {
 					foreach ( $wallet_overrides as $country => $wallet ) {
+						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						echo self::render_wallet_country_row( $country, $wallet );
 					}
 				}
-				// Empty row
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo self::render_wallet_country_row();
 				?>
 			</tbody>
@@ -216,13 +227,14 @@ class GeneralTab {
 		</p>
 		</div>
 		<?php
+		return ob_get_clean();
 	}
 
 	/**
 	 * Render a single row for the country wallet overrides table.
 	 *
 	 * @param string $country The country code.
-	 * @param string $wallet  The wallet address.
+	 * @param array  $wallet  The wallet address.
 	 *
 	 * @return string HTML for the row.
 	 */
@@ -231,7 +243,7 @@ class GeneralTab {
 		'wallet'    => '',
 		'connected' => '0',
 	) ): string {
-		$is_connected = $wallet['connected'] === '1';
+		$is_connected = '1' === $wallet['connected'];
 		ob_start();
 		?>
 		<tr style="<?php echo empty( $country ) ? 'display:none;' : ''; ?>">
@@ -345,7 +357,9 @@ class GeneralTab {
 			'wm_multi_wallets_option',
 			$value,
 			array(
+				// translators: %s is HTML markup for <strong>.
 				'one' => wp_kses_post( 'Only use one wallet (This option displays <strong>a single wallet address</strong> based on the following priority: article > post type >  author > site)', 'web-monetization' ),
+				// translators: %s is HTML markup for <strong>.
 				'all' => wp_kses_post( 'Use all wallets (This option displays <strong>all wallet addresses that are defined</strong> including site, author, post type and article wallets)', 'web-monetization' ),
 			)
 		);
