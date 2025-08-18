@@ -74,6 +74,63 @@
 		margin: 0;
 		padding: 0;
 	}
+	// Wallet UI wrapper
+	.wallet-ui-wrapper {
+		margin-top: 8px;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	// Feedback messages
+	.wallet-feedback {
+		font-size: 0.9em;
+		margin-left: 0.5rem;
+		&.text-danger {
+			color: red;
+		}
+	}
+
+	// Buttons
+	.wallet-verify {
+		// inherits WP button styles via "button button-secondary"
+		&.is-busy,
+		&[aria-busy="true"] {
+			opacity: 0.7;
+			pointer-events: none;
+		}
+	}
+
+	.wallet-edit {
+		margin-left: 12px; // replaces inline marginLeft
+		display: inline;   // visible when toggled
+	}
+
+	.wallet-check {
+		margin-left: 8px;
+		color: green;
+		display: inline;   // visible when toggled
+	}
+
+	// Utility classes
+	.hidden {
+		display: none !important;
+	}
+
+	.text-danger {
+		color: red !important;
+	}
+
+	.ml-2 {
+		margin-left: 8px;
+	}
+
+	.ml-3 {
+		margin-left: 12px;
+	}
+
+	.mt-2 {
+		margin-top: 8px;
+	}
 
 }
 
