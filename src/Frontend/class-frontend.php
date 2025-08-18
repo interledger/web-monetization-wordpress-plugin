@@ -105,10 +105,8 @@ class Frontend {
 			return;
 		}
 
-		$site_wallet = get_option( 'wm_wallet_address', '' );
+		$site_wallet = $this->get_wallet_for_front_page();
 		if ( $site_wallet ) {
-			$url = esc_url( $this->clean_wallet_address( $site_wallet ), 'https' );
-			echo '	<link rel="monetization" href="' . esc_url( $url, 'https' ) . '" />' . PHP_EOL;
 			$wallets = explode( ' ', $site_wallet );
 
 			$output = '';
@@ -126,7 +124,7 @@ class Frontend {
 			return;
 		}
 
-		$site_wallet = get_option( 'wm_wallet_address', '' );
+		$site_wallet = $this->get_wallet_for_front_page();
 		if ( $site_wallet ) {
 			$wallets = explode( ' ', $site_wallet );
 			$output  = '';
@@ -147,18 +145,16 @@ class Frontend {
 	 */
 	public function generate_monetization_link_for_post( $post_id, $element_type = 'link' ): ?string {
 
-		echo "<!-- generate_monetization_link_for_post $post_id -->" . PHP_EOL;
 		if ( ! $this->is_enabled() ) {
 			return null;
 		}
-		echo "<!-- generate_monetization_link_for_post $post_id 2-->" . PHP_EOL;
+
 		$post = get_post( $post_id );
 		if ( ! $post ) {
 			return null;
 		}
-		echo "<!-- generate_monetization_link_for_post $post_id  3-->" . PHP_EOL;
+
 		$wallets = $this->get_wallets_for_post( $post );
-		// echo "<!-- generate_monetization_link_for_post {".print_r($wallets['list'], true)."} -->";
 		if ( empty( $wallets['list'] ) ) {
 			return null;
 		}
@@ -172,9 +168,7 @@ class Frontend {
 			}
 		} else {
 			foreach ( array( 'article', 'author', 'post_type', 'site' ) as $key ) {
-				echo "<!-- generate_monetization_link_for_post |{wallets['list'][ $key ]} -->";
 				if ( isset( $wallets['list'][ $key ] ) ) {
-					echo "<!-- generate_monetization_link_for_post {$wallets['list'][ $key ]} -->";
 					if ( 'site' === $key && 0 < strpos( $wallets['list'][ $key ], ' ' ) ) {
 						$wallets = explode( ' ', $wallets['list'][ $key ] );
 						foreach ( $wallets as $wallet ) {
@@ -249,14 +243,9 @@ class Frontend {
 		if ( $config && ! empty( $config['enabled'] ) && ! empty( $config['wallet'] ) ) {
 			$list['post_type'] = $config['wallet'];
 		}
-
-		// Site-wide wallet.
-		// $site_wallet = get_option( 'wm_wallet_address', '' );
-		// if ( $site_wallet ) {
-		// $list['site'] = $site_wallet;
-		// }
+		// Site wallet.
 		$list['site'] = $this->get_wallet_for_front_page();
-		print_r( $list );
+
 		return array(
 			'list'     => $list,
 			'disabled' => $disabled,
@@ -280,11 +269,9 @@ class Frontend {
 			$country_code = $this->wm_detect_country();
 
 			if ( ! $country_code ) {
-				echo '<!-- No GeoIP info available. -->';
 				return null;
 			}
 			if ( '' !== $country_code ) {
-				echo '<!-- geoip_info Country code detected: ' . $country_code . '. -->';
 				$country_code = strtoupper( $country_code );
 				if ( isset( $wallet_overrides[ $country_code ]['wallet'] ) && ! empty( $wallet_overrides[ $country_code ]['wallet'] ) ) {
 					return $this->clean_wallet_address( $wallet_overrides[ $country_code ]['wallet'] );
@@ -325,38 +312,32 @@ class Frontend {
 		return (bool) get_option( 'wm_enabled', 0 );
 	}
 
+	/**
+	 * Detect country from Cloudflare header.
+	 *
+	 * @return string The country code from Cloudflare header.
+	 */
 	private function wm_country_from_cloudflare(): string {
-		return strtoupper( $_SERVER['HTTP_CF_IPCOUNTRY'] ?? '' );
+		return strtoupper( sanitize_text_field( wp_unslash( $_SERVER['HTTP_CF_IPCOUNTRY'] ?? '' ) ) );
 	}
 
-	private function wm_guess_country_from_accept_language(): string {
-		$al = $_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? '';
-		if ( ! $al ) {
-			return '';
-		}
-		// naive parse: look for pattern like en-US or fr-FR
-		if ( preg_match( '/^[a-z]{2,3}(?:-[A-Z]{2})?/', $al, $m ) ) {
-			if ( strpos( $m[0], '-' ) !== false ) {
-				$parts = explode( '-', $m[0] );
-				return strtoupper( $parts[1] ?? '' );
-			}
-		}
-		return '';
-	}
-
+	/**
+	 * Detect country from GeoIP or Cloudflare header.
+	 *
+	 * @return string The detected country code.
+	 */
 	private function wm_detect_country(): string {
-		// Preferred: GeoIP Detection if present
 		if ( function_exists( 'geoip_detect2_get_info_from_current_ip' ) ) {
 			$info = geoip_detect2_get_info_from_current_ip();
 			return strtoupper( $info->country->isoCode ?? '' );
 		}
-		// Next: Cloudflare header (if any)
+
 		$cf = $this->wm_country_from_cloudflare();
 		if ( $cf ) {
 			return $cf;
 		}
-		// Fallback: Accept-Language heuristic
-		return $this->wm_guess_country_from_accept_language();
+
+		return '';
 	}
 
 	/**

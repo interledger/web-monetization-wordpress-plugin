@@ -210,14 +210,14 @@ class GeneralTab {
 			</thead>
 			<tbody>
 				<?php
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo self::render_wallet_country_row();
 				if ( ! empty( $wallet_overrides ) ) {
 					foreach ( $wallet_overrides as $country => $wallet ) {
 						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						echo self::render_wallet_country_row( $country, $wallet );
 					}
 				}
-				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				echo self::render_wallet_country_row();
 				?>
 			</tbody>
 		</table>
