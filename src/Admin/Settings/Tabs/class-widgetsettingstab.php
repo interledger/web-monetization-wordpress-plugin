@@ -21,7 +21,7 @@ class WidgetSettingsTab {
 		register_setting( 'webmonetization_display', 'webmonetization_custom_banner' );
 
 		wp_localize_script(
-			'wm-banner-tool',
+			'wm-widget',
 			'wmBannerConfig',
 			array(
 				'nonce' => wp_create_nonce( 'wm_save_banner_config' ),

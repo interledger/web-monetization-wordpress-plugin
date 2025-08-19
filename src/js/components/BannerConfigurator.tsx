@@ -3,14 +3,11 @@ import debounce from 'lodash.debounce';
 import { cx } from 'class-variance-authority';
 import { useEffect, useMemo, useRef, useState } from '@wordpress/element';
 
-import type { BannerConfig } from '../types/banner-config';
 import { ColorPicker } from './ColorPicker';
 import { FontSize } from './FontSize';
 import { controlOptions, FontsType } from '../presets';
 import eyeSvg from '../../../assets/images/eye.svg';
 import { Select } from './Select';
-
-declare const ajaxurl: string;
 
 const borderOptions = [
 	{ label: 'No border', value: 'none' },
@@ -47,7 +44,7 @@ const getWebMonetizationLinkHref = () => {
 };
 
 export default function BannerConfigurator() {
-	const wmBannerConfig = JSON.parse(window.wm?.wmBannerConfig) || {};
+	const wmBannerConfig = window.wm?.wmBannerConfig ? JSON.parse(window.wm.wmBannerConfig) : { nonce: '', config: undefined };
 
 	const configData = {
 		...defaultConfig,

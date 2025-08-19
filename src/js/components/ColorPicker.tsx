@@ -11,19 +11,19 @@ import {
 } from '../presets';
 import { isColorLight } from '../utils';
 import checkSvg from '../../../assets/images/check.svg';
-import colorPickerSvg from '../../..//assets/images/color_picker.svg';
+import colorPickerSvg from '../../../assets/images/color_picker.svg';
 
-type ColorPickerProps = ComponentPropsWithoutRef< 'div' > & {
+type ColorPickerProps = ComponentPropsWithoutRef<'div'> & {
 	label?: string;
 	value: string;
 	name: string;
 	preset: 'text' | 'background' | 'trigger';
-	updateColor: ( value: string ) => void;
+	updateColor: (value: string) => void;
 	error?: string | string[];
 	allowCustomColors?: boolean;
 };
 
-export const ColorPicker = forwardRef< HTMLDivElement, ColorPickerProps >(
+export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(
 	(
 		{
 			id,
@@ -37,97 +37,97 @@ export const ColorPicker = forwardRef< HTMLDivElement, ColorPickerProps >(
 		},
 		ref
 	) => {
-		const [ displayColorpicker, setDisplayColorpicker ] = useState( false );
+		const [displayColorpicker, setDisplayColorpicker] = useState(false);
 
 		const generatedId = useMemo(
-			() => `wm-input-${ Math.random().toString( 36 ).substr( 2, 8 ) }`,
+			() => `wm-input-${Math.random().toString(36).substr(2, 8)}`,
 			[]
 		);
 		const internalId = id ?? generatedId;
 
-		if ( ! value ) {
+		if (!value) {
 			return;
 		}
 
 		let colorPresets = backgroundColorPresets;
-		if ( preset === 'text' ) {
+		if (preset === 'text') {
 			colorPresets = textColorPresets;
-		} else if ( preset === 'trigger' ) {
+		} else if (preset === 'trigger') {
 			colorPresets = triggerColorPresets;
 		}
 		const isCustomColor =
-			colorPresets.indexOf( value.toLowerCase() ) === -1;
+			colorPresets.indexOf(value.toLowerCase()) === -1;
 
 		return (
 			<div
-				className={ cx( 'color-picker', className ) }
-				ref={ ref }
-				{ ...props }
+				className={cx('color-picker', className)}
+				ref={ref}
+				{...props}
 			>
 				<input
 					type="hidden"
-					name={ name }
-					value={ value ?? '' }
-					id={ internalId }
+					name={name}
+					value={value ?? ''}
+					id={internalId}
 				/>
 				<div className="color-picker__presets">
-					{ colorPresets.map( ( color ) => (
+					{colorPresets.map((color) => (
 						<div
 							className="color-picker__swatch"
-							style={ { backgroundColor: String( color ) } }
-							onClick={ () => updateColor( color ) }
+							style={{ backgroundColor: String(color) }}
+							onClick={() => updateColor(color)}
 							role="presentation"
-							key={ color }
+							key={color}
 						>
-							{ value.toLowerCase() === color && (
+							{value.toLowerCase() === color && (
 								<img
-									className={ cx(
+									className={cx(
 										'color-picker__check',
-										isColorLight( color ) && 'invert'
-									) }
-									src={ checkSvg }
+										isColorLight(color) && 'invert'
+									)}
+									src={checkSvg}
 									alt="check"
 								/>
-							) }
+							)}
 						</div>
-					) ) }
+					))}
 
-					{ allowCustomColors && (
+					{allowCustomColors && (
 						<div className="color-picker__custom">
 							<div
 								className="color-picker__custom-trigger"
-								style={ {
+								style={{
 									backgroundColor: isCustomColor
-										? String( value )
+										? String(value)
 										: 'white',
-								} }
-								onClick={ ( e ) => {
+								}}
+								onClick={(e) => {
 									e.stopPropagation();
-									setDisplayColorpicker( true );
-								} }
+									setDisplayColorpicker(true);
+								}}
 								role="presentation"
 							>
 								<img
 									className="color-picker__custom-icon"
-									src={ colorPickerSvg }
+									src={colorPickerSvg}
 									alt="picker"
 								/>
 							</div>
-							{ displayColorpicker && (
+							{displayColorpicker && (
 								<ClickAwayListener
-									onClickAway={ () => {
-										setDisplayColorpicker( false );
-									} }
+									onClickAway={() => {
+										setDisplayColorpicker(false);
+									}}
 								>
 									<div
 										className="color-picker__popover show"
-										// onClick={(e) => e.stopPropagation()} // prevent closing when interacting inside
+									// onClick={(e) => e.stopPropagation()} // prevent closing when interacting inside
 									>
-										<style>{ `.react-colorful__last-control { border-radius: 0; }` }</style>
+										<style>{`.react-colorful__last-control { border-radius: 0; }`}</style>
 										<HexColorPicker
-											color={ String( value ) }
-											onChange={ ( color ) =>
-												updateColor( color )
+											color={String(value)}
+											onChange={(color) =>
+												updateColor(color)
 											}
 										/>
 										<div className="color-picker__input-wrapper">
@@ -135,9 +135,9 @@ export const ColorPicker = forwardRef< HTMLDivElement, ColorPickerProps >(
 												#
 											</span>
 											<HexColorInput
-												color={ String( value ) }
-												onChange={ ( color ) =>
-													updateColor( color )
+												color={String(value)}
+												onChange={(color) =>
+													updateColor(color)
 												}
 												className="color-picker__input"
 												placeholder="000000"
@@ -145,9 +145,9 @@ export const ColorPicker = forwardRef< HTMLDivElement, ColorPickerProps >(
 										</div>
 									</div>
 								</ClickAwayListener>
-							) }
+							)}
 						</div>
-					) }
+					)}
 				</div>
 			</div>
 		);

@@ -12,5 +12,5 @@
     "skipLibCheck": true,
     "typeRoots": ["./node_modules/@types"]
   },
-  "include": ["src", "src/js/components", "assets", "src/js/globals.d.ts"]
+  "include": ["src", "src/js", "src/js/components", "assets"]
 }

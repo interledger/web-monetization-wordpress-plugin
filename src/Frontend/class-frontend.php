@@ -366,7 +366,7 @@ class Frontend {
 			'wm-banner-script',
 			'wm',
 			array(
-				'wmBannerConfig' => get_option( 'wm_banner_published', array() ),
+				'wmBannerConfig' => wp_json_encode( get_option( 'wm_banner_published', array() ) ),
 				'wmEnabled'      => get_option( 'wm_enabled', 0 ),
 				'wmBuildUrl'     => plugin_dir_url( dirname( __DIR__, 1 ) ) . 'build/',
 			)

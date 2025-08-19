@@ -1,7 +1,7 @@
 import '../scss/frontend.scss';
-import type { BannerConfig } from './types/banner-config';
-const config = window.wm?.wmBannerConfig || {};
+const config = window.wm?.wmBannerConfig ? JSON.parse(window.wm.wmBannerConfig) || {} : {};
 const wmEnabled = window.wm.wmEnabled || false;
+const wmBuildUrl = window.wm.wmBuildUrl || '';
 
 if (wmEnabled) {
   if (document.readyState === 'loading') {
@@ -12,33 +12,18 @@ if (wmEnabled) {
 }
 
 function initWMBanner() {
-  if (config.paymentPointer) {
-    let pointer = config.paymentPointer;
-    // If pointer uses "$" syntax, convert it to "https://" format
-    if (pointer.startsWith('$')) {
-      pointer = 'https://' + pointer.slice(1);
-    }
-    let monetizationTag = document.querySelector(
-      'link[rel="monetization"], meta[name="monetization"]'
-    );
-    if (!monetizationTag) {
-      monetizationTag = document.createElement('link');
-      monetizationTag.setAttribute('rel', 'monetization');
-      document.head.appendChild(monetizationTag);
-    }
-  }
 
   const { shadowHost, shadowRoot } = createShadowDOM();
 
   const css = getCSSFile('banner-style.css');
   const banner = drawBanner(config);
 
-  const font = getFontFamily(config.font, 'banner');
+  const font = getFontFamily(config?.font, 'banner');
   shadowHost.style.setProperty(
     '--wmt-banner-font',
     font?.selectedFont ? font.selectedFont : 'inherit'
   );
-  shadowHost.style.setProperty('--wmt-banner-font-size', config.fontSize);
+  shadowHost.style.setProperty('--wmt-banner-font-size', config?.fontSize);
   if (font?.fontFamily) {
     document.body.appendChild(font.fontFamily);
   }
@@ -236,7 +221,7 @@ const getCSSFile = (url: string) => {
 
   link.rel = 'stylesheet';
   link.type = 'text/css';
-  link.href = window.wm.wmBuildUrl?.concat(`${url}`);
+  link.href = wmBuildUrl.concat(`${url}`);
 
   return link;
 };
