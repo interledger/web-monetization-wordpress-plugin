@@ -9,211 +9,216 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-07-24T06:59:46+00:00\n"
+"POT-Creation-Date: 2025-08-19T09:20:06+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.13.0-alpha-44e6127\n"
+"X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: web-monetization\n"
 
 #. Plugin Name of the plugin
-#: interledger-web-monetization-wordpress-plugin.php
-#: src/Admin/Admin.php:65
-#: src/Admin/Admin.php:91
-#: src/Admin/UserMeta.php:272
+#: web-monetization-wordpress-plugin.php
+#: src/admin/class-admin.php:156
+#: src/admin/class-admin.php:186
+#: src/admin/class-usermeta.php:267
 msgid "Web Monetization"
 msgstr ""
 
 #. Description of the plugin
-#: interledger-web-monetization-wordpress-plugin.php
+#: web-monetization-wordpress-plugin.php
 msgid "Web Monetization plugin for WordPress."
 msgstr ""
 
 #. Author of the plugin
-#: interledger-web-monetization-wordpress-plugin.php
+#: web-monetization-wordpress-plugin.php
 msgid "Interledger Foundation"
 msgstr ""
 
 #. Author URI of the plugin
-#: interledger-web-monetization-wordpress-plugin.php
+#: web-monetization-wordpress-plugin.php
 msgid "https://interledger.org"
 msgstr ""
 
-#: src/Admin/Admin.php:64
-#: src/Admin/Settings/SettingsPage.php:73
-#: src/Admin/Settings/SettingsPage.php:76
-#: src/Admin/UserMeta.php:202
+#: src/admin/class-admin.php:155
+#: src/admin/class-usermeta.php:188
+#: src/admin/settings/class-settingspage.php:86
+#: src/admin/settings/class-settingspage.php:89
 msgid "Web Monetization Settings"
 msgstr ""
 
-#: src/Admin/Admin.php:106
+#: src/admin/class-admin.php:207
 msgid "Wallet Address:"
 msgstr ""
 
-#: src/Admin/Admin.php:113
-msgid "Disable Web Monetization for this post"
+#: src/admin/class-admin.php:217
+msgid "Disable Web Monetization for this post "
 msgstr ""
 
-#: src/Admin/Settings/SettingsPage.php:34
-msgid "General"
-msgstr ""
-
-#: src/Admin/Settings/SettingsPage.php:35
-msgid "Banner"
-msgstr ""
-
-#: src/Admin/Settings/SettingsPage.php:36
-msgid "About"
-msgstr ""
-
-#: src/Admin/Settings/Tabs/AboutTab.php:29
-msgid "About Web Monetization"
-msgstr ""
-
-#: src/Admin/Settings/Tabs/AboutTab.php:31
-msgid "Web Monetization introduces a new way for content owners and publishers to earn while allowing visitors to engage on their own terms. By enabling streaming micropayments, Web Monetization complements ads, subscriptions, and memberships, giving publishers more revenue options and visitors more ways to access and support content."
-msgstr ""
-
-#: src/Admin/Settings/Tabs/AboutTab.php:33
-msgid "The plugin lets you add a Web Monetization-compatible wallet address to monetize your entire site, individual posts, and pages. If you have multiple authors, you can also allow them to add their own wallet addresses to monetize their content."
-msgstr ""
-
-#: src/Admin/Settings/Tabs/AboutTab.php:37
-msgid "Resources"
-msgstr ""
-
-#: src/Admin/Settings/Tabs/AboutTab.php:42
-msgid "Learn More at WebMonetization.org"
-msgstr ""
-
-#: src/Admin/Settings/Tabs/AboutTab.php:50
-msgid "Learn more about Web Monetization enabled wallets"
-msgstr ""
-
-#: src/Admin/Settings/Tabs/GeneralTab.php:38
-#: src/Admin/UserMeta.php:144
-msgid "Enable Web Monetization"
-msgstr ""
-
-#: src/Admin/Settings/Tabs/GeneralTab.php:46
-msgid "Enter your wallet address"
-msgstr ""
-
-#: src/Admin/Settings/Tabs/GeneralTab.php:54
-msgid "Enable Authors"
-msgstr ""
-
-#: src/Admin/Settings/Tabs/GeneralTab.php:62
-msgid "Set wallet behavior"
-msgstr ""
-
-#: src/Admin/Settings/Tabs/GeneralTab.php:70
-msgid "Set up Web Monetization per post type"
-msgstr ""
-
-#: src/Admin/Settings/Tabs/GeneralTab.php:77
-msgid "Enable the banner"
-msgstr ""
-
-#: src/Admin/Settings/Tabs/GeneralTab.php:105
-msgid "Enable Web Monetization globally."
-msgstr ""
-
-#: src/Admin/Settings/Tabs/GeneralTab.php:127
-msgid "Note: There "
-msgstr ""
-
-#: src/Admin/Settings/Tabs/GeneralTab.php:128
-msgid "is 1 user"
-msgstr ""
-
-#: src/Admin/Settings/Tabs/GeneralTab.php:128
-msgid "are "
-msgstr ""
-
-#: src/Admin/Settings/Tabs/GeneralTab.php:129
-msgid " excluded from Web Monetization. You can view them on the - filtered - "
-msgstr ""
-
-#: src/Admin/Settings/Tabs/GeneralTab.php:136
-msgid "Let your authors enter their own wallet address. You can manually disable this setting for a specific user from the "
-msgstr ""
-
-#: src/Admin/Settings/Tabs/GeneralTab.php:140
-msgid "Users page"
-msgstr ""
-
-#: src/Admin/Settings/Tabs/GeneralTab.php:151
-msgid "Only use one wallet (This option displays <strong>a single wallet address</strong> based on the following priority: article > post type >  author > site  )"
-msgstr ""
-
-#: src/Admin/Settings/Tabs/GeneralTab.php:152
-msgid "Show all wallets ( This option displays <strong>all wallet addresses that are defined</strong> including site, author, post type and article wallets)"
-msgstr ""
-
-#: src/Admin/Settings/Tabs/GeneralTab.php:155
-msgid "Example:"
-msgstr ""
-
-#: src/Admin/Settings/Tabs/GeneralTab.php:156
-msgid "If you choose to only use one wallet and If the author has their own wallet address, only that one will be used."
-msgstr ""
-
-#: src/Admin/Settings/Tabs/GeneralTab.php:157
-msgid "If you choose to show all wallets and If all of the wallets are defined, they will all be included and used simultaneously."
-msgstr ""
-
-#: src/Admin/Settings/Tabs/GeneralTab.php:167
-msgid "Show a customizable banner to introduce Web Monetization to your website visitors. You can customize the banner on the "
-msgstr ""
-
-#: src/Admin/Settings/Tabs/GeneralTab.php:168
-msgid "Banner Settings"
-msgstr ""
-
-#: src/Admin/Settings/Tabs/GeneralTab.php:169
-msgid "page"
-msgstr ""
-
-#: src/Admin/Settings/Tabs/GeneralTab.php:200
-msgid "Enable Web Monetization per post type and provide a wallet address."
-msgstr ""
-
-#: src/Admin/Settings/Tabs/GeneralTab.php:205
-msgid "Post Type"
-msgstr ""
-
-#: src/Admin/Settings/Tabs/GeneralTab.php:206
-#: src/Admin/UserMeta.php:275
-msgid "Wallet Address"
-msgstr ""
-
-#: src/Admin/UserMeta.php:56
+#: src/admin/class-usermeta.php:57
 msgid "All Users"
 msgstr ""
 
-#: src/Admin/UserMeta.php:57
+#: src/admin/class-usermeta.php:58
 msgid "Excluded Users Only"
 msgstr ""
 
-#: src/Admin/UserMeta.php:58
+#: src/admin/class-usermeta.php:59
 msgid "Non-Excluded Users Only"
 msgstr ""
 
-#: src/Admin/UserMeta.php:144
+#: src/admin/class-usermeta.php:129
+#: src/admin/settings/tabs/class-generaltab.php:51
+msgid "Enable Web Monetization"
+msgstr ""
+
+#: src/admin/class-usermeta.php:129
 msgid "Disable Web Monetization"
 msgstr ""
 
-#: src/Admin/UserMeta.php:170
+#: src/admin/class-usermeta.php:155
 msgid "Invalid nonce."
 msgstr ""
 
-#: src/Admin/UserMeta.php:205
+#: src/admin/class-usermeta.php:191
 msgid "Exclude from Author Monetization"
 msgstr ""
 
-#: src/Admin/UserMeta.php:209
+#: src/admin/class-usermeta.php:195
 msgid "Prevent this author from using their own wallet address (site fallback will be used)."
 msgstr ""
 
-#: src/Admin/UserMeta.php:280
+#: src/admin/class-usermeta.php:270
+#: src/admin/settings/tabs/class-generaltab.php:207
+#: src/admin/settings/tabs/class-generaltab.php:423
+msgid "Wallet Address"
+msgstr ""
+
+#: src/admin/class-usermeta.php:282
 msgid "Enter your wallet address to enable Web Monetization."
+msgstr ""
+
+#: src/admin/settings/tabs/class-abouttab.php:29
+msgid "About Web Monetization"
+msgstr ""
+
+#: src/admin/settings/tabs/class-abouttab.php:31
+msgid "Web Monetization introduces a new way for content owners and publishers to earn while allowing visitors to engage on their own terms. By enabling streaming micropayments, Web Monetization complements ads, subscriptions, and memberships, giving publishers more revenue options and visitors more ways to access and support content."
+msgstr ""
+
+#: src/admin/settings/tabs/class-abouttab.php:33
+msgid "The plugin lets you add a Web Monetization-compatible wallet address to monetize your entire site, individual posts, and pages. If you have multiple authors, you can also allow them to add their own wallet addresses to monetize their content."
+msgstr ""
+
+#: src/admin/settings/tabs/class-abouttab.php:37
+msgid "Resources"
+msgstr ""
+
+#: src/admin/settings/tabs/class-abouttab.php:42
+msgid "Learn More at WebMonetization.org"
+msgstr ""
+
+#: src/admin/settings/tabs/class-abouttab.php:50
+msgid "Learn more about Web Monetization enabled wallets"
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:59
+msgid "Enter your wallet address"
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:67
+msgid "Enable Authors"
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:75
+msgid "Set wallet behavior"
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:83
+msgid "Set up Web Monetization per post type"
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:90
+msgid "Enable the banner"
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:98
+msgid "Enable country-specific wallet addresses"
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:106
+msgid "Country-Based Wallet Overrides"
+msgstr ""
+
+#. translators: %s is the URL to the GeoIP Detection plugin.
+#: src/admin/settings/tabs/class-generaltab.php:187
+#, php-format
+msgid "Country detection requires the <a href=\"%s\" target=\"_blank\" rel=\"noopener\">GeoIP Detection plugin</a>."
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:206
+msgid "Country Code"
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:226
+msgid "Add New Country Wallet"
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:285
+msgid "Enable Web Monetization globally."
+msgstr ""
+
+#. translators: %d is the number of excluded authors
+#: src/admin/settings/tabs/class-generaltab.php:323
+#, php-format
+msgid "are %d authors"
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:327
+msgid "Note: There "
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:329
+msgid "is 1 author"
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:332
+msgid " excluded from Web Monetization. You can view them on the - filtered - "
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:342
+msgid "Admins can disallow specific authors from the "
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:346
+msgid "Users page"
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:366
+msgid "Example:"
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:367
+msgid "If you choose to only use one wallet and if the author has their own wallet address, only that one will be used."
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:368
+msgid "If you choose to use all wallets and if all of the wallets are defined, they will all be included and used simultaneously."
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:381
+msgid "Show a customizable banner to introduce Web Monetization to your website visitors. You can customize the banner on the "
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:382
+msgid "Banner Settings"
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:383
+msgid "page"
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:417
+msgid "Enable Web Monetization per post type and provide a wallet address."
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:422
+msgid "Post Type"
 msgstr ""

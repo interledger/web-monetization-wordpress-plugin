@@ -22,13 +22,15 @@
     "dealerdirect/phpcodesniffer-composer-installer": "^0.7",
     "phpstan/phpstan": "^1.10",
     "szepeviktor/phpstan-wordpress": "^1.0",
-    "php-stubs/wordpress-stubs": "*"
+    "php-stubs/wordpress-stubs": "*",
+    "wp-cli/i18n-command": "^2.6"
   },
   "scripts": {
     "l": "phpcs -e",
     "lint": "phpcs --standard=WordPress --ignore=vendor,node_modules,*/build/*.* .",
     "lint:fix": "phpcbf --standard=WordPress --ignore=vendor,node_modules,*/build/*.* .",
     "phpstan": "phpstan analyse ./src",
+    "make-pot": "wp i18n make-pot . languages/web-monetization.pot --exclude=node_modules,vendor,build",
     "post-install-cmd": [
       "@lint"
     ],
