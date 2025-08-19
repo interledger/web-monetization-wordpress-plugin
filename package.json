@@ -45,6 +45,7 @@
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.27.1",
+    "@types/lodash.debounce": "^4.0.9",
     "@types/react": "^19.1.5",
     "@types/react-dom": "^19.1.5",
     "@types/wordpress__admin": "^5.8.4",
