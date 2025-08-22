@@ -105,6 +105,8 @@ class Core {
 				add_option( 'wm_excluded_authors', array() ); // Default to no excluded authors.
 				add_option( 'wm_banner_config', $default_wm_banner_config ); // Default banner configuration.
 				add_option( 'wm_banner_published', $default_wm_banner_config ); // Default to no published banner.
+				add_option( 'wm_enable_country_wallets', 0 ); // Default to disabled country-specific wallets.
+				add_option( 'wm_wallet_address_overrides', array() ); // Default to no wallet address overrides.
 
 				restore_current_blog();
 			}
@@ -119,6 +121,8 @@ class Core {
 			add_option( 'wm_excluded_authors', array() ); // Default to no excluded.
 			add_option( 'wm_banner_config', $default_wm_banner_config ); // Default banner configuration.
 			add_option( 'wm_banner_published', $default_wm_banner_config ); // Default to no published banner.
+			add_option( 'wm_enable_country_wallets', 0 ); // Default to disabled country-specific wallets.
+			add_option( 'wm_wallet_address_overrides', array() ); // Default to no wallet address overrides.
 		}
 	}
 	/**
