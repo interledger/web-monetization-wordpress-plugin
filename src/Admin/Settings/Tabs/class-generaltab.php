@@ -103,7 +103,7 @@ class GeneralTab {
 
 		add_settings_field(
 			'wm_wallet_address_overrides',
-			__( 'Country-Based Wallet Overrides', 'web-monetization' ),
+			'',
 			array( self::class, 'render_field_country_wallet_overrides_echo' ),
 			'webmonetization_general',
 			'webmonetization_general_section'
@@ -141,11 +141,12 @@ class GeneralTab {
 	public static function render_field_enable_country_wallets(): void {
 		$value = get_option( 'wm_enable_country_wallets', 0 );
 
-		$geoip_available = function_exists( 'geoip_detect2_get_info_from_current_ip' );
+		$geoip_available      = function_exists( 'geoip_detect2_get_info_from_current_ip' );
+		$cloudflare_available = '' !== sanitize_text_field( wp_unslash( $_SERVER['HTTP_CF_IPCOUNTRY'] ?? '' ) );
 
-		$label = esc_html__( 'Enable country-specific wallet addresses. If enabled, you can set different wallet addresses based on the visitor\'s country.', 'your-text-domain' );
-		if ( ! $geoip_available ) {
-			$label .= ' ' . esc_html__( 'Note: GeoIP detection is not available.', 'your-text-domain' );
+		$label = esc_html__( 'Enable country-specific wallet addresses. If enabled, you can set different wallet addresses based on the visitor\'s country.', 'web-monetization' );
+		if ( ! $geoip_available && ! $cloudflare_available ) {
+			$label .= ' ' . esc_html__( 'Note: GeoIP and Cloudflare country detection are not available.', 'web-monetization' );
 		}
 		FieldRenderer::render_checkbox(
 			'wm_enable_country_wallets',
@@ -171,20 +172,22 @@ class GeneralTab {
 	public static function render_field_country_wallet_overrides(): string {
 		$enabled = get_option( 'wm_enable_country_wallets', '0' ) === '1';
 
-		$wallet_overrides = get_option( 'wm_wallet_address_overrides', array() );
-		$geoip_available  = function_exists( 'geoip_detect2_get_info_from_current_ip' );
+		$wallet_overrides     = get_option( 'wm_wallet_address_overrides', array() );
+		$geoip_available      = function_exists( 'geoip_detect2_get_info_from_current_ip' );
+		$cloudflare_available = '' !== sanitize_text_field( wp_unslash( $_SERVER['HTTP_CF_IPCOUNTRY'] ?? '' ) );
+
 		ob_start();
 		?>
 		<div id="wm_country_wallets_wrapper" style="<?php echo $enabled ? '' : 'display:none;'; ?>">
 
-		<?php if ( get_option( 'wm_enable_country_wallets' ) && ! $geoip_available ) : ?>
+		<?php if ( ! $geoip_available && ! $cloudflare_available ) : ?>
 			<div class="notice notice-warning inline">
 				<p>
 					<?php
 					printf(
 						wp_kses(
 							// translators: %s is the URL to the GeoIP Detection plugin.
-							__( 'Country detection requires the <a href="%s" target="_blank" rel="noopener">GeoIP Detection plugin</a>.', 'web-monetization' ),
+							__( 'Country detection requires the <a href="%s" target="_blank" rel="noopener">GeoIP Detection plugin</a>, or the site must be <a href="https://www.cloudflare.com/" target="_blank" rel="noopener">running behind Cloudflare</a>', 'web-monetization' ),
 							array(
 								'a' => array(
 									'href'   => array(),
@@ -300,6 +303,11 @@ class GeneralTab {
 			'e.g. https://walletprovider.com/MyWallet',
 			$is_connected
 		);
+
+		echo '<br> <p  class="description">' . esc_html__(
+			'Multiple wallet addresses can be added here separated by a space',
+			'web-monetization'
+		) . '</p>';
 
 		FieldRenderer::render_hidden_input(
 			'wm_wallet_address_connected',
