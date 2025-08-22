@@ -41,6 +41,16 @@ class Frontend {
 		add_action( 'rss2_item', array( $this, 'add_monetization_atom_link_to_feed_item' ) );
 		add_action( 'atom_entry', array( $this, 'add_monetization_link_to_feed_item' ) );
 		add_action( 'atom_head', array( $this, 'add_site_monetization_link_to_feed_head' ) );
+
+		add_filter( 'activitypub_json_context', function( $context ) {
+			$wm = 'https://webmonetization.org/ns.jsonld';
+			if ( is_array( $context ) && ! in_array( $wm, $context, true ) ) {
+				$context[] = $wm;
+			}
+			return $context;
+		}, 99, 1 );
+
+		add_filter( 'activitypub_json_post', array( $this, 'add_site_monetization_link_to_activitypub_item' ), 10, 1 );
 	}
 
 	/**
@@ -80,6 +90,87 @@ class Frontend {
 		if ( $link_tag ) {
 			echo wp_kses( $link_tag, $this->allowed_tags );
 		}
+	}
+
+	public function add_site_monetization_link_to_activitypub_head( $object ) {
+		if ( ! $this->is_enabled() ) {
+			return;
+		}
+		$post_id = 0;
+		if ( isset( $object->url ) ) {
+			$post_id = url_to_postid( $object->url );
+		} elseif ( isset( $object->id ) ) {
+			$post_id = url_to_postid( $object->id );
+		}
+
+		if ( ! $post_id ) {
+			return $object; // can't map, leave untouched
+		}
+
+		$site_wallet = $this->get_wallet_for_front_page();
+		if ( $site_wallet ) {
+			$wallets = explode( ' ', $site_wallet );
+			foreach ( $wallets as $wallet ) {
+				echo wp_kses(
+					$this->render_monetization_link( $wallet, 'atom:link' ),
+					$this->allowed_tags
+				);
+			}
+		}
+	}
+
+	public function add_site_monetization_link_to_activitypub_item( $object ) {
+
+		if ( ! $this->is_enabled() ) {
+			return;
+		}
+		$post_id = 0;
+		if ( isset( $object->url ) ) {
+			$post_id = url_to_postid( $object->url );
+		} elseif ( isset( $object->id ) ) {
+			$post_id = url_to_postid( $object->id );
+		}
+
+		$post = get_post( $post_id );
+		if ( ! $post ) {
+			return null;
+		}
+
+		$wallets = $this->get_wallets_for_post( $post );
+		if ( empty( $wallets['list'] ) ) {
+			return null;
+		}
+
+		$urls = array_map(
+			function( $wa ) {
+				return esc_url_raw( $this->clean_wallet_address( $wa ), array( 'https' ) );
+			},
+			$wallets['list']
+		);
+		$urls = array_values( array_filter( $urls ) );
+
+
+		$mode   = get_option( 'wm_multi_wallets_option', 'one' );
+		$urls   = array();
+		if ( 'all' === $mode ) {
+			foreach ( $wallets['list'] as $wallet ) {
+				$urls = $this->get_wallets_from_value( $wallet, $urls );
+			}
+		} else {
+			foreach ( array( 'article', 'author', 'post_type', 'site' ) as $key ) {
+				if ( isset( $wallets['list'][ $key ] ) ) {
+					$urls = $this->get_wallets_from_value( $wallets['list'][ $key ], $urls );
+					break;
+				}
+			}
+		}
+
+		if ( $urls ) {
+			// If only one, assign string; otherwise assign array.
+			$object->monetization = ( count( $urls ) === 1 ) ? $urls[0] : $urls;
+		}
+
+		return $object;
 	}
 
 	/**
