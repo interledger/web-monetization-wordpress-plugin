@@ -39,8 +39,8 @@ export function validateWalletAddresses(
 ): boolean {
   if (!wa) return true;
   if (typeof wa !== 'string') return false;
-  const addresses =
-    name === 'wm_wallet_address' ? wa.trim().split(/\s+/) : [wa.trim()];
+  if (wa.length > 1000) return false; // arbitrary max length
+  const addresses = wa.trim().split(/\s+/);
   return addresses.every(validateSingleWalletAddress);
 }
 
@@ -227,12 +227,6 @@ function setupWalletField(input: HTMLInputElement) {
 
   const validateAndToggleButton = () => {
     const ok = showValidation(input, feedback);
-    console.log(
-      'Wallet is valid for ',
-      input.value,
-      ok,
-      input.value.trim() !== '',
-    );
     toggle(connectBtn, ok && input.value.trim() !== '');
   };
 
@@ -295,12 +289,12 @@ function validateConnectedState(
 ) {
   const isConnected = input.readOnly && input.value.trim() !== '';
   if (isConnected) {
-    check.style.display = 'inline';
-    editLink.style.display = 'inline';
+    check.classList.toggle('hidden', false);
+    editLink.classList.toggle('hidden', false);
     input.readOnly = true;
   } else {
-    check.style.display = 'none';
-    editLink.style.display = 'none';
+    check.classList.toggle('hidden', true);
+    editLink.classList.toggle('hidden', true);
     input.readOnly = false;
   }
   return isConnected;

@@ -29,12 +29,10 @@ function initWMBanner() {
   }
 
   if (banner) {
-    console.log('Web Monetization banner created:', banner);
     shadowRoot.appendChild(css);
     shadowRoot.appendChild(banner);
   }
   if (document.monetization) {
-    console.log('Web Monetization API is available');
     if (document.monetization.state === 'started') {
       console.log(
         'Monetization already started (user is an active subscriber)'
