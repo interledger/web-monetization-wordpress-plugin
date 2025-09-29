@@ -3,11 +3,6 @@
  * Web Monetization Plugin
  *
  * @package WebMonetization
- *
- * @wordpress-plugin
- * Plugin Name: Web Monetization
- * Description: A plugin to integrate web monetization into WordPress.
- * Version: 1.0.0
  */
 
 namespace WebMonetization;
@@ -23,14 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Core class for the Web Monetization plugin.
  *
  * This class handles the initialization of the plugin, including loading text domains,
- * registering hooks for admin and frontend functionality, and integrating with popular
- *
- * page builders like Elementor, Beaver Builder, and Divi.
- *
- * @package WebMonetization
- * @author  Your Name
- * @license GPL-2.0-or-later
- * @link    https://example.com
+ * registering hooks for admin and frontend functionality
  */
 class Core {
 
