@@ -42,15 +42,36 @@ class Frontend {
 		add_action( 'atom_entry', array( $this, 'add_monetization_link_to_feed_item' ) );
 		add_action( 'atom_head', array( $this, 'add_site_monetization_link_to_feed_head' ) );
 
-		add_filter( 'activitypub_json_context', function( $context ) {
-			$wm = 'https://webmonetization.org/ns.jsonld';
-			if ( is_array( $context ) && ! in_array( $wm, $context, true ) ) {
-				$context[] = $wm;
-			}
-			return $context;
-		}, 99, 1 );
+		add_filter(
+			'activitypub_json_context',
+			array( $this, 'activitypub_json_context' ),
+			99,
+			1
+		);
 
-		add_filter( 'activitypub_json_post', array( $this, 'add_site_monetization_link_to_activitypub_item' ), 10, 1 );
+		add_filter(
+			'activitypub_activity_object_array',
+			array( $this, 'activitypub_activity_object_array' ),
+			10,
+			1
+		);
+	}
+
+	/**
+	 * Add Web Monetization context to ActivityPub JSON-LD.
+	 *
+	 * @param array $context The original JSON-LD context.
+	 * @return array The modified JSON-LD context.
+	 */
+	public function activitypub_json_context( $context ) {
+		if ( ! $this->is_enabled() ) {
+			return $context;
+		}
+		$wm = 'https://webmonetization.org/ns.jsonld';
+		if ( is_array( $context ) && ! in_array( $wm, $context, true ) ) {
+			$context[] = $wm;
+		}
+		return $context;
 	}
 
 	/**
@@ -66,6 +87,14 @@ class Frontend {
 			if ( $link_tag ) {
 				echo wp_kses( $link_tag, $this->allowed_tags );
 			}
+		} elseif ( is_author() ) {
+			$author = get_queried_object();
+			if ( $author && isset( $author->ID ) ) {
+				$link_tag = $this->generate_monetization_link_for_author( $author->ID );
+				if ( $link_tag ) {
+					echo wp_kses( $link_tag, $this->allowed_tags );
+				}
+			}
 		} else {
 			$wallet  = $this->get_wallet_for_front_page();
 			$wallets = is_string( $wallet ) ? explode( ' ', $wallet ) : array();
@@ -77,6 +106,30 @@ class Frontend {
 		}
 	}
 
+	/**
+	 * Generate a monetization link for a specific author.
+	 *
+	 * @param int    $author_id The ID of the author.
+	 * @param string $element_type The type of HTML element to generate (e.g., 'link', 'meta').
+	 * @return string|null The generated monetization link or null if not applicable.
+	 */
+	public function generate_monetization_link_for_author( $author_id, $element_type = 'link' ): ?string {
+		if ( ! $this->is_enabled() ) {
+			return null;
+		}
+
+		$author_wallet = get_user_meta( $author_id, 'wm_wallet_address', true );
+		if ( ! $author_wallet ) {
+			return null;
+		}
+
+		$output  = '';
+		$wallets = is_string( $author_wallet ) ? explode( ' ', $author_wallet ) : array();
+		foreach ( $wallets as $wallet ) {
+			$output .= $this->render_monetization_link( $wallet, $element_type );
+		}
+		return $output;
+	}
 	/**
 	 * Add monetization link to each feed item.
 	 */
@@ -92,99 +145,96 @@ class Frontend {
 		}
 	}
 
-	public function add_site_monetization_link_to_activitypub_head( $object ) {
+	/**
+	 * Add site monetization link to ActivityPub context.
+	 *
+	 * @param array $object_array The ActivityPub object.
+	 * @return array The modified ActivityPub object.
+	 */
+	public function activitypub_activity_object_array( $object_array ) {
 		if ( ! $this->is_enabled() ) {
-			return;
-		}
-		$post_id = 0;
-		if ( isset( $object->url ) ) {
-			$post_id = url_to_postid( $object->url );
-		} elseif ( isset( $object->id ) ) {
-			$post_id = url_to_postid( $object->id );
+			return $object_array;
 		}
 
-		if ( ! $post_id ) {
-			return $object; // can't map, leave untouched
+		$wm = 'https://webmonetization.org/ns.jsonld';
+		if ( is_array( $object_array['@context'] ) && ! in_array( $wm, $object_array['@context'], true ) ) {
+			$last                       = array_pop( $object_array['@context'] );
+			$object_array['@context'][] = $wm;
+			$object_array['@context'][] = $last;
 		}
 
-		$site_wallet = $this->get_wallet_for_front_page();
-		if ( $site_wallet ) {
-			$wallets = explode( ' ', $site_wallet );
-			foreach ( $wallets as $wallet ) {
-				echo wp_kses(
-					$this->render_monetization_link( $wallet, 'atom:link' ),
-					$this->allowed_tags
-				);
+		$user_id = null;
+		if ( isset( $object_array['id'] ) && class_exists( '\Activitypub\Collection\Actors' ) && method_exists( '\Activitypub\Collection\Actors', 'get_id_by_resource' ) ) {
+			$user_id = \Activitypub\Collection\Actors::get_id_by_resource( $object_array['id'] );
+		}
+		if ( is_numeric( $user_id ) ) {
+			$author_wallet = get_user_meta( $user_id, 'wm_wallet_address', true );
+
+			if ( ! $author_wallet ) {
+				return $object_array;
 			}
-		}
-	}
+			$wallets = is_string( $author_wallet ) ? explode( ' ', $author_wallet ) : array();
 
-	public function add_site_monetization_link_to_activitypub_item( $object ) {
-
-		if ( ! $this->is_enabled() ) {
-			return;
-		}
-		$post_id = 0;
-		if ( isset( $object->url ) ) {
-			$post_id = url_to_postid( $object->url );
-		} elseif ( isset( $object->id ) ) {
-			$post_id = url_to_postid( $object->id );
-		}
-
-		$post = get_post( $post_id );
-		if ( ! $post ) {
-			return null;
-		}
-
-		$wallets = $this->get_wallets_for_post( $post );
-		if ( empty( $wallets['list'] ) ) {
-			return null;
-		}
-
-		$urls = array_map(
-			function( $wa ) {
-				return esc_url_raw( $this->clean_wallet_address( $wa ), array( 'https' ) );
-			},
-			$wallets['list']
-		);
-		$urls = array_values( array_filter( $urls ) );
-
-
-		$mode   = get_option( 'wm_multi_wallets_option', 'one' );
-		$urls   = array();
-		if ( 'all' === $mode ) {
-			foreach ( $wallets['list'] as $wallet ) {
+			$urls = array();
+			foreach ( $wallets as $wallet ) {
 				$urls = $this->get_wallets_from_value( $wallet, $urls );
 			}
 		} else {
-			foreach ( array( 'article', 'author', 'post_type', 'site' ) as $key ) {
-				if ( isset( $wallets['list'][ $key ] ) ) {
-					$urls = $this->get_wallets_from_value( $wallets['list'][ $key ], $urls );
-					break;
+			$post_url = $object_array['id'];
+			$post_id  = url_to_postid( $post_url );
+
+			if ( ! $post_id && preg_match( '/[?&]p=(\d+)/', $post_url, $matches ) ) {
+				$post_id = intval( $matches[1] );
+			}
+
+			$wallets = $this->get_wallets_for_post( get_post( $post_id ) );
+			if ( empty( $wallets['list'] ) ) {
+				return null;
+			}
+
+			$urls = array_map(
+				function ( $wa ) {
+					return esc_url_raw( $this->clean_wallet_address( $wa ), array( 'https' ) );
+				},
+				$wallets['list']
+			);
+			$urls = array_values( array_filter( $urls ) );
+
+			$mode = get_option( 'wm_multi_wallets_option', 'one' );
+			$urls = array();
+			if ( 'all' === $mode ) {
+				foreach ( $wallets['list'] as $source => $wallet ) {
+					$urls = $this->get_wallets_from_value( $wallet, $urls );
+				}
+			} else {
+				foreach ( array( 'article', 'author', 'post_type', 'site' ) as $key ) {
+					if ( isset( $wallets['list'][ $key ] ) ) {
+						$urls = $this->get_wallets_from_value( $wallets['list'][ $key ], $urls );
+						break;
+					}
 				}
 			}
 		}
 
 		if ( $urls ) {
-			// If only one, assign string; otherwise assign array.
-			$object->monetization = ( count( $urls ) === 1 ) ? $urls[0] : $urls;
+			$object_array['monetization'] = ( count( $urls ) === 1 ) ? $urls[0] : $urls;
 		}
 
-		return $object;
+		return $object_array;
 	}
 
 	/**
 	 * Normalize a wallet value into an array of unique HTTPS wallet URLs.
 	 *
-	 * @param string $value Raw wallet value (may contain multiple space-separated wallets).
+	 * @param string   $value Raw wallet value (may contain multiple space-separated wallets).
+	 * @param string[] $existing_wallets Existing array of wallet URLs to merge with.
 	 * @return string[] Array of unique sanitized wallet URLs.
 	 */
-	private function get_wallets_from_value( $value, array $existing_wallets = array() ): array {
+	public function get_wallets_from_value( $value, array $existing_wallets = array() ): array {
 		$wallets = array();
 
-
-		// Normalizer for both new and existing entries
-		$normalize = function( $wa ) {
+		// Normalizer for both new and existing entries.
+		$normalize = function ( $wa ) {
 			$wa = trim( (string) $wa );
 			if ( '' === $wa ) {
 				return '';
@@ -196,8 +246,10 @@ class Frontend {
 		};
 
 		if ( ! empty( $value ) ) {
-			$parts = preg_split( '/\s+/', (string) $value ) ?: array();
-
+			$parts = preg_split( '/\s+/', (string) $value );
+			if ( ! is_array( $parts ) ) {
+				$parts = array();
+			}
 			foreach ( $parts as $wa ) {
 				$wallet = $normalize( $wa );
 				if ( $wallet ) {
@@ -206,10 +258,10 @@ class Frontend {
 			}
 		}
 
-		// Merge, trim, remove empties, and ensure uniqueness
+		// Merge, trim, remove empties, and ensure uniqueness.
 		$merged = array_merge( $existing_wallets, $wallets );
 		$merged = array_map( 'trim', $merged );
-		$merged = array_filter( $merged ); // remove ''
+		$merged = array_filter( $merged );
 		$merged = array_values( array_unique( $merged ) );
 
 		return $merged;
@@ -396,9 +448,6 @@ class Frontend {
 
 			$country_code = $this->wm_detect_country();
 
-			if ( ! $country_code ) {
-				return null;
-			}
 			if ( '' !== $country_code ) {
 				$country_code = strtoupper( $country_code );
 				if ( isset( $wallet_overrides[ $country_code ]['wallet'] ) && ! empty( $wallet_overrides[ $country_code ]['wallet'] ) ) {
