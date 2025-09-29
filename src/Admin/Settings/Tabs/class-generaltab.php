@@ -206,7 +206,9 @@ class GeneralTab {
 		<table id="wallet-country-table" class="widefat striped wm-post-type-settings">
 			<thead>
 				<tr>
-					<th><?php esc_html_e( 'Country Code', 'web-monetization' ); ?></th>
+					<th><?php esc_html_e( 'Country Code', 'web-monetization' ); ?><br>
+						<span class="description"><?php esc_html_e( '(e.g. US, GB, FR)', 'web-monetization' ); ?></span>
+					</th>
 					<th><?php esc_html_e( 'Wallet Address', 'web-monetization' ); ?></th>
 					<th></th>
 				</tr>
