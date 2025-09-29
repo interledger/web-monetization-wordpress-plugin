@@ -26,7 +26,22 @@ class AboutTab {
 	public static function render(): void {
 		?>
 		<div class="wrap wm-about-tab">
-			<h2><?php esc_html_e( 'About Web Monetization', 'web-monetization' ); ?></h2>
+			<h2><?php esc_html_e( 'About this plugin', 'web-monetization' ); ?></h2>
+
+			<p>
+				<?php
+				/* translators: 1: Interledger Foundation link, 2: GitHub issues link */
+				printf(
+					esc_html__( 'The %1$s created, maintains, and releases this Web Monetization plugin for WordPress. Contribute feature requests and bug reports on %2$s.', 'web-monetization' ),
+					'<a href="https://interledger.org/" target="_blank" rel="noopener noreferrer">Interledger Foundation</a>',
+					'<a href="https://github.com/interledger/web-monetization-wordpress-plugin/issues/" target="_blank" rel="noopener noreferrer">GitHub</a>'
+				);
+				?>
+			</p>
+
+			<p><?php esc_html_e( 'The Interledger Foundation is a US-based 501(c)(3) non-profit committed to advancing digital financial inclusion.', 'web-monetization' ); ?></p>
+
+			<h3><?php esc_html_e( 'About Web Monetization', 'web-monetization' ); ?></h3>
 
 			<p><?php esc_html_e( 'Web Monetization introduces a new way for content owners and publishers to earn while allowing visitors to engage on their own terms. By enabling streaming micropayments, Web Monetization complements ads, subscriptions, and memberships, giving publishers more revenue options and visitors more ways to access and support content.', 'web-monetization' ); ?></p>
 
