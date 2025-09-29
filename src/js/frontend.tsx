@@ -1,5 +1,7 @@
 import '../scss/frontend.scss';
-const config = window.wm?.wmBannerConfig ? JSON.parse(window.wm.wmBannerConfig) || {} : {};
+const config = window.wm?.wmBannerConfig
+  ? JSON.parse(window.wm.wmBannerConfig) || {}
+  : {};
 const wmEnabled = window.wm.wmEnabled || false;
 const wmBuildUrl = window.wm.wmBuildUrl || '';
 
@@ -12,16 +14,15 @@ if (wmEnabled) {
 }
 
 function initWMBanner() {
-
   const { shadowHost, shadowRoot } = createShadowDOM();
 
-  const css = getCSSFile('banner-style.css');
+  const css = getCSSFile('bannerStyle.css');
   const banner = drawBanner(config);
 
   const font = getFontFamily(config?.font, 'banner');
   shadowHost.style.setProperty(
     '--wmt-banner-font',
-    font?.selectedFont ? font.selectedFont : 'inherit'
+    font?.selectedFont ? font.selectedFont : 'inherit',
   );
   shadowHost.style.setProperty('--wmt-banner-font-size', config?.fontSize);
   if (font?.fontFamily) {
@@ -35,12 +36,10 @@ function initWMBanner() {
   if (document.monetization) {
     if (document.monetization.state === 'started') {
       console.log(
-        'Monetization already started (user is an active subscriber)'
+        'Monetization already started (user is an active subscriber)',
       );
     } else {
-      console.log(
-        'Monetization not started yet, setting initial message'
-      );
+      console.log('Monetization not started yet, setting initial message');
       // Listen for the monetization start event to update the banner
       document.monetization.addEventListener('monetizationstart', () => {
         console.log('Monetization started');
@@ -62,12 +61,12 @@ function drawBanner(conf: BannerConfig) {
   const closedByUser = sessionStorage.getItem('_wm_tools_closed_by_user');
 
   const monetizationLinks = document.querySelector<HTMLLinkElement>(
-    'link[rel=monetization]'
+    'link[rel=monetization]',
   );
   if (
-    (monetizationLinks &&
-      monetizationLinks.relList.supports('monetization')) ||
-    closedByUser || monetizationLinks === null
+    (monetizationLinks && monetizationLinks.relList.supports('monetization')) ||
+    closedByUser ||
+    monetizationLinks === null
   ) {
     return;
   }
@@ -153,7 +152,7 @@ const allowedFonts = [
 const getFontFamily = (family: string, forElement: string = 'banner') => {
   // if exists remove it
   const currentFontFamily = document.getElementById(
-    `wmt-font-family-${forElement}`
+    `wmt-font-family-${forElement}`,
   ) as HTMLLinkElement;
   if (currentFontFamily) {
     currentFontFamily.remove();

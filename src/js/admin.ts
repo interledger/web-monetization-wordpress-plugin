@@ -147,10 +147,11 @@ async function fetchWalletDetails(
   const res = await fetchWithTimeout(url, {
     headers: { Accept: 'application/json' },
   });
-  if (!res.ok) throw new Error('Wallet request failed');
+  if (!res.ok) throw new Error('Wallet verification failed for ' + url);
 
   const json = await res.json();
-  if (!isWalletAddress(json)) throw new Error('Invalid wallet response');
+  if (!isWalletAddress(json))
+    throw new Error('Invalid wallet response for ' + url);
 
   return { url: res.url, response: json };
 }
