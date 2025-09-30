@@ -25,7 +25,6 @@ require_once __DIR__ . '/src/admin/settings/class-settingspage.php';
 require_once __DIR__ . '/src/admin/settings/tabs/class-widgetsettingstab.php';
 require_once __DIR__ . '/src/admin/settings/tabs/class-generaltab.php';
 require_once __DIR__ . '/src/admin/settings/tabs/class-abouttab.php';
-require_once __DIR__ . '/src/admin/settings/class-settingspage.php';
 require_once __DIR__ . '/src/admin/class-usermeta.php';
 require_once __DIR__ . '/src/admin/class-admin.php';
 require_once __DIR__ . '/src/class-core.php';
