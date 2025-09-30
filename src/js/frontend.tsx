@@ -68,7 +68,7 @@ function drawBanner(conf: BannerConfig) {
     closedByUser ||
     monetizationLinks === null
   ) {
-    return;
+    return null;
   }
 
   const banner = document.createElement('div');
