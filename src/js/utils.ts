@@ -35,5 +35,5 @@ export const isColorLight = (color: string) => {
   const hsp = Math.sqrt(0.299 * (r * r) + 0.587 * (g * g) + 0.114 * (b * b));
 
   // Using the HSP value, the color is light or not (dark)
-  return hsp > 192 ? true : false;
+  return hsp > 192;
 };
