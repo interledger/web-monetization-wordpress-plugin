@@ -40,7 +40,7 @@ export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(
     const [displayColorpicker, setDisplayColorpicker] = useState(false);
 
     const generatedId = useMemo(
-      () => `wm-input-${Math.random().toString(36).substr(2, 8)}`,
+      () => `wm-input-${typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substr(2, 8)}`,
       [],
     );
     const internalId = id ?? generatedId;
