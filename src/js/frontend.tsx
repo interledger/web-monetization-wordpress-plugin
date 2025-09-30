@@ -1,6 +1,6 @@
 import '../scss/frontend.scss';
 const config = window.wm?.wmBannerConfig
-  ? JSON.parse(window.wm.wmBannerConfig) || {}
+  ? (JSON.parse(window.wm.wmBannerConfig) ?? {})
   : {};
 const wmEnabled = window.wm.wmEnabled || false;
 const wmBuildUrl = window.wm.wmBuildUrl || '';
