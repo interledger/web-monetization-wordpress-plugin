@@ -3,7 +3,7 @@ export const isColorLight = (color: string) => {
 
   // Check the format of the color, HEX or RGB?
   if (color.match(/^rgb/)) {
-    // If HEX --> separate the red, green, blue values in separate variables
+    // If RGB --> separate the red, green, blue values in separate variables
     colorPart =
       color.match(
         /^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/,
