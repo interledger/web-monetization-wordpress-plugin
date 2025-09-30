@@ -13,7 +13,7 @@ export const isColorLight = (color: string) => {
     g = colorPart[2];
     b = colorPart[3];
   } else {
-    // If RGB --> Convert it to HEX: http://gist.github.com/983661
+    // If HEX --> Convert it to decimal values
     if (color.length < 5) {
       colorPart = +('0x' + color.slice(1).replace(/./g, '$&$&'));
     } else {
