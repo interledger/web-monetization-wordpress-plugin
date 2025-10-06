@@ -1,9 +1,9 @@
-=== Web Monetization plugin for WordPress ===
+=== Web Monetization ===
 Contributors: interledger
 Tags: web monetization, open-payments, interledger, micropayments, payments, wallet, monetization, revenue, content-monetization, micro-payments, web-standards
 Requires at least: 6.8.1
-Tested up to: 6.8.1
-Stable tag: 6.8.1
+Tested up to: 6.8
+Stable tag: 1.0.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html

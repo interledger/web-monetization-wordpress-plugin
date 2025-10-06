@@ -47,8 +47,6 @@ class Core {
 			}
 		);
 
-		// Load text domain for translations.
-		load_plugin_textdomain( 'web-monetization', false, dirname( __DIR__, 1 ) . '/languages' );
 		// Initialize admin or public functionality based on context.
 		if ( is_admin() ) {
 			( new Admin() )->register_hooks();

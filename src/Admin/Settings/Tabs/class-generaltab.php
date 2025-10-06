@@ -20,16 +20,78 @@ class GeneralTab {
 	 * Register the settings for the General tab.
 	 */
 	public static function register(): void {
-		register_setting( 'webmonetization_general', 'wm_enabled' );
-		register_setting( 'webmonetization_general', 'wm_wallet_address' );
-		register_setting( 'webmonetization_general', 'wm_wallet_address_connected' );
-		register_setting( 'webmonetization_general', 'wm_enable_authors' );
-		register_setting( 'webmonetization_general', 'wm_multi_wallets_option' );
-		register_setting( 'webmonetization_general', 'wm_post_type_settings' );
-		register_setting( 'webmonetization_general', 'wm_banner_enabled' );
-		register_setting( 'webmonetization_general', 'wm_wallet_address' );
-		register_setting( 'webmonetization_general', 'wm_enable_country_wallets' );
-		register_setting( 'webmonetization_general', 'wm_wallet_address_overrides' );
+		register_setting(
+			'webmonetization_general',
+			'wm_enabled',
+			array(
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+			)
+		);
+		register_setting(
+			'webmonetization_general',
+			'wm_wallet_address',
+			array(
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+			)
+		);
+		register_setting(
+			'webmonetization_general',
+			'wm_wallet_address_connected',
+			array(
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+			)
+		);
+		register_setting(
+			'webmonetization_general',
+			'wm_enable_authors',
+			array(
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+			)
+		);
+		register_setting(
+			'webmonetization_general',
+			'wm_multi_wallets_option',
+			array(
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+			)
+		);
+		register_setting(
+			'webmonetization_general',
+			'wm_post_type_settings',
+			array(
+				'type'              => 'array',
+				'sanitize_callback' => 'sanitize_text_field', // You may want a custom sanitizer for arrays
+			)
+		);
+		register_setting(
+			'webmonetization_general',
+			'wm_banner_enabled',
+			array(
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+			)
+		);
+		register_setting(
+			'webmonetization_general',
+			'wm_enable_country_wallets',
+			array(
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+			)
+		);
+		register_setting(
+			'webmonetization_general',
+			'wm_wallet_address_overrides',
+			array(
+				'type'              => 'array',
+				'sanitize_callback' => array( self::class, 'sanitize_wallet_overrides' ),
+			)
+		);
 		register_setting(
 			'webmonetization_settings_group',
 			'wm_wallet_address_overrides',
@@ -48,7 +110,7 @@ class GeneralTab {
 
 		add_settings_field(
 			'wm_enabled',
-			__( 'Enable Web Monetization', 'web-monetization' ),
+			__( 'Enable Web Monetization', 'web-monetization-wordpress-plugin' ),
 			array( self::class, 'render_field_enabled' ),
 			'webmonetization_general',
 			'webmonetization_general_section'
@@ -56,7 +118,7 @@ class GeneralTab {
 
 		add_settings_field(
 			'wm_wallet_address',
-			__( 'Enter your wallet address', 'web-monetization' ),
+			__( 'Enter your wallet address', 'web-monetization-wordpress-plugin' ),
 			array( self::class, 'render_field_wallet_address' ),
 			'webmonetization_general',
 			'webmonetization_general_section'
@@ -64,7 +126,7 @@ class GeneralTab {
 
 		add_settings_field(
 			'wm_enable_authors',
-			__( 'Enable Authors', 'web-monetization' ),
+			__( 'Enable Authors', 'web-monetization-wordpress-plugin' ),
 			array( self::class, 'render_field_enable_authors' ),
 			'webmonetization_general',
 			'webmonetization_general_section'
@@ -72,7 +134,7 @@ class GeneralTab {
 
 		add_settings_field(
 			'wm_multi_wallets_option',
-			__( 'Set wallet behavior', 'web-monetization' ),
+			__( 'Set wallet behavior', 'web-monetization-wordpress-plugin' ),
 			array( self::class, 'render_field_multi_wallets' ),
 			'webmonetization_general',
 			'webmonetization_general_section'
@@ -80,14 +142,14 @@ class GeneralTab {
 
 		add_settings_field(
 			'wm_post_type_settings',
-			__( 'Set up Web Monetization per post type', 'web-monetization' ),
+			__( 'Set up Web Monetization per post type', 'web-monetization-wordpress-plugin' ),
 			array( self::class, 'render_post_type_settings' ),
 			'webmonetization_general',
 			'webmonetization_general_section'
 		);
 		add_settings_field(
 			'wm_banner_enabled',
-			__( 'Enable the banner', 'web-monetization' ),
+			__( 'Enable the banner', 'web-monetization-wordpress-plugin' ),
 			array( self::class, 'render_field_banner_enabled' ),
 			'webmonetization_general',
 			'webmonetization_general_section'
@@ -95,7 +157,7 @@ class GeneralTab {
 
 		add_settings_field(
 			'wm_enable_country_wallets',
-			__( 'Enable country-specific wallet addresses', 'web-monetization' ),
+			__( 'Enable country-specific wallet addresses', 'web-monetization-wordpress-plugin' ),
 			array( self::class, 'render_field_enable_country_wallets' ),
 			'webmonetization_general',
 			'webmonetization_general_section'
@@ -144,9 +206,9 @@ class GeneralTab {
 		$geoip_available      = function_exists( 'geoip_detect2_get_info_from_current_ip' );
 		$cloudflare_available = '' !== sanitize_text_field( wp_unslash( $_SERVER['HTTP_CF_IPCOUNTRY'] ?? '' ) );
 
-		$label = esc_html__( 'Enable country-specific wallet addresses. If enabled, you can set different wallet addresses based on the visitor\'s country.', 'web-monetization' );
+		$label = esc_html__( 'Enable country-specific wallet addresses. If enabled, you can set different wallet addresses based on the visitor\'s country.', 'web-monetization-wordpress-plugin' );
 		if ( ! $geoip_available && ! $cloudflare_available ) {
-			$label .= ' ' . esc_html__( 'Note: GeoIP and Cloudflare country detection are not available.', 'web-monetization' );
+			$label .= ' ' . esc_html__( 'Note: GeoIP and Cloudflare country detection are not available.', 'web-monetization-wordpress-plugin' );
 		}
 		FieldRenderer::render_checkbox(
 			'wm_enable_country_wallets',
@@ -187,7 +249,7 @@ class GeneralTab {
 					printf(
 						wp_kses(
 							// translators: %s is the URL to the GeoIP Detection plugin.
-							__( 'Country detection requires the <a href="%s" target="_blank" rel="noopener">GeoIP Detection plugin</a>, or the site must be <a href="https://www.cloudflare.com/" target="_blank" rel="noopener">running behind Cloudflare</a>', 'web-monetization' ),
+							__( 'Country detection requires the <a href="%s" target="_blank" rel="noopener">GeoIP Detection plugin</a>, or the site must be <a href="https://www.cloudflare.com/" target="_blank" rel="noopener">running behind Cloudflare</a>', 'web-monetization-wordpress-plugin' ),
 							array(
 								'a' => array(
 									'href'   => array(),
@@ -206,10 +268,10 @@ class GeneralTab {
 		<table id="wallet-country-table" class="widefat striped wm-post-type-settings">
 			<thead>
 				<tr>
-					<th><?php esc_html_e( 'Country Code', 'web-monetization' ); ?><br>
-						<span class="description"><?php esc_html_e( '(e.g. US, GB, FR)', 'web-monetization' ); ?></span>
+					<th><?php esc_html_e( 'Country Code', 'web-monetization-wordpress-plugin' ); ?><br>
+						<span class="description"><?php esc_html_e( '(e.g. US, GB, FR)', 'web-monetization-wordpress-plugin' ); ?></span>
 					</th>
-					<th><?php esc_html_e( 'Wallet Address', 'web-monetization' ); ?></th>
+					<th><?php esc_html_e( 'Wallet Address', 'web-monetization-wordpress-plugin' ); ?></th>
 					<th></th>
 				</tr>
 			</thead>
@@ -228,7 +290,7 @@ class GeneralTab {
 		</table>
 
 		<p>
-			<button type="button" class="button" id="add-wallet-country-row"><?php esc_html_e( 'Add New Country Wallet', 'web-monetization' ); ?></button>
+			<button type="button" class="button" id="add-wallet-country-row"><?php esc_html_e( 'Add New Country Wallet', 'web-monetization-wordpress-plugin' ); ?></button>
 		</p>
 		</div>
 		<?php
@@ -287,7 +349,7 @@ class GeneralTab {
 			'wm_enabled',
 			'wm_enabled',
 			$value,
-			esc_html__( 'Enable Web Monetization globally.', 'web-monetization' )
+			esc_html__( 'Enable Web Monetization globally.', 'web-monetization-wordpress-plugin' )
 		);
 	}
 
@@ -308,7 +370,7 @@ class GeneralTab {
 
 		echo '<br> <p  class="description">' . esc_html__(
 			'Multiple wallet addresses can be added here separated by a space',
-			'web-monetization'
+			'web-monetization-wordpress-plugin'
 		) . '</p>';
 
 		FieldRenderer::render_hidden_input(
@@ -330,16 +392,16 @@ class GeneralTab {
 			$is_only_one_author_excluded = count( $excluded_users ) === 1;
 			$multiple_authors_text       = sprintf(
 				/* translators: %d is the number of excluded authors */
-				esc_html__( 'are %d authors', 'web-monetization' ),
+				esc_html__( 'are %d authors', 'web-monetization-wordpress-plugin' ),
 				count( $excluded_users )
 			);
 			$excluded_users_notice .= ' <br><span class="description">' .
-				esc_html__( 'Note: There ', 'web-monetization' ) .
+				esc_html__( 'Note: There ', 'web-monetization-wordpress-plugin' ) .
 				( $is_only_one_author_excluded ?
-					esc_html__( 'is 1 author', 'web-monetization' ) :
+					esc_html__( 'is 1 author', 'web-monetization-wordpress-plugin' ) :
 					$multiple_authors_text
 				) .
-				esc_html__( ' excluded from Web Monetization. You can view them on the - filtered - ', 'web-monetization' ) .
+				esc_html__( ' excluded from Web Monetization. You can view them on the - filtered - ', 'web-monetization-wordpress-plugin' ) .
 				'<a href="' . admin_url( 'users.php?wm_excluded_filter=excluded' ) . '">Users page</a></span>';
 		}
 		FieldRenderer::render_checkbox(
@@ -347,13 +409,14 @@ class GeneralTab {
 			'wm_enable_authors',
 			$value,
 			esc_html__(
-				'Let your authors enter their own wallet address.'
+				'Let your authors enter their own wallet address.',
+				'web-monetization-wordpress-plugin'
 			) .
 			'<br> <p  class="description">' . esc_html__(
 				'Admins can disallow specific authors from the ',
-				'web-monetization'
+				'web-monetization-wordpress-plugin'
 			) .
-			'<a href="' . admin_url( 'users.php' ) . '">' . esc_html__( 'Users page', 'web-monetization' ) . '</a> </p>' . $excluded_users_notice
+			'<a href="' . admin_url( 'users.php' ) . '">' . esc_html__( 'Users page', 'web-monetization-wordpress-plugin' ) . '</a> </p>' . $excluded_users_notice
 		);
 	}
 
@@ -368,14 +431,14 @@ class GeneralTab {
 			$value,
 			array(
 				// translators: %s is HTML markup for <strong>.
-				'one' => wp_kses_post( 'Only use one wallet (This option displays <strong>a single wallet address</strong> based on the following priority: article > post type >  author > site)', 'web-monetization' ),
+				'one' => wp_kses_post( 'Only use one wallet (This option displays <strong>a single wallet address</strong> based on the following priority: article > post type >  author > site)', 'web-monetization-wordpress-plugin' ),
 				// translators: %s is HTML markup for <strong>.
-				'all' => wp_kses_post( 'Use all wallets (This option displays <strong>all wallet addresses that are defined</strong> including site, author, post type and article wallets)', 'web-monetization' ),
+				'all' => wp_kses_post( 'Use all wallets (This option displays <strong>all wallet addresses that are defined</strong> including site, author, post type and article wallets)', 'web-monetization-wordpress-plugin' ),
 			)
 		);
-		echo '<p class="description">' . esc_html__( 'Example:', 'web-monetization' ) . ' <br>' .
-			esc_html__( 'If you choose to only use one wallet and if the author has their own wallet address, only that one will be used.', 'web-monetization' ) . '<br>' .
-			esc_html__( 'If you choose to use all wallets and if all of the wallets are defined, they will all be included and used simultaneously.', 'web-monetization' ) .
+		echo '<p class="description">' . esc_html__( 'Example:', 'web-monetization-wordpress-plugin' ) . ' <br>' .
+			esc_html__( 'If you choose to only use one wallet and if the author has their own wallet address, only that one will be used.', 'web-monetization-wordpress-plugin' ) . '<br>' .
+			esc_html__( 'If you choose to use all wallets and if all of the wallets are defined, they will all be included and used simultaneously.', 'web-monetization-wordpress-plugin' ) .
 		'</p>';
 	}
 
@@ -388,9 +451,9 @@ class GeneralTab {
 			'wm_banner_enabled',
 			'wm_banner_enabled',
 			$value,
-			__( 'Show a customizable banner to introduce Web Monetization to your website visitors. You can customize the banner on the ', 'web-monetization' ) .
-			' <a href="' . admin_url( 'admin.php?page=web-monetization-settings&tab=widget' ) . '">' . __( 'Banner Settings', 'web-monetization' ) . '</a> ' .
-			__( 'page', 'web-monetization' )
+			__( 'Show a customizable banner to introduce Web Monetization to your website visitors. You can customize the banner on the ', 'web-monetization-wordpress-plugin' ) .
+			' <a href="' . admin_url( 'admin.php?page=web-monetization-settings&tab=widget' ) . '">' . __( 'Banner Settings', 'web-monetization-wordpress-plugin' ) . '</a> ' .
+			__( 'page', 'web-monetization-wordpress-plugin' )
 		);
 	}
 
@@ -424,13 +487,13 @@ class GeneralTab {
 				$supported_types[] = $post_type;
 			}
 		}
-		echo '<p class="description">' . esc_html__( 'Enable Web Monetization per post type and provide a wallet address.', 'web-monetization' ) . '</p>';
+		echo '<p class="description">' . esc_html__( 'Enable Web Monetization per post type and provide a wallet address.', 'web-monetization-wordpress-plugin' ) . '</p>';
 
 		echo '<br><table class="widefat striped wm-post-type-settings">';
 		echo '<thead>';
 		echo '<tr>';
-		echo '<th>' . esc_html__( 'Post Type', 'web-monetization' ) . '</th>';
-		echo '<th> ' . esc_html__( 'Wallet Address', 'web-monetization' ) . '</th>';
+		echo '<th>' . esc_html__( 'Post Type', 'web-monetization-wordpress-plugin' ) . '</th>';
+		echo '<th> ' . esc_html__( 'Wallet Address', 'web-monetization-wordpress-plugin' ) . '</th>';
 		echo '</tr>';
 		echo '</thead>';
 		echo '<tbody>';

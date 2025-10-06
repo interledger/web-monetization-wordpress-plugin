@@ -18,7 +18,14 @@ class WidgetSettingsTab {
 	 * Register the settings for the Widget tab.
 	 */
 	public static function register(): void {
-		register_setting( 'webmonetization_display', 'webmonetization_custom_banner' );
+		register_setting(
+			'webmonetization_display',
+			'webmonetization_custom_banner',
+			array(
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+			)
+		);
 
 		wp_localize_script(
 			'wm-widget',
