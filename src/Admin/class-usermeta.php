@@ -54,9 +54,9 @@ class UserMeta {
 			: '';
 		?>
 		<select name="wm_excluded_filter"  onchange="this.form.submit()">
-			<option value=""><?php esc_html_e( 'All Users', 'web-monetization-wordpress-plugin' ); ?></option>
-			<option value="excluded" <?php selected( $selected, 'excluded' ); ?>><?php esc_html_e( 'Excluded Users Only', 'web-monetization-wordpress-plugin' ); ?></option>
-			<option value="included" <?php selected( $selected, 'included' ); ?>><?php esc_html_e( 'Non-Excluded Users Only', 'web-monetization-wordpress-plugin' ); ?></option>
+			<option value=""><?php esc_html_e( 'All Users', 'web-monetization' ); ?></option>
+			<option value="excluded" <?php selected( $selected, 'excluded' ); ?>><?php esc_html_e( 'Excluded Users Only', 'web-monetization' ); ?></option>
+			<option value="included" <?php selected( $selected, 'included' ); ?>><?php esc_html_e( 'Non-Excluded Users Only', 'web-monetization' ); ?></option>
 		</select>
 		<?php
 	}
@@ -126,7 +126,7 @@ class UserMeta {
 			admin_url( 'users.php' )
 		);
 
-		$label = $is_excluded ? esc_html__( 'Enable Web Monetization', 'web-monetization-wordpress-plugin' ) : esc_html__( 'Disable Web Monetization', 'web-monetization-wordpress-plugin' );
+		$label = $is_excluded ? esc_html__( 'Enable Web Monetization', 'web-monetization' ) : esc_html__( 'Disable Web Monetization', 'web-monetization' );
 
 		$actions['wm_toggle_exclude'] = sprintf(
 			'<a href="%s">%s</a>',
@@ -152,7 +152,7 @@ class UserMeta {
 		$user_id = absint( wp_unslash( $_GET['wm_toggle_exclude'] ) );
 
 		if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'wm_toggle_exclude_' . $user_id ) ) {
-			wp_die( esc_html__( 'Invalid nonce.', 'web-monetization-wordpress-plugin' ) );
+			wp_die( esc_html__( 'Invalid nonce.', 'web-monetization' ) );
 		}
 
 		$excluded = get_option( 'wm_excluded_authors', array() );
@@ -185,14 +185,14 @@ class UserMeta {
 		$is_excluded = in_array( $user->ID, $excluded, true );
 
 		?>
-		<h2><?php esc_html_e( 'Web Monetization Settings', 'web-monetization-wordpress-plugin' ); ?></h2>
+		<h2><?php esc_html_e( 'Web Monetization Settings', 'web-monetization' ); ?></h2>
 		<table class="form-table" role="presentation">
 			<tr>
-				<th scope="row"><?php esc_html_e( 'Exclude from Author Monetization', 'web-monetization-wordpress-plugin' ); ?></th>
+				<th scope="row"><?php esc_html_e( 'Exclude from Author Monetization', 'web-monetization' ); ?></th>
 				<td>
 					<label for="wm_exclude_author">
 						<input type="checkbox" name="wm_exclude_author" id="wm_exclude_author" value="1" <?php checked( $is_excluded ); ?> />
-						<?php esc_html_e( 'Prevent this author from using their own wallet address (site fallback will be used).', 'web-monetization-wordpress-plugin' ); ?>
+						<?php esc_html_e( 'Prevent this author from using their own wallet address (site fallback will be used).', 'web-monetization' ); ?>
 						<?php wp_nonce_field( 'wm_toggle_exclude_' . $user->ID, 'wm_toggle_exclude_nonce' ); ?>
 					</label>
 				</td>
@@ -264,10 +264,10 @@ class UserMeta {
 		$wallet       = get_user_meta( $user->ID, 'wm_wallet_address', true );
 		$is_connected = get_user_meta( $user->ID, 'wm_wallet_address_connected', true ) === '1';
 		?>
-		<h2><?php esc_html_e( 'Web Monetization', 'web-monetization-wordpress-plugin' ); ?></h2>
+		<h2><?php esc_html_e( 'Web Monetization', 'web-monetization' ); ?></h2>
 		<table class="form-table" role="presentation">
 			<tr>
-				<th><label for="wm_wallet_address"><?php esc_html_e( 'Wallet Address', 'web-monetization-wordpress-plugin' ); ?></label></th>
+				<th><label for="wm_wallet_address"><?php esc_html_e( 'Wallet Address', 'web-monetization' ); ?></label></th>
 				<td>
 					<input type="text" name="wm_wallet_address" id="wm_wallet_address"
 						value="<?php echo esc_attr( $wallet ); ?>"
@@ -279,7 +279,7 @@ class UserMeta {
 					);
 					?>
 					<?php wp_nonce_field( 'wm_save_wallet_address', 'wm_wallet_address_nonce' ); ?>
-					<p class="description"><?php esc_html_e( 'Enter your wallet address to enable Web Monetization.', 'web-monetization-wordpress-plugin' ); ?></p>
+					<p class="description"><?php esc_html_e( 'Enter your wallet address to enable Web Monetization.', 'web-monetization' ); ?></p>
 				</td>
 			</tr>
 		</table>
