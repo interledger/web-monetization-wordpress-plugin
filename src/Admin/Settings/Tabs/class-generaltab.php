@@ -240,7 +240,7 @@ class GeneralTab {
 
 		ob_start();
 		?>
-		<div id="wm_country_wallets_wrapper" style="<?php echo $enabled ? '' : 'display:none;'; ?>">
+		<div id="wm-country-wallets-wrapper" style="<?php echo $enabled ? '' : 'display:none;'; ?>">
 
 		<?php if ( ! $geoip_available && ! $cloudflare_available ) : ?>
 			<div class="notice notice-warning inline">
@@ -329,7 +329,7 @@ class GeneralTab {
 	 */
 	public static function render(): void {
 		?>
-		<form id="webmonetization_general_form" method="post" action="options.php">
+		<form id="webmonetization-general-form" method="post" action="options.php">
 			<?php
 
 			settings_fields( 'webmonetization_general' );

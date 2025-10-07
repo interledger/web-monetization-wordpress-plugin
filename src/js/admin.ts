@@ -312,7 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // “Dirty form” guard
   const form = document.querySelector<HTMLFormElement>(
-    'form#webmonetization_general_form',
+    'form#webmonetization-general-form',
   );
   if (form) {
     let initial = new FormData(form);
@@ -360,7 +360,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const checkbox = document.querySelector<HTMLInputElement>(
     'input[name="wm_enable_country_wallets"]',
   );
-  const wrapper = document.getElementById('wm_country_wallets_wrapper');
+  const wrapper = document.getElementById('wm-country-wallets-wrapper');
   if (checkbox && wrapper) {
     const toggleWrapper = () => {
       wrapper.style.display = checkbox.checked ? 'block' : 'none';

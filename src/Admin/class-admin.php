@@ -182,7 +182,7 @@ class Admin {
 			return;
 		}
 		add_meta_box(
-			'wm_wallet_address_meta_box',
+			'wm-wallet-address-meta-box',
 			__( 'Web Monetization', 'web-monetization' ),
 			array( $this, 'render_wallet_address_meta_box' ),
 			$post_type,
@@ -243,11 +243,11 @@ class Admin {
 	 */
 	public function inline_logo_menu_icon(): void {
 		if ( 'toplevel_page_web-monetization' !== get_current_screen()->base ) {
-			echo '<style>#adminmenu li a.toplevel_page_web-monetization-settings .wp-menu-image:before { display: none; }</style>';
+			echo '<style>#adminmenu [class*="web-monetization-settings"] .wp-menu-image:before { display: none; }</style>';
 		}
 		echo '<script>
 			document.addEventListener("DOMContentLoaded", function() {
-				const img = document.querySelector("#adminmenu li a.toplevel_page_web-monetization-settings .wp-menu-image");
+				const img = document.querySelector("#adminmenu [class*=\"web-monetization-settings\"] .wp-menu-image");
 				if (img) {
 					img.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 37 25" width="20" height="20" fill="currentColor">
 						<path d="M28.49 20.49l-.01 2.15H2.42l.03-14.54h3.45V5.7H.1v1.51l-.04 16.76h.01v.14l28.42.05h2.35v-4.5H28.49Z"/>

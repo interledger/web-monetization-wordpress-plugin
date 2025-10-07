@@ -2,15 +2,28 @@
 	--wm-green-shade: #3abf84; // example value
 }
 
+[class*="web-monetization-settings"] .wp-menu-image svg {
+	color: #999;
+}
+
+[class*="web-monetization-settings"].current .wp-menu-image svg,
+li:hover [class*="web-monetization-settings"] .wp-menu-image svg {
+	color: #007cba;
+}
+
 #adminmenu {
 
-	#toplevel_page_web-monetization-settings {
+	[id*="web-monetization-settings"] {
+
 		a {
+
 			div.wp-menu-image {
-				&:before {
+
+				&::before {
 					display: none;
-					content: '';
+					content: "";
 				}
+
 				svg {
 					width: 20px;
 					height: 20px;
@@ -20,17 +33,11 @@
 				}
 			}
 		}
-		
+
 	}
+
 }
 
-
-.toplevel_page-web-monetization .wp-menu-image svg {
-  color: #999; /* inactive */
-}
-.toplevel_page-web-monetization.current .wp-menu-image svg {
-	color: #007cba; /* active menu item */
-}
 
 .wm-header {
 	padding: 1.5rem 0;
@@ -59,24 +66,18 @@
 		}
 	}
 }
-.wm-post-type-settings th{
+
+.wm-post-type-settings th {
 	padding-left: 10px;
 }
 
-#webmonetization_general_form,
-#wm_wallet_address_meta_box {
-	.wallet-ui-wrapper {
-		display: inline-flex;
-		align-items: center;
-		gap: 8px;
-		margin-left: 4px;
-	}
-	.wallet-feedback {
-		margin: 0;
-		padding: 0;
-	}
+#webmonetization-general-form,
+#wm-wallet-address-meta-box {
+
 	// Wallet UI wrapper
 	.wallet-ui-wrapper {
+		display: inline-flex;
+		margin-left: 4px;
 		margin-top: 8px;
 		align-items: center;
 		gap: 0.5rem;
@@ -84,15 +85,19 @@
 
 	// Feedback messages
 	.wallet-feedback {
+
+		padding: 0;
 		font-size: 0.9em;
-		margin-left: 0.5rem;
+		margin-left: 0.5rem 0 0 0;
+
 		&.text-danger {
-			color: red;
+			color: #f00;
 		}
 	}
 
 	// Buttons
 	.wallet-verify {
+
 		// inherits WP button styles via "button button-secondary"
 		&.is-busy,
 		&[aria-busy="true"] {
@@ -103,13 +108,13 @@
 
 	.wallet-edit {
 		margin-left: 12px; // replaces inline marginLeft
-		display: inline;   // visible when toggled
+		display: inline; // visible when toggled
 	}
 
 	.wallet-check {
 		margin-left: 8px;
-		color: green;
-		display: inline;   // visible when toggled
+		color: #008000;
+		display: inline; // visible when toggled
 	}
 
 	// Utility classes
@@ -118,7 +123,7 @@
 	}
 
 	.text-danger {
-		color: red !important;
+		color: #f00 !important;
 	}
 
 	.ml-2 {
@@ -135,23 +140,29 @@
 
 }
 
-#wm_country_wallets_wrapper {
+#wm-country-wallets-wrapper {
 	transition: all 0.3s ease;
 }
+
 #wallet-country-table {
 	width: 100%;
 	border-collapse: collapse;
 	margin-top: 1rem;
-	th, td {
+
+	th,
+	td {
 		padding: 0.5rem;
 		text-align: left;
 	}
+
 	th {
+
 		&:first-child {
 			border-top-left-radius: 8px;
 			border-bottom-left-radius: 8px;
 			width: 90px;
 		}
+
 		&:last-child {
 			border-top-right-radius: 8px;
 			border-bottom-right-radius: 8px;
