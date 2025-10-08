@@ -1,5 +1,5 @@
 {
-  "name": "web-monetization-wordpress-plugin",
+  "name": "web-monetization",
   "version": "1.0.0",
   "description": "Web Monetization plugin for WordPress",
   "author": "Interledger Foundation",
@@ -24,7 +24,11 @@
     "languages/",
     "src/",
     "vendor/",
-    "web-monetization-wordpress-plugin.php",
+    "web-monetization.php",
+    "composer.json",
+    "composer.lock",
+    "package.json",
+    "package-lock.json",
     "uninstall.php",
     "README.md",
     "readme.txt"

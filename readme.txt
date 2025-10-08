@@ -1,17 +1,17 @@
 === Web Monetization ===
 Contributors: interledger
-Tags: web monetization, open-payments, interledger, micropayments, payments, wallet, monetization, revenue, content-monetization, micro-payments, web-standards
+Tags: web monetization, open-payments, interledger, micropayments, payments
 Requires at least: 6.8.1
 Tested up to: 6.8
 Stable tag: 1.0.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
-Lightweight, extensible Web Monetization plugin for WordPress. Add a web monetization-compatible wallet address to monetize your entire site, individual posts, and pages. Receive micro-payments. No tracking.
+Add a web monetization-compatible wallet address to monetize your site, posts, and pages. Receiving micropayments. No tracking.
 
 == Description ==
 
-**Web Monetization for WordPress** adds a `<link rel="monetization">` tag to your site’s `<head>` and lets you define **which wallet gets paid** at the **site-wide**, **author**, or **per-post** level. It’s built to work with Interledger-compatible wallets and is designed for performance, clarity, and extensibility.
+**Web Monetization** connects you with your audience, turning engagement into revenue. No friction, no barriers, no limits. **Web Monetization for WordPress** adds a `<link rel="monetization">` tag to your site’s `<head>` and lets you define **which wallet gets paid** at the **site-wide**, **author**, or **per-post** level. It’s built to work with Interledger-compatible wallets and is designed for performance, clarity, and extensibility.
 
 **Highlights**
 - Add a Web Monetization tag to your pages automatically
@@ -24,7 +24,7 @@ Lightweight, extensible Web Monetization plugin for WordPress. Add a web monetiz
 - No tracking, no external requests by default
 
 **What is Web Monetization?**  
-It’s a proposed web standard that enables **streaming micro-payments** to creators as users browse. This plugin helps you output the right markup and manage which wallet gets paid.
+Web Monetization is an open web standard. It connects publishers with their audiences and enables continuous payments to their websites.
 
 = Privacy =
 - No tracking or analytics.
