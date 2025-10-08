@@ -65,7 +65,7 @@ class GeneralTab {
 			'wm_post_type_settings',
 			array(
 				'type'              => 'array',
-				'sanitize_callback' => 'sanitize_text_field', // You may want a custom sanitizer for arrays
+				'sanitize_callback' => 'sanitize_text_field', // You may want a custom sanitizer for arrays.
 			)
 		);
 		register_setting(

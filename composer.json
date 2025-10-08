@@ -27,8 +27,8 @@
   },
   "scripts": {
     "l": "phpcs -e",
-    "lint": "phpcs --standard=WordPress --ignore=vendor,node_modules,*/build/*.* .",
-    "lint:fix": "phpcbf --standard=WordPress --ignore=vendor,node_modules,*/build/*.* .",
+    "lint": "phpcs --standard=WordPress --ignore=vendor,node_modules,*/build/*.* --extensions=php .",
+    "lint:fix": "phpcbf --standard=WordPress --ignore=vendor,*/build/*.* --extensions=php .",
     "phpstan": "phpstan analyse ./src",
     "make-pot": "wp i18n make-pot . languages/web-monetization.pot --exclude=node_modules,vendor,build",
     "post-install-cmd": [

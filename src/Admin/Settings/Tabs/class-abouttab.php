@@ -67,10 +67,13 @@ class AboutTab {
 				?>
 			</p>
 
-			<p><?php esc_html_e(
-				'The Interledger Foundation (ILF) is a mission-driven nonprofit ensuring that no one is left behind in the digital economy. We support inclusive innovation and financial infrastructure that connects people, communities, and entire economies globally.',
-				'web-monetization'
-				); ?>
+			<p>
+				<?php
+				esc_html_e(
+					'The Interledger Foundation (ILF) is a mission-driven nonprofit ensuring that no one is left behind in the digital economy. We support inclusive innovation and financial infrastructure that connects people, communities, and entire economies globally.',
+					'web-monetization'
+				);
+				?>
 			</p>
 
 		</div>
