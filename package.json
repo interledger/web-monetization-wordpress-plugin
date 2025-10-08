@@ -23,7 +23,6 @@
     "build/",
     "languages/",
     "src/",
-    "vendor/",
     "web-monetization.php",
     "composer.json",
     "composer.lock",
