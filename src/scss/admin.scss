@@ -1,0 +1,171 @@
+:root {
+	--wm-green-shade: #3abf84; // example value
+}
+
+[class*="web-monetization-settings"] .wp-menu-image svg {
+	color: #999;
+}
+
+[class*="web-monetization-settings"].current .wp-menu-image svg,
+li:hover [class*="web-monetization-settings"] .wp-menu-image svg {
+	color: #007cba;
+}
+
+#adminmenu {
+
+	[id*="web-monetization-settings"] {
+
+		a {
+
+			div.wp-menu-image {
+
+				&::before {
+					display: none;
+					content: "";
+				}
+
+				svg {
+					width: 20px;
+					height: 20px;
+					margin-top: 6px;
+					opacity: 0.8;
+					padding: 7px 0;
+				}
+			}
+		}
+
+	}
+
+}
+
+
+.wm-header {
+	padding: 1.5rem 0;
+	border-bottom: 4px solid var(--wm-green-shade);
+
+	.wm-header-inner {
+		display: flex;
+		align-items: center;
+		gap: 1.5rem;
+		width: 100%;
+		max-width: 1200px;
+
+		.wm-logo {
+			margin-left: 1.5rem;
+			cursor: pointer;
+			height: 40px;
+			width: auto;
+		}
+
+		.wm-title {
+			margin-left: 1.5rem;
+			font-size: 1.25rem;
+			font-weight: 600;
+			cursor: pointer;
+			color: #1d2327;
+		}
+	}
+}
+
+.wm-post-type-settings th {
+	padding-left: 10px;
+}
+
+#webmonetization-general-form,
+#wm-wallet-address-meta-box {
+
+	// Wallet UI wrapper
+	.wallet-ui-wrapper {
+		display: inline-flex;
+		margin-left: 4px;
+		margin-top: 8px;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	// Feedback messages
+	.wallet-feedback {
+
+		padding: 0;
+		font-size: 0.9em;
+		margin-left: 0.5rem 0 0 0;
+
+		&.text-danger {
+			color: #f00;
+		}
+	}
+
+	// Buttons
+	.wallet-verify {
+
+		// inherits WP button styles via "button button-secondary"
+		&.is-busy,
+		&[aria-busy="true"] {
+			opacity: 0.7;
+			pointer-events: none;
+		}
+	}
+
+	.wallet-edit {
+		margin-left: 12px; // replaces inline marginLeft
+		display: inline; // visible when toggled
+	}
+
+	.wallet-check {
+		margin-left: 8px;
+		color: #008000;
+		display: inline; // visible when toggled
+	}
+
+	// Utility classes
+	.hidden {
+		display: none !important;
+	}
+
+	.text-danger {
+		color: #f00 !important;
+	}
+
+	.ml-2 {
+		margin-left: 8px;
+	}
+
+	.ml-3 {
+		margin-left: 12px;
+	}
+
+	.mt-2 {
+		margin-top: 8px;
+	}
+
+}
+
+#wm-country-wallets-wrapper {
+	transition: all 0.3s ease;
+}
+
+#wallet-country-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 1rem;
+
+	th,
+	td {
+		padding: 0.5rem;
+		text-align: left;
+	}
+
+	th {
+
+		&:first-child {
+			border-top-left-radius: 8px;
+			border-bottom-left-radius: 8px;
+			width: 90px;
+		}
+
+		&:last-child {
+			border-top-right-radius: 8px;
+			border-bottom-right-radius: 8px;
+		}
+	}
+}

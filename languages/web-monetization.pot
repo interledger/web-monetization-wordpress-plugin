@@ -1,0 +1,254 @@
+# Copyright (C) 2025 Interledger Foundation
+# This file is distributed under the GPL-2.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Web Monetization 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/web-monetization\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-10-08T10:56:12+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: web-monetization\n"
+
+#. Plugin Name of the plugin
+#: web-monetization.php
+#: src/admin/class-admin.php:156
+#: src/admin/class-admin.php:186
+#: src/admin/class-usermeta.php:267
+msgid "Web Monetization"
+msgstr ""
+
+#. Description of the plugin
+#: web-monetization.php
+msgid "Web Monetization plugin for WordPress."
+msgstr ""
+
+#. Author of the plugin
+#: web-monetization.php
+msgid "Interledger Foundation"
+msgstr ""
+
+#. Author URI of the plugin
+#: web-monetization.php
+msgid "https://interledger.org"
+msgstr ""
+
+#: src/admin/class-admin.php:155
+#: src/admin/class-usermeta.php:188
+#: src/admin/settings/class-settingspage.php:86
+#: src/admin/settings/class-settingspage.php:89
+msgid "Web Monetization Settings"
+msgstr ""
+
+#: src/admin/class-admin.php:207
+msgid "Wallet Address:"
+msgstr ""
+
+#: src/admin/class-admin.php:217
+msgid "Disable Web Monetization for this post "
+msgstr ""
+
+#: src/admin/class-usermeta.php:57
+msgid "All Users"
+msgstr ""
+
+#: src/admin/class-usermeta.php:58
+msgid "Excluded Users Only"
+msgstr ""
+
+#: src/admin/class-usermeta.php:59
+msgid "Non-Excluded Users Only"
+msgstr ""
+
+#: src/admin/class-usermeta.php:129
+#: src/admin/settings/tabs/class-generaltab.php:113
+msgid "Enable Web Monetization"
+msgstr ""
+
+#: src/admin/class-usermeta.php:129
+msgid "Disable Web Monetization"
+msgstr ""
+
+#: src/admin/class-usermeta.php:155
+msgid "Invalid nonce."
+msgstr ""
+
+#: src/admin/class-usermeta.php:191
+msgid "Exclude from Author Monetization"
+msgstr ""
+
+#: src/admin/class-usermeta.php:195
+msgid "Prevent this author from using their own wallet address (site fallback will be used)."
+msgstr ""
+
+#: src/admin/class-usermeta.php:270
+#: src/admin/settings/tabs/class-generaltab.php:274
+#: src/admin/settings/tabs/class-generaltab.php:496
+msgid "Wallet Address"
+msgstr ""
+
+#: src/admin/class-usermeta.php:282
+msgid "Enter your wallet address to enable Web Monetization."
+msgstr ""
+
+#: src/admin/settings/tabs/class-abouttab.php:29
+msgid "About Web Monetization"
+msgstr ""
+
+#: src/admin/settings/tabs/class-abouttab.php:31
+msgid "Web Monetization introduces a new way for content owners and publishers to earn while allowing visitors to engage on their own terms. By enabling streaming micropayments, Web Monetization complements ads, subscriptions, and memberships, giving publishers more revenue options and visitors more ways to access and support content."
+msgstr ""
+
+#: src/admin/settings/tabs/class-abouttab.php:33
+msgid "The plugin lets you add a Web Monetization-compatible wallet address to monetize your entire site, individual posts, and pages. If you have multiple authors, you can also allow them to add their own wallet addresses to monetize their content."
+msgstr ""
+
+#: src/admin/settings/tabs/class-abouttab.php:37
+msgid "Resources"
+msgstr ""
+
+#: src/admin/settings/tabs/class-abouttab.php:42
+msgid "Learn More at WebMonetization.org"
+msgstr ""
+
+#: src/admin/settings/tabs/class-abouttab.php:50
+msgid "Learn more about Web Monetization enabled wallets"
+msgstr ""
+
+#: src/admin/settings/tabs/class-abouttab.php:58
+msgid "About this plugin"
+msgstr ""
+
+#. translators: 1: Interledger Foundation link, 2: GitHub issues link
+#: src/admin/settings/tabs/class-abouttab.php:63
+#, php-format
+msgid "The %1$s created, maintains, and releases this Web Monetization plugin for WordPress. Contribute feature requests and bug reports on %2$s."
+msgstr ""
+
+#: src/admin/settings/tabs/class-abouttab.php:70
+msgid "The Interledger Foundation (ILF) is a mission-driven nonprofit ensuring that no one is left behind in the digital economy. We support inclusive innovation and financial infrastructure that connects people, communities, and entire economies globally."
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:121
+msgid "Enter your wallet address"
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:129
+msgid "Enable Authors"
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:137
+msgid "Set wallet behavior"
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:145
+msgid "Set up Web Monetization per post type"
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:152
+msgid "Enable the banner"
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:160
+msgid "Enable country-specific wallet addresses"
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:209
+msgid "Enable country-specific wallet addresses. If enabled, you can set different wallet addresses based on the visitor's country."
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:211
+msgid "Note: GeoIP and Cloudflare country detection are not available."
+msgstr ""
+
+#. translators: %s is the URL to the GeoIP Detection plugin.
+#: src/admin/settings/tabs/class-generaltab.php:252
+#, php-format
+msgid "Country detection requires the <a href=\"%s\" target=\"_blank\" rel=\"noopener\">GeoIP Detection plugin</a>, or the site must be <a href=\"https://www.cloudflare.com/\" target=\"_blank\" rel=\"noopener\">running behind Cloudflare</a>"
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:271
+msgid "Country Code"
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:272
+msgid "(e.g. US, GB, FR)"
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:293
+msgid "Add New Country Wallet"
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:352
+msgid "Enable Web Monetization globally."
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:371
+msgid "Multiple wallet addresses can be added here separated by a space"
+msgstr ""
+
+#. translators: %d is the number of excluded authors
+#: src/admin/settings/tabs/class-generaltab.php:395
+#, php-format
+msgid "are %d authors"
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:399
+msgid "Note: There "
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:401
+msgid "is 1 author"
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:404
+msgid " excluded from Web Monetization. You can view them on the - filtered - "
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:411
+msgid "Let your authors enter their own wallet address."
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:415
+msgid "Admins can disallow specific authors from the "
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:419
+msgid "Users page"
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:439
+msgid "Example:"
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:440
+msgid "If you choose to only use one wallet and if the author has their own wallet address, only that one will be used."
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:441
+msgid "If you choose to use all wallets and if all of the wallets are defined, they will all be included and used simultaneously."
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:454
+msgid "Show a customizable banner to introduce Web Monetization to your website visitors. You can customize the banner on the "
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:455
+msgid "Banner Settings"
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:456
+msgid "page"
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:490
+msgid "Enable Web Monetization per post type and provide a wallet address."
+msgstr ""
+
+#: src/admin/settings/tabs/class-generaltab.php:495
+msgid "Post Type"
+msgstr ""
