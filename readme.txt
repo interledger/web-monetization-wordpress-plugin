@@ -5,8 +5,8 @@ Requires at least: 6.8.1
 Tested up to: 6.8
 Stable tag: 1.0.0
 Requires PHP: 7.4
-License: GPLv2 or later
-License URI: https://www.gnu.org/licenses/gpl-2.0.html
+License: Apache-2.0
+License URI: http://www.apache.org/licenses/LICENSE-2.0.txt
 Add a web monetization-compatible wallet address to monetize your site, posts, and pages. Receiving micropayments. No tracking.
 
 == Description ==
