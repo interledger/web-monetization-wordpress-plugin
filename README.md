@@ -3,7 +3,7 @@
 **Web Monetization** is a lightweight and extensible plugin that enables WordPress site owners and content creators to receive micro-payments using the [Web Monetization](https://webmonetization.org/). The plugin is designed to be compatible with Interledger wallets and supports flexible configuration across site, author, and content levels.
 
 ![WordPress Tested Up To](https://img.shields.io/badge/WordPress-6.8+-blue?logo=wordpress)  
-![License: GPL v2 or later](https://img.shields.io/badge/license-GPLv2--or--later-blue.svg)  
+![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)  
 ![Maintained by Interledger Foundation](https://img.shields.io/badge/Maintained%20by-Interledger%20Foundation-0a0a0a)
 
 ---
