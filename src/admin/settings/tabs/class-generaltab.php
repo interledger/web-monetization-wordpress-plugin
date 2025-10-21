@@ -431,13 +431,13 @@ class GeneralTab {
 			$value,
 			array(
 				// translators: %s is HTML markup for <strong>.
-				'one' => wp_kses_post( 'Only use one wallet (This option displays <strong>a single wallet address</strong> based on the following priority: article > post type >  author > site)', 'web-monetization' ),
+				'one' => wp_kses_post( 'Only use one wallet field (This option displays <strong>a single wallet address</strong> based on the following priority: article > post type >  author > site)', 'web-monetization' ),
 				// translators: %s is HTML markup for <strong>.
-				'all' => wp_kses_post( 'Use all wallets (This option displays <strong>all wallet addresses that are defined</strong> including site, author, post type and article wallets)', 'web-monetization' ),
+				'all' => wp_kses_post( 'Use all wallets fields (This option displays <strong>all wallet addresses that are defined</strong> including site, author, post type and article wallets)', 'web-monetization' ),
 			)
 		);
 		echo '<p class="description">' . esc_html__( 'Example:', 'web-monetization' ) . ' <br>' .
-			esc_html__( 'If you choose to only use one wallet and if the author has their own wallet address, only that one will be used.', 'web-monetization' ) . '<br>' .
+			esc_html__( 'If you choose to only use one wallet field and if the author has their own wallet address, only that one will be used.', 'web-monetization' ) . '<br>' .
 			esc_html__( 'If you choose to use all wallets and if all of the wallets are defined, they will all be included and used simultaneously.', 'web-monetization' ) .
 		'</p>';
 	}

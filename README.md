@@ -81,13 +81,13 @@ Want to contribute? See [`CONTRIBUTING.md`](CONTRIBUTING.md) for guidelines.
 
 ## 🧠 Requirements
 
-- WordPress 5.8 or higher
+- WordPress 6.8 or higher
 - PHP 7.4 or higher
 
 ---
 
 ## 📝 License
 
-This plugin is licensed under the [GPLv2 or later](https://www.gnu.org/licenses/gpl-2.0.html).
+This plugin is licensed under the [Apache-2.0](http://www.apache.org/licenses/LICENSE-2.0.txt).
 
 © Interledger Foundation

@@ -21,7 +21,6 @@ class Admin {
 	 */
 	public function register_hooks(): void {
 
-		add_action( 'admin_head', array( $this, 'inline_logo_menu_icon' ) );
 		add_action( 'admin_menu', array( $this, 'register_menu' ) );
 		add_action( 'admin_init', array( SettingsPage::class, 'register_settings' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_assets' ) );
@@ -31,9 +30,9 @@ class Admin {
 			array( $this, 'plugin_row_actions' )
 		);
 
-		add_action( 'wp_ajax_save_wm_banner_config', array( WidgetSettingsTab::class, 'save_banner_config' ) );
-		add_action( 'wp_ajax_publish_wm_banner_config', array( WidgetSettingsTab::class, 'publish_banner_config' ) );
-		add_action( 'wp_ajax_save_wallet_connection', array( $this, 'save_wallet_connection_callback' ) );
+		add_action( 'wp_ajax_wm_save_banner_config', array( WidgetSettingsTab::class, 'save_banner_config' ) );
+		add_action( 'wp_ajax_wm_publish_banner_config', array( WidgetSettingsTab::class, 'publish_banner_config' ) );
+		add_action( 'wp_ajax_wm_save_wallet_connection', array( $this, 'save_wallet_connection_callback' ) );
 
 		add_action( 'add_meta_boxes', array( $this, 'add_wallet_address_meta_box' ) );
 
@@ -221,31 +220,33 @@ class Admin {
 	}
 
 	/**
-	 * Get inline SVG content.
+	 * Enqueue admin assets.
 	 *
-	 * @param string $path The path to the SVG file.
-	 * @return string The SVG content or an empty string if the file does not exist.
+	 * @param string $hook The current admin page hook.
 	 */
-	private function get_inline_svg( string $path ): string {
-		if ( ! file_exists( $path ) || ! is_file( $path ) ) {
-			return '';
-		}
-		$contents = file( $path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES );
-		return is_array( $contents ) ? implode( "\n", $contents ) : '';
-	}
+	public function enqueue_admin_assets( $hook ): void {
 
+		wp_enqueue_style(
+			'wm-admin-style',
+			plugin_dir_url( dirname( __DIR__, 1 ) ) . 'build/admin.css',
+			array(),
+			WEB_MONETIZATION_PLUGIN_VERSION
+		);
 
-	/**
-	 * Inline SVG logo for the admin menu icon.
-	 * This function replaces the default menu icon with a custom SVG logo.
-	 *
-	 * @return void
-	 */
-	public function inline_logo_menu_icon(): void {
-		if ( 'toplevel_page_web-monetization' !== get_current_screen()->base ) {
-			echo '<style>#adminmenu [class*="web-monetization-settings"] .wp-menu-image:before { display: none; }</style>';
+		if ( get_current_screen() && 'toplevel_page_web-monetization' !== get_current_screen()->base ) {
+			$custom_css = '#adminmenu [class*="web-monetization-settings"] .wp-menu-image:before { display: none; }
+			#adminmenu [class*="web-monetization-settings"] .wp-menu-image { display: flex; align-items: center; justify-content: center; }';
+			wp_add_inline_style( 'wm-admin-style', $custom_css );
 		}
-		echo '<script>
+		if ( get_current_screen() && 'toplevel_page_web-monetization-settings' === get_current_screen()->base ) {
+			$custom_css_icon_fill = '#adminmenu [class*="web-monetization-settings"] .wp-menu-image svg { fill: #fff; }';
+			wp_add_inline_style( 'wm-admin-style', $custom_css_icon_fill );
+		}
+
+		wp_register_script( 'wm-admin-menu-icon', '', array(), WEB_MONETIZATION_PLUGIN_VERSION, true );
+		wp_enqueue_script( 'wm-admin-menu-icon' );
+
+		$custom_js = '
 			document.addEventListener("DOMContentLoaded", function() {
 				const img = document.querySelector("#adminmenu [class*=\"web-monetization-settings\"] .wp-menu-image");
 				if (img) {
@@ -265,22 +266,8 @@ class Admin {
 					</svg>`;
 				}
 			});
-		</script>';
-	}
-
-	/**
-	 * Enqueue admin assets.
-	 *
-	 * @param string $hook The current admin page hook.
-	 */
-	public function enqueue_admin_assets( $hook ): void {
-
-		wp_enqueue_style(
-			'wm-admin-style',
-			plugin_dir_url( dirname( __DIR__, 1 ) ) . 'build/admin.css',
-			array(),
-			WEB_MONETIZATION_PLUGIN_VERSION
-		);
+		';
+		wp_add_inline_script( 'wm-admin-menu-icon', $custom_js, 'after' );
 
 		$allowed_hooks = array(
 			'toplevel_page_web-monetization-settings',
