@@ -23,7 +23,7 @@
     "build/",
     "languages/",
     "src/",
-    "web-monetization.php",
+    "web-monetization-by-interledger.php",
     "composer.json",
     "composer.lock",
     "package.json",
