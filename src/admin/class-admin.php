@@ -151,8 +151,8 @@ class Admin {
 	 */
 	public static function register_menu(): void {
 		add_menu_page(
-			__( 'Web Monetization Settings', 'web-monetization' ),
-			__( 'Web Monetization', 'web-monetization' ),
+			__( 'Web Monetization Settings', 'web-monetization-by-interledger' ),
+			__( 'Web Monetization', 'web-monetization-by-interledger' ),
 			'manage_options',
 			self::PAGE_SLUG,
 			array( SettingsPage::class, 'render' ),
@@ -182,7 +182,7 @@ class Admin {
 		}
 		add_meta_box(
 			'wm-wallet-address-meta-box',
-			__( 'Web Monetization', 'web-monetization' ),
+			__( 'Web Monetization', 'web-monetization-by-interledger' ),
 			array( $this, 'render_wallet_address_meta_box' ),
 			$post_type,
 			'side',
@@ -203,7 +203,7 @@ class Admin {
 		wp_nonce_field( 'save_post', 'wm_wallet_address_post_nonce' );
 
 		echo '<p>';
-		echo '<label for="wm_wallet_address">' . esc_html__( 'Wallet Address:', 'web-monetization' ) . '</label>';
+		echo '<label for="wm_wallet_address">' . esc_html__( 'Wallet Address:', 'web-monetization-by-interledger' ) . '</label>';
 		echo '<input type="text" id="wm_wallet_address" name="wm_wallet_address" value="' . esc_attr( $wallet_address ) . '" class="widefat" ' . ( $is_connected ? ' readonly' : '' ) . ' />';
 		printf(
 			'<input type="hidden" id="wm_wallet_address_connected"  name="wm_wallet_address_connected" value="%1$s">',
@@ -213,7 +213,7 @@ class Admin {
 		echo '<p>';
 		echo '<label for="wm_disabled">';
 		echo '<input type="checkbox" id="wm_disabled" name="wm_disabled" value="1" ' . checked( '1' === $wm_disabled, true, false ) . ' />';
-		echo ' ' . esc_html__( 'Disable Web Monetization for this post ', 'web-monetization' );
+		echo ' ' . esc_html__( 'Disable Web Monetization for this post ', 'web-monetization-by-interledger' );
 
 		echo '</label>';
 		echo '</p>';

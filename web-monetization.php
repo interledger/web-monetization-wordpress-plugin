@@ -1,13 +1,13 @@
 <?php
 /**
- * Plugin Name: Web Monetization
+ * Plugin Name: Web Monetization by Interledger
  * Description: Web Monetization plugin for WordPress.
  * Version:     1.0.0
  * Author:      Interledger Foundation
  * Author URI:  https://interledger.org
  * License: Apache-2.0
  * License URI: http://www.apache.org/licenses/LICENSE-2.0.txt
- * Text Domain: web-monetization
+ * Text Domain: web-monetization-by-interledger
  * Domain Path: /languages
  *
  * @package     WebMonetization

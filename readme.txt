@@ -1,4 +1,4 @@
-=== Web Monetization ===
+=== Web Monetization by Interledger ===
 Contributors: interledger
 Tags: web monetization, open-payments, interledger, micropayments, payments
 Requires at least: 6.8

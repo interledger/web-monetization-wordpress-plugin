@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Web Monetization plugin for WordPress",
   "author": "Interledger Foundation",
-  "license": "GPL-2.0-or-later",
+  "license": "Apache-2.0",
   "keywords": [
     "wordpress",
     "web-monetization",

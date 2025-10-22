@@ -110,7 +110,7 @@ class GeneralTab {
 
 		add_settings_field(
 			'wm_enabled',
-			__( 'Enable Web Monetization', 'web-monetization' ),
+			__( 'Enable Web Monetization', 'web-monetization-by-interledger' ),
 			array( self::class, 'render_field_enabled' ),
 			'webmonetization_general',
 			'webmonetization_general_section'
@@ -118,7 +118,7 @@ class GeneralTab {
 
 		add_settings_field(
 			'wm_wallet_address',
-			__( 'Enter your wallet address', 'web-monetization' ),
+			__( 'Enter your wallet address', 'web-monetization-by-interledger' ),
 			array( self::class, 'render_field_wallet_address' ),
 			'webmonetization_general',
 			'webmonetization_general_section'
@@ -126,7 +126,7 @@ class GeneralTab {
 
 		add_settings_field(
 			'wm_enable_authors',
-			__( 'Enable Authors', 'web-monetization' ),
+			__( 'Enable Authors', 'web-monetization-by-interledger' ),
 			array( self::class, 'render_field_enable_authors' ),
 			'webmonetization_general',
 			'webmonetization_general_section'
@@ -134,7 +134,7 @@ class GeneralTab {
 
 		add_settings_field(
 			'wm_multi_wallets_option',
-			__( 'Set wallet behavior', 'web-monetization' ),
+			__( 'Set wallet behavior', 'web-monetization-by-interledger' ),
 			array( self::class, 'render_field_multi_wallets' ),
 			'webmonetization_general',
 			'webmonetization_general_section'
@@ -142,14 +142,14 @@ class GeneralTab {
 
 		add_settings_field(
 			'wm_post_type_settings',
-			__( 'Set up Web Monetization per post type', 'web-monetization' ),
+			__( 'Set up Web Monetization per post type', 'web-monetization-by-interledger' ),
 			array( self::class, 'render_post_type_settings' ),
 			'webmonetization_general',
 			'webmonetization_general_section'
 		);
 		add_settings_field(
 			'wm_banner_enabled',
-			__( 'Enable the banner', 'web-monetization' ),
+			__( 'Enable the banner', 'web-monetization-by-interledger' ),
 			array( self::class, 'render_field_banner_enabled' ),
 			'webmonetization_general',
 			'webmonetization_general_section'
@@ -157,7 +157,7 @@ class GeneralTab {
 
 		add_settings_field(
 			'wm_enable_country_wallets',
-			__( 'Enable country-specific wallet addresses', 'web-monetization' ),
+			__( 'Enable country-specific wallet addresses', 'web-monetization-by-interledger' ),
 			array( self::class, 'render_field_enable_country_wallets' ),
 			'webmonetization_general',
 			'webmonetization_general_section'
@@ -206,9 +206,9 @@ class GeneralTab {
 		$geoip_available      = function_exists( 'geoip_detect2_get_info_from_current_ip' );
 		$cloudflare_available = '' !== sanitize_text_field( wp_unslash( $_SERVER['HTTP_CF_IPCOUNTRY'] ?? '' ) );
 
-		$label = esc_html__( 'Enable country-specific wallet addresses. If enabled, you can set different wallet addresses based on the visitor\'s country.', 'web-monetization' );
+		$label = esc_html__( 'Enable country-specific wallet addresses. If enabled, you can set different wallet addresses based on the visitor\'s country.', 'web-monetization-by-interledger' );
 		if ( ! $geoip_available && ! $cloudflare_available ) {
-			$label .= ' ' . esc_html__( 'Note: GeoIP and Cloudflare country detection are not available.', 'web-monetization' );
+			$label .= ' ' . esc_html__( 'Note: GeoIP and Cloudflare country detection are not available.', 'web-monetization-by-interledger' );
 		}
 		FieldRenderer::render_checkbox(
 			'wm_enable_country_wallets',
@@ -249,7 +249,7 @@ class GeneralTab {
 					printf(
 						wp_kses(
 							// translators: %s is the URL to the GeoIP Detection plugin.
-							__( 'Country detection requires the <a href="%s" target="_blank" rel="noopener">GeoIP Detection plugin</a>, or the site must be <a href="https://www.cloudflare.com/" target="_blank" rel="noopener">running behind Cloudflare</a>', 'web-monetization' ),
+							__( 'Country detection requires the <a href="%s" target="_blank" rel="noopener">GeoIP Detection plugin</a>, or the site must be <a href="https://www.cloudflare.com/" target="_blank" rel="noopener">running behind Cloudflare</a>', 'web-monetization-by-interledger' ),
 							array(
 								'a' => array(
 									'href'   => array(),
@@ -268,10 +268,10 @@ class GeneralTab {
 		<table id="wallet-country-table" class="widefat striped wm-post-type-settings">
 			<thead>
 				<tr>
-					<th><?php esc_html_e( 'Country Code', 'web-monetization' ); ?><br>
-						<span class="description"><?php esc_html_e( '(e.g. US, GB, FR)', 'web-monetization' ); ?></span>
+					<th><?php esc_html_e( 'Country Code', 'web-monetization-by-interledger' ); ?><br>
+						<span class="description"><?php esc_html_e( '(e.g. US, GB, FR)', 'web-monetization-by-interledger' ); ?></span>
 					</th>
-					<th><?php esc_html_e( 'Wallet Address', 'web-monetization' ); ?></th>
+					<th><?php esc_html_e( 'Wallet Address', 'web-monetization-by-interledger' ); ?></th>
 					<th></th>
 				</tr>
 			</thead>
@@ -290,7 +290,7 @@ class GeneralTab {
 		</table>
 
 		<p>
-			<button type="button" class="button" id="add-wallet-country-row"><?php esc_html_e( 'Add New Country Wallet', 'web-monetization' ); ?></button>
+			<button type="button" class="button" id="add-wallet-country-row"><?php esc_html_e( 'Add New Country Wallet', 'web-monetization-by-interledger' ); ?></button>
 		</p>
 		</div>
 		<?php
@@ -349,7 +349,7 @@ class GeneralTab {
 			'wm_enabled',
 			'wm_enabled',
 			$value,
-			esc_html__( 'Enable Web Monetization globally.', 'web-monetization' )
+			esc_html__( 'Enable Web Monetization globally.', 'web-monetization-by-interledger' )
 		);
 	}
 
@@ -370,7 +370,7 @@ class GeneralTab {
 
 		echo '<br> <p  class="description">' . esc_html__(
 			'Multiple wallet addresses can be added here separated by a space',
-			'web-monetization'
+			'web-monetization-by-interledger'
 		) . '</p>';
 
 		FieldRenderer::render_hidden_input(
@@ -392,16 +392,16 @@ class GeneralTab {
 			$is_only_one_author_excluded = count( $excluded_users ) === 1;
 			$multiple_authors_text       = sprintf(
 				/* translators: %d is the number of excluded authors */
-				esc_html__( 'are %d authors', 'web-monetization' ),
+				esc_html__( 'are %d authors', 'web-monetization-by-interledger' ),
 				count( $excluded_users )
 			);
 			$excluded_users_notice .= ' <br><span class="description">' .
-				esc_html__( 'Note: There ', 'web-monetization' ) .
+				esc_html__( 'Note: There ', 'web-monetization-by-interledger' ) .
 				( $is_only_one_author_excluded ?
-					esc_html__( 'is 1 author', 'web-monetization' ) :
+					esc_html__( 'is 1 author', 'web-monetization-by-interledger' ) :
 					$multiple_authors_text
 				) .
-				esc_html__( ' excluded from Web Monetization. You can view them on the - filtered - ', 'web-monetization' ) .
+				esc_html__( ' excluded from Web Monetization. You can view them on the - filtered - ', 'web-monetization-by-interledger' ) .
 				'<a href="' . admin_url( 'users.php?wm_excluded_filter=excluded' ) . '">Users page</a></span>';
 		}
 		FieldRenderer::render_checkbox(
@@ -410,13 +410,13 @@ class GeneralTab {
 			$value,
 			esc_html__(
 				'Let your authors enter their own wallet address.',
-				'web-monetization'
+				'web-monetization-by-interledger'
 			) .
 			'<br> <p  class="description">' . esc_html__(
 				'Admins can disallow specific authors from the ',
-				'web-monetization'
+				'web-monetization-by-interledger'
 			) .
-			'<a href="' . admin_url( 'users.php' ) . '">' . esc_html__( 'Users page', 'web-monetization' ) . '</a> </p>' . $excluded_users_notice
+			'<a href="' . admin_url( 'users.php' ) . '">' . esc_html__( 'Users page', 'web-monetization-by-interledger' ) . '</a> </p>' . $excluded_users_notice
 		);
 	}
 
@@ -431,14 +431,14 @@ class GeneralTab {
 			$value,
 			array(
 				// translators: %s is HTML markup for <strong>.
-				'one' => wp_kses_post( 'Only use one wallet field (This option displays <strong>a single wallet address</strong> based on the following priority: article > post type >  author > site)', 'web-monetization' ),
+				'one' => wp_kses_post( 'Only use one wallet field (This option displays <strong>a single wallet address</strong> based on the following priority: article > post type >  author > site)', 'web-monetization-by-interledger' ),
 				// translators: %s is HTML markup for <strong>.
-				'all' => wp_kses_post( 'Use all wallets fields (This option displays <strong>all wallet addresses that are defined</strong> including site, author, post type and article wallets)', 'web-monetization' ),
+				'all' => wp_kses_post( 'Use all wallets fields (This option displays <strong>all wallet addresses that are defined</strong> including site, author, post type and article wallets)', 'web-monetization-by-interledger' ),
 			)
 		);
-		echo '<p class="description">' . esc_html__( 'Example:', 'web-monetization' ) . ' <br>' .
-			esc_html__( 'If you choose to only use one wallet field and if the author has their own wallet address, only that one will be used.', 'web-monetization' ) . '<br>' .
-			esc_html__( 'If you choose to use all wallets and if all of the wallets are defined, they will all be included and used simultaneously.', 'web-monetization' ) .
+		echo '<p class="description">' . esc_html__( 'Example:', 'web-monetization-by-interledger' ) . ' <br>' .
+			esc_html__( 'If you choose to only use one wallet field and if the author has their own wallet address, only that one will be used.', 'web-monetization-by-interledger' ) . '<br>' .
+			esc_html__( 'If you choose to use all wallets and if all of the wallets are defined, they will all be included and used simultaneously.', 'web-monetization-by-interledger' ) .
 		'</p>';
 	}
 
@@ -451,9 +451,9 @@ class GeneralTab {
 			'wm_banner_enabled',
 			'wm_banner_enabled',
 			$value,
-			__( 'Show a customizable banner to introduce Web Monetization to your website visitors. You can customize the banner on the ', 'web-monetization' ) .
-			' <a href="' . admin_url( 'admin.php?page=web-monetization-settings&tab=widget' ) . '">' . __( 'Banner Settings', 'web-monetization' ) . '</a> ' .
-			__( 'page', 'web-monetization' )
+			__( 'Show a customizable banner to introduce Web Monetization to your website visitors. You can customize the banner on the ', 'web-monetization-by-interledger' ) .
+			' <a href="' . admin_url( 'admin.php?page=web-monetization-settings&tab=widget' ) . '">' . __( 'Banner Settings', 'web-monetization-by-interledger' ) . '</a> ' .
+			__( 'page', 'web-monetization-by-interledger' )
 		);
 	}
 
@@ -487,13 +487,13 @@ class GeneralTab {
 				$supported_types[] = $post_type;
 			}
 		}
-		echo '<p class="description">' . esc_html__( 'Enable Web Monetization per post type and provide a wallet address.', 'web-monetization' ) . '</p>';
+		echo '<p class="description">' . esc_html__( 'Enable Web Monetization per post type and provide a wallet address.', 'web-monetization-by-interledger' ) . '</p>';
 
 		echo '<br><table class="widefat striped wm-post-type-settings">';
 		echo '<thead>';
 		echo '<tr>';
-		echo '<th>' . esc_html__( 'Post Type', 'web-monetization' ) . '</th>';
-		echo '<th> ' . esc_html__( 'Wallet Address', 'web-monetization' ) . '</th>';
+		echo '<th>' . esc_html__( 'Post Type', 'web-monetization-by-interledger' ) . '</th>';
+		echo '<th> ' . esc_html__( 'Wallet Address', 'web-monetization-by-interledger' ) . '</th>';
 		echo '</tr>';
 		echo '</thead>';
 		echo '<tbody>';

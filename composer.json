@@ -2,7 +2,7 @@
   "name": "interledger/web-monetization-wordpress-plugin",
   "description": "Web Monetization plugin for WordPress",
   "type": "wordpress-plugin",
-  "license": "GPL-2.0-or-later",
+  "license": "Apache-2.0",
   "require": {
     "php": ">=7.4"
   },
@@ -30,7 +30,7 @@
     "lint": "phpcs --standard=WordPress --ignore=vendor,node_modules,*/build/*.* --extensions=php .",
     "lint:fix": "phpcbf --standard=WordPress --ignore=vendor,node_modules,*/build/*.* --extensions=php .",
     "phpstan": "phpstan analyse ./src",
-    "make-pot": "wp i18n make-pot . languages/web-monetization.pot --exclude=node_modules,vendor,build",
+    "make-pot": "wp i18n make-pot . languages/web-monetization-by-interledger.pot --exclude=node_modules,vendor,build",
     "post-install-cmd": [
       "@lint"
     ],
