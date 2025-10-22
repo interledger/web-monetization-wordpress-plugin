@@ -74,6 +74,7 @@ export const Select = ( {
 					value: opt.value ?? '',
 				} ) ) }
 				__nextHasNoMarginBottom
+				__next40pxDefaultSize={ true }
 				disabled={ disabled }
 			/>
 

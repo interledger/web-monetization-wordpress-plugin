@@ -116,7 +116,7 @@ export default function BannerConfigurator() {
 						'Content-Type': 'application/x-www-form-urlencoded',
 					},
 					body: new URLSearchParams( {
-						action: 'save_wm_banner_config',
+						action: 'wm_save_banner_config',
 						config: JSON.stringify( conf ),
 						_wpnonce: nonce,
 					} ),
@@ -141,7 +141,7 @@ export default function BannerConfigurator() {
 					'Content-Type': 'application/x-www-form-urlencoded',
 				},
 				body: new URLSearchParams( {
-					action: 'publish_wm_banner_config',
+					action: 'wm_publish_banner_config',
 					config: JSON.stringify( conf ),
 					_wpnonce: nonce,
 				} ),

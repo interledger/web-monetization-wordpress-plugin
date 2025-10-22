@@ -1,7 +1,7 @@
-=== Web Monetization ===
+=== Web Monetization by Interledger ===
 Contributors: interledger
 Tags: web monetization, open-payments, interledger, micropayments, payments
-Requires at least: 6.8.1
+Requires at least: 6.8
 Tested up to: 6.8
 Stable tag: 1.0.0
 Requires PHP: 7.4

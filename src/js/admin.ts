@@ -207,7 +207,7 @@ async function saveWalletConnection( walletId: string, inputName: string ) {
 			'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
 		},
 		body: new URLSearchParams( {
-			action: 'save_wallet_connection',
+			action: 'wm_save_wallet_connection',
 			nonce: cfg.nonce,
 			wallet_field: inputName,
 			id: walletId,
