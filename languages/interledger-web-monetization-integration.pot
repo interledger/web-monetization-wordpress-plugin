@@ -2,40 +2,40 @@
 # This file is distributed under the Apache-2.0.
 msgid ""
 msgstr ""
-"Project-Id-Version: Web Monetization by Interledger 1.0.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/web-monetization\n"
+"Project-Id-Version: Interledger Web Monetization Integration 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/interledger-web-monetization-integration\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-10-21T12:59:05+00:00\n"
+"POT-Creation-Date: 2025-10-27T13:40:30+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
-"X-Domain: web-monetization-by-interledger\n"
+"X-Domain: interledger-web-monetization-integration\n"
 
 #. Plugin Name of the plugin
-#: web-monetization.php
-msgid "Web Monetization by Interledger"
+#: interledger-web-monetization-integration.php
+msgid "Interledger Web Monetization Integration"
 msgstr ""
 
 #. Description of the plugin
-#: web-monetization.php
-msgid "Web Monetization plugin for WordPress."
+#: interledger-web-monetization-integration.php
+msgid "Implements the open Web Monetization standard in WordPress. Developed and maintained by the Interledger Foundation."
 msgstr ""
 
 #. Author of the plugin
-#: web-monetization.php
+#: interledger-web-monetization-integration.php
 msgid "Interledger Foundation"
 msgstr ""
 
 #. Author URI of the plugin
-#: web-monetization.php
+#: interledger-web-monetization-integration.php
 msgid "https://interledger.org"
 msgstr ""
 
 #: src/admin/class-admin.php:154
-#: src/admin/class-usermeta.php:188
+#: src/admin/class-usermeta.php:184
 #: src/admin/settings/class-settingspage.php:86
 #: src/admin/settings/class-settingspage.php:89
 msgid "Web Monetization Settings"
@@ -43,7 +43,7 @@ msgstr ""
 
 #: src/admin/class-admin.php:155
 #: src/admin/class-admin.php:185
-#: src/admin/class-usermeta.php:267
+#: src/admin/class-usermeta.php:263
 msgid "Web Monetization"
 msgstr ""
 
@@ -67,34 +67,34 @@ msgstr ""
 msgid "Non-Excluded Users Only"
 msgstr ""
 
-#: src/admin/class-usermeta.php:129
+#: src/admin/class-usermeta.php:125
 #: src/admin/settings/tabs/class-generaltab.php:113
 msgid "Enable Web Monetization"
 msgstr ""
 
-#: src/admin/class-usermeta.php:129
+#: src/admin/class-usermeta.php:125
 msgid "Disable Web Monetization"
 msgstr ""
 
-#: src/admin/class-usermeta.php:155
+#: src/admin/class-usermeta.php:151
 msgid "Invalid nonce."
 msgstr ""
 
-#: src/admin/class-usermeta.php:191
+#: src/admin/class-usermeta.php:187
 msgid "Exclude from Author Monetization"
 msgstr ""
 
-#: src/admin/class-usermeta.php:195
+#: src/admin/class-usermeta.php:191
 msgid "Prevent this author from using their own wallet address (site fallback will be used)."
 msgstr ""
 
-#: src/admin/class-usermeta.php:270
+#: src/admin/class-usermeta.php:266
 #: src/admin/settings/tabs/class-generaltab.php:274
 #: src/admin/settings/tabs/class-generaltab.php:496
 msgid "Wallet Address"
 msgstr ""
 
-#: src/admin/class-usermeta.php:282
+#: src/admin/class-usermeta.php:278
 msgid "Enter your wallet address to enable Web Monetization."
 msgstr ""
 

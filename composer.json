@@ -30,7 +30,7 @@
     "lint": "phpcs --standard=WordPress --ignore=vendor,node_modules,*/build/*.* --extensions=php .",
     "lint:fix": "phpcbf --standard=WordPress --ignore=vendor,node_modules,*/build/*.* --extensions=php .",
     "phpstan": "phpstan analyse ./src",
-    "make-pot": "wp i18n make-pot . languages/web-monetization-by-interledger.pot --exclude=node_modules,vendor,build",
+    "make-pot": "wp i18n make-pot . languages/interledger-web-monetization-integration.pot --exclude=node_modules,vendor,build",
     "post-install-cmd": [
       "@lint"
     ],

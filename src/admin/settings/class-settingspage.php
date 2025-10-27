@@ -83,10 +83,10 @@ class SettingsPage {
 					<img
 						class="wm-logo"
 						src="' . esc_attr( WEB_MONETIZATION_PLUGIN_DIR ) . 'assets/images/wm_logo.svg"
-						alt="' . esc_html__( 'Web Monetization Settings', 'web-monetization-by-interledger' ) . '"
+						alt="' . esc_html__( 'Web Monetization Settings', 'interledger-web-monetization-integration' ) . '"
 					/>
 					<h1 class="wm-title" >
-						' . esc_html__( 'Web Monetization Settings', 'web-monetization-by-interledger' ) . '
+						' . esc_html__( 'Web Monetization Settings', 'interledger-web-monetization-integration' ) . '
 					</h1>
 				</div>
 			</div>';
