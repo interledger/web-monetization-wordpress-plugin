@@ -108,10 +108,6 @@ class UserMeta {
 		if ( ! current_user_can( 'edit_user', $user->ID ) || ! get_option( 'wm_enable_authors' ) ) {
 			return $actions;
 		}
-		// Exclude administrators.
-		if ( in_array( 'administrator', (array) $user->roles, true ) ) {
-			return $actions;
-		}
 
 		$excluded    = get_option( 'wm_excluded_authors', array() );
 		$is_excluded = in_array( $user->ID, $excluded, true );
