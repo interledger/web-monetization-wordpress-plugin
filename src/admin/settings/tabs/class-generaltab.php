@@ -265,7 +265,7 @@ class GeneralTab {
 			</div>
 		<?php endif; ?>
 
-		<table id="intlwemo-wallet-country-table" class="widefat striped wm-post-type-settings">
+		<table id="intlwemo-wallet-country-table" class="widefat striped intlwemo-post-type-settings">
 			<thead>
 				<tr>
 					<th><?php esc_html_e( 'Country Code', 'interledger-web-monetization-integration' ); ?><br>
@@ -489,7 +489,7 @@ class GeneralTab {
 		}
 		echo '<p class="description">' . esc_html__( 'Enable Web Monetization per post type and provide a wallet address.', 'interledger-web-monetization-integration' ) . '</p>';
 
-		echo '<br><table class="widefat striped wm-post-type-settings">';
+		echo '<br><table class="widefat striped intlwemo-post-type-settings">';
 		echo '<thead>';
 		echo '<tr>';
 		echo '<th>' . esc_html__( 'Post Type', 'interledger-web-monetization-integration' ) . '</th>';

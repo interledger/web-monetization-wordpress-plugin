@@ -66,7 +66,7 @@ export const Select = ( {
 				<input type="hidden" name={ name } value={ internalValue } />
 			) }
 			<SelectControl
-				className="wm-select-control"
+				className="intlwemo-select-control"
 				value={ internalValue as string | undefined }
 				onChange={ handleChange }
 				options={ options.map( ( opt ) => ( {

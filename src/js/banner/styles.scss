@@ -3,7 +3,7 @@
 @import url(https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap);
 @import url(https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap);
 
-.wm-banner-configurator {
+.intlwemo-banner-configurator {
 	max-width: 720px;
 	margin-top: 2rem;
 
@@ -26,7 +26,7 @@
 		}
 	}
 
-	.wm-form-row {
+	.intlwemo-form-row {
 		display: flex;
 		align-items: flex-start;
 		flex-wrap: wrap;
@@ -65,7 +65,7 @@
 		}
 	}
 
-	.wm-gradient-container {
+	.intlwemo-gradient-container {
 		border-top-left-radius: 0.5rem;
 		border-top-right-radius: 0.5rem;
 		position: relative;
@@ -248,7 +248,7 @@
 		display: none !important;
 	}
 
-	.wm-banner-preview-button {
+	.intlwemo-banner-preview-button {
 		display: flex;
 		justify-content: flex-end;
 		margin-top: 1.25rem; // -mt-5
@@ -257,14 +257,14 @@
 
 	}
 
-	.wm-banner-container {
+	.intlwemo-banner-container {
 		display: flex;
 		min-height: 14rem;
 
 		&.bottom {
 			align-items: flex-end;
 
-			.wm-banner-preview {
+			.intlwemo-banner-preview {
 
 				&.animation {
 					animation: slideUp 3s ease-in-out;
@@ -276,7 +276,7 @@
 		&.top {
 			align-items: flex-start;
 
-			.wm-banner-preview {
+			.intlwemo-banner-preview {
 
 				&.animation {
 					animation: slideDown 3s ease-in-out;
@@ -286,7 +286,7 @@
 
 	}
 
-	.wm-banner-preview {
+	.intlwemo-banner-preview {
 		padding: 1rem 1.5rem;
 		margin-top: 1rem;
 		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -312,8 +312,8 @@
 			opacity: 0.85;
 		}
 
-		._wm_link,
-		._wm_link a {
+		._intlwemo_link,
+		._intlwemo_link a {
 			display: flex;
 			color: inherit;
 		}
@@ -447,17 +447,17 @@
 	.select-control-wrapper {
 		z-index: 1;
 
-		.wm-select-control {
+		.intlwemo-select-control {
 			background-color: #fff;
 		}
 	}
 }
 
-.wm-banner-preview.pill {
+.intlwemo-banner-preview.pill {
 	border-radius: 1rem;
 }
 
-.wm-banner-preview.none {
+.intlwemo-banner-preview.none {
 	border-radius: 0;
 }
 

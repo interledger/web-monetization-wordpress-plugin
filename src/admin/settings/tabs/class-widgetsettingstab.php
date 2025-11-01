@@ -47,7 +47,7 @@ class WidgetSettingsTab {
 	 */
 	public static function render(): void {
 		?>
-		<div id="wm-banner-app"></div>
+		<div id="intlwemo-banner-app"></div>
 		<?php
 	}
 	/**

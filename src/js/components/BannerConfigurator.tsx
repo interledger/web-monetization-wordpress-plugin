@@ -206,7 +206,7 @@ export default function BannerConfigurator() {
 	}
 	return (
 		<div
-			className="wm-banner-configurator"
+			className="intlwemo-banner-configurator"
 			style={ { maxWidth: '720px', marginTop: '2rem' } }
 		>
 			<h3 style={ { fontSize: '1.5rem', marginBottom: '1.5rem' } }>
@@ -222,9 +222,9 @@ export default function BannerConfigurator() {
 					General Settings.
 				</a>
 			</p>
-			<div className="wm-gradient-container">
+			<div className="intlwemo-gradient-container">
 				{ animation && (
-					<div className="wm-banner-preview-button">
+					<div className="intlwemo-banner-preview-button">
 						<img
 							onMouseEnter={ () => setTriggerAnimation( true ) }
 							onMouseLeave={ () => setTriggerAnimation( false ) }
@@ -234,9 +234,9 @@ export default function BannerConfigurator() {
 						/>
 					</div>
 				) }
-				<div className={ `wm-banner-container ${ position } ` }>
+				<div className={ `intlwemo-banner-container ${ position } ` }>
 					<div
-						className={ `wm-banner-preview ${ borderStyle } ${
+						className={ `intlwemo-banner-preview ${ borderStyle } ${
 							triggerAnimation ? 'animation' : ''
 						}` }
 						style={ {
@@ -264,7 +264,7 @@ export default function BannerConfigurator() {
 							{ message }
 						</p>
 						<br />
-						<span className="_wm_link">
+						<span className="_intlwemo_link">
 							<a
 								rel="noindex nofollow noreferrer"
 								target="_blank"
@@ -321,12 +321,12 @@ export default function BannerConfigurator() {
 				</div>
 			</div>
 
-			<div className="wm-form">
-				<div className="wm-form-row">
-					<label htmlFor="wm-position">
+			<div className="intlwemo-form">
+				<div className="intlwemo-form-row">
+					<label htmlFor="intlwemo-position">
 						Position
 						<select
-							id="wm-position"
+							id="intlwemo-position"
 							value={ position }
 							onChange={ ( e ) =>
 								setPosition(
@@ -339,10 +339,10 @@ export default function BannerConfigurator() {
 						</select>
 					</label>
 
-					<label htmlFor="wm-animation">
+					<label htmlFor="intlwemo-animation">
 						Animation
 						<select
-							id="wm-animation"
+							id="intlwemo-animation"
 							value={ animation ? 'yes' : 'no' }
 							onChange={ ( e ) =>
 								setAnimation( e.target.value === 'yes' )
@@ -375,11 +375,11 @@ export default function BannerConfigurator() {
 						</select>
 					</label>
 				</div>
-				<div className="wm-form-row">
-					<label htmlFor="wm-font">
+				<div className="intlwemo-form-row">
+					<label htmlFor="intlwemo-font">
 						Font
 						<select
-							id="wm-font"
+							id="intlwemo-font"
 							value={ font }
 							onChange={ ( e ) => setFont( e.target.value ) }
 						>
@@ -400,10 +400,10 @@ export default function BannerConfigurator() {
 						} }
 					/>
 
-					<label htmlFor="wm-banner-title">
+					<label htmlFor="intlwemo-banner-title">
 						Title
 						<input
-							id="wm-banner-title"
+							id="intlwemo-banner-title"
 							type="text"
 							value={ title }
 							onChange={ ( e ) => setTitle( e.target.value ) }
@@ -412,11 +412,11 @@ export default function BannerConfigurator() {
 					</label>
 				</div>
 
-				<div className="wm-form-row">
-					<label htmlFor="wm-banner-message">
+				<div className="intlwemo-form-row">
+					<label htmlFor="intlwemo-banner-message">
 						Text
 						<textarea
-							id="wm-banner-message"
+							id="intlwemo-banner-message"
 							value={ message }
 							onChange={ ( e ) => setMessage( e.target.value ) }
 							className="large-text"
@@ -424,7 +424,7 @@ export default function BannerConfigurator() {
 						/>
 					</label>
 				</div>
-				<div className="wm-form-row">
+				<div className="intlwemo-form-row">
 					<p className="submit">
 						<input
 							type="submit"

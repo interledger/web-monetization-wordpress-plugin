@@ -25,7 +25,7 @@ class AboutTab {
 	 */
 	public static function render(): void {
 		?>
-		<div class="wrap wm-about-tab">
+		<div class="wrap intlwemo-about-tab">
 			<h2><?php esc_html_e( 'About Web Monetization', 'interledger-web-monetization-integration' ); ?></h2>
 
 			<p><?php esc_html_e( 'Web Monetization introduces a new way for content owners and publishers to earn while allowing visitors to engage on their own terms. By enabling streaming micropayments, Web Monetization complements ads, subscriptions, and memberships, giving publishers more revenue options and visitors more ways to access and support content.', 'interledger-web-monetization-integration' ); ?></p>
