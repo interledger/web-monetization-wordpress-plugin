@@ -1,16 +1,16 @@
 <?php
 /**
- * WebMonetization Admin Class
+ * Interledger Web Monetization Admin About Tab Class
  *
- * @package WebMonetization
+ * @package Interledger\WebMonetization
  */
 
-namespace WebMonetization\Admin\Settings\Tabs;
+namespace Interledger\WebMonetization\Admin\Settings\Tabs;
 
 /**
  * Class AboutTab
  *
- * @package WebMonetization\Admin\Settings\Tabs
+ * @package Interledger\WebMonetization\Admin\Settings\Tabs
  */
 class AboutTab {
 

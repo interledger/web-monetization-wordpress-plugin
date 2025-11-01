@@ -24,12 +24,6 @@ type WalletConnectData = {
 	nonce: string;
 };
 
-declare global {
-	interface Window {
-		walletConnectData?: Partial< WalletConnectData >;
-	}
-}
-
 function normalizeWAPrefix( pointer: string ): string {
 	const s = pointer.trim();
 	return s.startsWith( '$' ) ? 'https://' + s.slice( 1 ) : s;
@@ -136,24 +130,26 @@ function toggle( el: HTMLElement, show: boolean ) {
 function setConnectedHiddenFlag( input: HTMLInputElement, value: '0' | '1' ) {
 	const byName = ( selector: string ) =>
 		document.querySelector< HTMLInputElement >( selector );
-	if ( input.name.startsWith( 'wm_wallet_address_overrides' ) ) {
+	if ( input.name.startsWith( 'intlwemo_wallet_address_overrides' ) ) {
 		const country = input.name.match( /\[(.*?)\]/ )?.[ 1 ];
 		const hidden = byName(
-			`input[name="wm_wallet_address_overrides[${ country }][connected]"]`
+			`input[name="intlwemo_wallet_address_overrides[${ country }][connected]"]`
 		);
 		if ( hidden ) {
 			hidden.value = value;
 		}
-	} else if ( input.name.startsWith( 'wm_post_type_settings' ) ) {
+	} else if ( input.name.startsWith( 'intlwemo_post_type_settings' ) ) {
 		const postType = input.name.match( /\[(.*?)\]/ )?.[ 1 ];
 		const hidden = byName(
-			`input[name="wm_post_type_settings[${ postType }][connected]"]`
+			`input[name="intlwemo_post_type_settings[${ postType }][connected]"]`
 		);
 		if ( hidden ) {
 			hidden.value = value;
 		}
-	} else if ( input.name === 'wm_wallet_address' ) {
-		const hidden = byName( 'input[name="wm_wallet_address_connected"]' );
+	} else if ( input.name === 'intlwemo_wallet_address' ) {
+		const hidden = byName(
+			'input[name="intlwemo_wallet_address_connected"]'
+		);
 		if ( hidden ) {
 			hidden.value = value;
 		}
@@ -197,8 +193,8 @@ async function fetchWalletDetails(
 
 async function saveWalletConnection( walletId: string, inputName: string ) {
 	const cfg: WalletConnectData = {
-		ajaxUrl: window.walletConnectData?.ajaxUrl ?? ajaxurl, // fallback to WP ajaxurl
-		nonce: window.walletConnectData?.nonce ?? '',
+		ajaxUrl: window.intlwemoWalletConnect?.ajaxUrl ?? ajaxurl, // fallback to WP ajaxurl
+		nonce: window.intlwemoWalletConnect?.nonce ?? '',
 	};
 
 	const res = await fetchWithTimeout( cfg.ajaxUrl, {
@@ -207,7 +203,7 @@ async function saveWalletConnection( walletId: string, inputName: string ) {
 			'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
 		},
 		body: new URLSearchParams( {
-			action: 'wm_save_wallet_connection',
+			action: 'intlwemo_save_wallet_connection',
 			nonce: cfg.nonce,
 			wallet_field: inputName,
 			id: walletId,
@@ -340,7 +336,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	// Wallet fields
 	const walletInputs = Array.from(
 		document.querySelectorAll< HTMLInputElement >(
-			'#wm_wallet_address, input[name^="wm_post_type_settings"][name$="[wallet]"], input[name^="wm_wallet_address_overrides"][name$="[wallet]"]'
+			'#intlwemo_wallet_address, input[name^="intlwemo_post_type_settings"][name$="[wallet]"], input[name^="intlwemo_wallet_address_overrides"][name$="[wallet]"]'
 		)
 	);
 	walletInputs.forEach( setupWalletField );
@@ -399,9 +395,11 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 	// Toggle country wallets section
 	const checkbox = document.querySelector< HTMLInputElement >(
-		'input[name="wm_enable_country_wallets"]'
+		'input[name="intlwemo_enable_country_wallets"]'
 	);
-	const wrapper = document.getElementById( 'wm-country-wallets-wrapper' );
+	const wrapper = document.getElementById(
+		'intlwemo-country-wallets-wrapper'
+	);
 	if ( checkbox && wrapper ) {
 		const toggleWrapper = () => {
 			wrapper.style.display = checkbox.checked ? 'block' : 'none';
@@ -412,10 +410,10 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 	// Table add/remove
 	const table = document.getElementById(
-		'wallet-country-table'
+		'intlwemo-wallet-country-table'
 	) as HTMLTableElement | null;
 	const addBtn = document.getElementById(
-		'add-wallet-country-row'
+		'intlwemo-add-wallet-country-row'
 	) as HTMLButtonElement | null;
 	if ( table && addBtn ) {
 		addBtn.addEventListener( 'click', () => {

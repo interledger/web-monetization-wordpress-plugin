@@ -44,8 +44,8 @@ const getWebMonetizationLinkHref = () => {
 };
 
 export default function BannerConfigurator() {
-	const wmBannerConfig = window.wm?.wmBannerConfig
-		? JSON.parse( window.wm.wmBannerConfig )
+	const wmBannerConfig = window.intlwemo?.wmBannerConfig
+		? JSON.parse( window.intlwemo.wmBannerConfig )
 		: { nonce: '', config: undefined };
 
 	const configData = {
@@ -116,7 +116,7 @@ export default function BannerConfigurator() {
 						'Content-Type': 'application/x-www-form-urlencoded',
 					},
 					body: new URLSearchParams( {
-						action: 'wm_save_banner_config',
+						action: 'intlwemo_save_banner_config',
 						config: JSON.stringify( conf ),
 						_wpnonce: nonce,
 					} ),
@@ -141,7 +141,7 @@ export default function BannerConfigurator() {
 					'Content-Type': 'application/x-www-form-urlencoded',
 				},
 				body: new URLSearchParams( {
-					action: 'wm_publish_banner_config',
+					action: 'intlwemo_publish_banner_config',
 					config: JSON.stringify( conf ),
 					_wpnonce: nonce,
 				} ),
@@ -217,7 +217,7 @@ export default function BannerConfigurator() {
 				you. The banner only appears to visitors who haven&apos;t
 				installed or configured the Web Monetization extension. You can
 				disable it anytime by unchecking the “Enable banner” option in
-				<a href="/wp-admin/admin.php?page=web-monetization-settings&tab=general">
+				<a href="/wp-admin/admin.php?page=interledger-web-monetization-settings&tab=general">
 					{ ' ' }
 					General Settings.
 				</a>

@@ -69,7 +69,6 @@
     "lint:js": "wp-scripts lint-js",
     "lint:js-fix": "wp-scripts lint-js --fix",
     "lint:md:docs": "wp-scripts lint-md-docs",
-    "lint:pkg-json": "wp-scripts lint-pkg-json",
     "plugin-zip": "wp-scripts plugin-zip"
   },
   "browserslist": [

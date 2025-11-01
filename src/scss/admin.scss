@@ -2,18 +2,18 @@
 	--wm-green-shade: #3abf84; // example value
 }
 
-[class*="web-monetization-settings"] .wp-menu-image svg {
+[class*="interledger-web-monetization-settings"] .wp-menu-image svg {
 	color: #999;
 }
 
-[class*="web-monetization-settings"].current .wp-menu-image svg,
-li:hover [class*="web-monetization-settings"] .wp-menu-image svg {
+[class*="interledger-web-monetization-settings"].current .wp-menu-image svg,
+li:hover [class*="interledger-web-monetization-settings"] .wp-menu-image svg {
 	color: #007cba;
 }
 
 #adminmenu {
 
-	[id*="web-monetization-settings"] {
+	[id*="interledger-web-monetization-settings"] {
 
 		a {
 
@@ -39,25 +39,25 @@ li:hover [class*="web-monetization-settings"] .wp-menu-image svg {
 }
 
 
-.wm-header {
+.intlwemo-header {
 	padding: 1.5rem 0;
 	border-bottom: 4px solid var(--wm-green-shade);
 
-	.wm-header-inner {
+	.intlwemo-header-inner {
 		display: flex;
 		align-items: center;
 		gap: 1.5rem;
 		width: 100%;
 		max-width: 1200px;
 
-		.wm-logo {
+		.intlwemo-logo {
 			margin-left: 1.5rem;
 			cursor: pointer;
 			height: 40px;
 			width: auto;
 		}
 
-		.wm-title {
+		.intlwemo-title {
 			margin-left: 1.5rem;
 			font-size: 1.25rem;
 			font-weight: 600;
@@ -71,8 +71,8 @@ li:hover [class*="web-monetization-settings"] .wp-menu-image svg {
 	padding-left: 10px;
 }
 
-#webmonetization-general-form,
-#wm-wallet-address-meta-box {
+#intlwemo-general-form,
+#intlwemo-wallet-address-meta-box {
 
 	// Wallet UI wrapper
 	.wallet-ui-wrapper {
@@ -140,11 +140,11 @@ li:hover [class*="web-monetization-settings"] .wp-menu-image svg {
 
 }
 
-#wm-country-wallets-wrapper {
+#intlwemo-country-wallets-wrapper {
 	transition: all 0.3s ease;
 }
 
-#wallet-country-table {
+#intlwemo-wallet-country-table {
 	width: 100%;
 	border-collapse: collapse;
 	margin-top: 1rem;

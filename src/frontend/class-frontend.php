@@ -1,11 +1,11 @@
 <?php
 /**
- * WebMonetization Frontend Class
+ * Interledger WebMonetization Frontend Class
  *
- * @package WebMonetization
+ * @package Interledger\WebMonetization
  */
 
-namespace WebMonetization\Frontend;
+namespace Interledger\WebMonetization\Frontend;
 
 /**
  * Class Frontend
@@ -118,7 +118,7 @@ class Frontend {
 			return null;
 		}
 
-		$author_wallet = get_user_meta( $author_id, 'wm_wallet_address', true );
+		$author_wallet = get_user_meta( $author_id, 'intlwemo_wallet_address', true );
 		if ( ! $author_wallet ) {
 			return null;
 		}
@@ -170,7 +170,7 @@ class Frontend {
 			$user_id = \Activitypub\Collection\Actors::get_id_by_resource( $object_array['id'] );
 		}
 		if ( is_numeric( $user_id ) ) {
-			$author_wallet = get_user_meta( $user_id, 'wm_wallet_address', true );
+			$author_wallet = get_user_meta( $user_id, 'intlwemo_wallet_address', true );
 
 			if ( ! $author_wallet ) {
 				return $object_array;
@@ -202,7 +202,7 @@ class Frontend {
 			);
 			$urls = array_values( array_filter( $urls ) );
 
-			$mode = get_option( 'wm_multi_wallets_option', 'one' );
+			$mode = get_option( 'intlwemo_multi_wallets_option', 'one' );
 			$urls = array();
 			if ( 'all' === $mode ) {
 				foreach ( $wallets['list'] as $source => $wallet ) {
@@ -348,7 +348,7 @@ class Frontend {
 		}
 
 		$output = '';
-		$mode   = get_option( 'wm_multi_wallets_option', 'one' );
+		$mode   = get_option( 'intlwemo_multi_wallets_option', 'one' );
 		$urls   = array();
 		if ( 'all' === $mode ) {
 			foreach ( $wallets['list'] as $source => $wallet ) {
@@ -387,7 +387,7 @@ class Frontend {
 	 */
 	private function get_wallets_for_post( $post ): array {
 		$list     = array();
-		$disabled = get_post_meta( $post->ID, 'wm_disabled', true ) === '1';
+		$disabled = get_post_meta( $post->ID, 'intlwemo_disabled', true ) === '1';
 
 		if ( $disabled ) {
 			return array(
@@ -397,8 +397,8 @@ class Frontend {
 		}
 		$author_disabled = 0;
 
-		if ( get_option( 'wm_enable_authors', false ) ) {
-			$excluded = get_option( 'wm_excluded_authors', array() );
+		if ( get_option( 'intlwemo_enable_authors', false ) ) {
+			$excluded = get_option( 'intlwemo_excluded_authors', array() );
 			if ( in_array( $post->post_author, $excluded, true ) ) {
 				$author_disabled = 1;
 			}
@@ -406,14 +406,14 @@ class Frontend {
 
 		if ( ! $author_disabled ) {
 			// Post-specific wallet.
-			$post_wallet = get_post_meta( $post->ID, 'wm_wallet_address', true );
+			$post_wallet = get_post_meta( $post->ID, 'intlwemo_wallet_address', true );
 			if ( $post_wallet && ! $disabled ) {
 				$list['article'] = $post_wallet;
 			}
 
 			// Author wallet.
-			if ( get_option( 'wm_enable_authors', false ) ) {
-				$author_wallet = get_user_meta( $post->post_author, 'wm_wallet_address', true );
+			if ( get_option( 'intlwemo_enable_authors', false ) ) {
+				$author_wallet = get_user_meta( $post->post_author, 'intlwemo_wallet_address', true );
 				if ( $author_wallet ) {
 					$list['author'] = $author_wallet;
 				}
@@ -421,7 +421,7 @@ class Frontend {
 		}
 
 		// Post type wallet.
-		$post_type_wallets = get_option( 'wm_post_type_settings', array() );
+		$post_type_wallets = get_option( 'intlwemo_post_type_settings', array() );
 		$config            = $post_type_wallets[ $post->post_type ] ?? null;
 		if ( $config && ! empty( $config['enabled'] ) && ! empty( $config['wallet'] ) ) {
 			$list['post_type'] = $config['wallet'];
@@ -444,8 +444,8 @@ class Frontend {
 		if ( ! $this->is_enabled() ) {
 			return null;
 		}
-		$enable_country_wallets = get_option( 'wm_enable_country_wallets', 0 );
-		$wallet_overrides       = get_option( 'wm_wallet_address_overrides', array() );
+		$enable_country_wallets = get_option( 'intlwemo_enable_country_wallets', 0 );
+		$wallet_overrides       = get_option( 'intlwemo_wallet_address_overrides', array() );
 
 		if ( $enable_country_wallets && ! empty( $wallet_overrides ) ) {
 
@@ -459,7 +459,7 @@ class Frontend {
 			}
 		}
 
-		$site_wallet = get_option( 'wm_wallet_address', '' );
+		$site_wallet = get_option( 'intlwemo_wallet_address', '' );
 		$wallets     = explode( ' ', $site_wallet );
 		$clean       = array();
 		foreach ( $wallets as $wallet ) {
@@ -489,7 +489,7 @@ class Frontend {
 	 * @return bool True if enabled, false otherwise.
 	 */
 	private function is_enabled(): bool {
-		return (bool) get_option( 'wm_enabled', 0 );
+		return (bool) get_option( 'intlwemo_enabled', 0 );
 	}
 
 	/**
@@ -530,12 +530,12 @@ class Frontend {
 		if ( is_attachment() || ( ! is_singular() && ! is_front_page() && ! is_author() ) ) {
 			return;
 		}
-		if ( ! get_option( 'wm_banner_enabled', 1 ) || ! $this->is_enabled() ) {
+		if ( ! get_option( 'intlwemo_banner_enabled', 1 ) || ! $this->is_enabled() ) {
 			return;
 		}
 
 		wp_register_script(
-			'wm-banner-script',
+			'intlwemo-banner-script',
 			plugin_dir_url( dirname( __DIR__, 1 ) ) . 'build/frontend.js',
 			array(),
 			'1.0.0',
@@ -543,15 +543,15 @@ class Frontend {
 		);
 
 		wp_localize_script(
-			'wm-banner-script',
-			'wm',
+			'intlwemo-banner-script',
+			'intlwemo',
 			array(
-				'wmBannerConfig' => wp_json_encode( get_option( 'wm_banner_published', array() ) ),
-				'wmEnabled'      => get_option( 'wm_enabled', 0 ),
+				'wmBannerConfig' => wp_json_encode( get_option( 'intlwemo_banner_published', array() ) ),
+				'wmEnabled'      => get_option( 'intlwemo_enabled', 0 ),
 				'wmBuildUrl'     => plugin_dir_url( dirname( __DIR__, 1 ) ) . 'build/',
 			)
 		);
 
-		wp_enqueue_script( 'wm-banner-script' );
+		wp_enqueue_script( 'intlwemo-banner-script' );
 	}
 }

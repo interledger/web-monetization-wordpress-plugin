@@ -1,11 +1,11 @@
 <?php
 /**
- * User Meta Class for Web Monetization
+ * User Meta Class for Interledger Web Monetization
  *
- * @package WebMonetization
+ * @package Interledger\WebMonetization
  */
 
-namespace WebMonetization\Admin;
+namespace Interledger\WebMonetization\Admin;
 
 /**
  * Class UserMeta
@@ -20,7 +20,7 @@ class UserMeta {
 	 * Register hooks for user meta functionality.
 	 */
 	public static function register_hooks(): void {
-		if ( ! get_option( 'wm_enable_authors' ) ) {
+		if ( ! get_option( 'intlwemo_enable_authors' ) ) {
 			return;
 		}
 		add_action( 'show_user_profile', array( self::class, 'render_wallet_address_field' ) );
@@ -48,9 +48,9 @@ class UserMeta {
 			return;
 		}
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$selected = isset( $_GET['wm_excluded_filter'] )
+		$selected = isset( $_GET['intlwemo_excluded_filter'] )
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			? sanitize_text_field( wp_unslash( $_GET['wm_excluded_filter'] ) )
+			? sanitize_text_field( wp_unslash( $_GET['intlwemo_excluded_filter'] ) )
 			: '';
 		?>
 		<select name="wm_excluded_filter"  onchange="this.form.submit()">
@@ -69,12 +69,12 @@ class UserMeta {
 	 */
 	public static function filter_excluded_users_query( $query ) {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if ( ! is_admin() || ! isset( $_GET['wm_excluded_filter'] ) || ! current_user_can( 'manage_options' ) ) {
+		if ( ! is_admin() || ! isset( $_GET['intlwemo_excluded_filter'] ) || ! current_user_can( 'manage_options' ) ) {
 			return $query;
 		}
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$filter   = sanitize_text_field( wp_unslash( $_GET['wm_excluded_filter'] ) );
-		$excluded = get_option( 'wm_excluded_authors', array() );
+		$filter   = sanitize_text_field( wp_unslash( $_GET['intlwemo_excluded_filter'] ) );
+		$excluded = get_option( 'intlwemo_excluded_authors', array() );
 
 		if ( 'excluded' === $filter ) {
 			if ( ! empty( $excluded ) ) {
@@ -105,26 +105,26 @@ class UserMeta {
 	 */
 	public static function add_user_row_action( $actions, $user ): array {
 
-		if ( ! current_user_can( 'edit_user', $user->ID ) || ! get_option( 'wm_enable_authors' ) ) {
+		if ( ! current_user_can( 'edit_user', $user->ID ) || ! get_option( 'intlwemo_enable_authors' ) ) {
 			return $actions;
 		}
 
-		$excluded    = get_option( 'wm_excluded_authors', array() );
+		$excluded    = get_option( 'intlwemo_excluded_authors', array() );
 		$is_excluded = in_array( $user->ID, $excluded, true );
 
-		$action_nonce = wp_create_nonce( 'wm_toggle_exclude_' . $user->ID );
+		$action_nonce = wp_create_nonce( 'intlwemo_toggle_exclude_' . $user->ID );
 
 		$url = add_query_arg(
 			array(
-				'wm_toggle_exclude' => $user->ID,
-				'_wpnonce'          => $action_nonce,
+				'intlwemo_toggle_exclude' => $user->ID,
+				'_wpnonce'                => $action_nonce,
 			),
 			admin_url( 'users.php' )
 		);
 
 		$label = $is_excluded ? esc_html__( 'Enable Web Monetization', 'interledger-web-monetization-integration' ) : esc_html__( 'Disable Web Monetization', 'interledger-web-monetization-integration' );
 
-		$actions['wm_toggle_exclude'] = sprintf(
+		$actions['intlwemo_toggle_exclude'] = sprintf(
 			'<a href="%s">%s</a>',
 			esc_url( $url ),
 			esc_html( $label )
@@ -139,19 +139,19 @@ class UserMeta {
 	 */
 	public static function handle_toggle_exclude_action(): void {
 		if (
-			! isset( $_GET['wm_toggle_exclude'], $_GET['_wpnonce'] )
+			! isset( $_GET['intlwemo_toggle_exclude'], $_GET['_wpnonce'] )
 			|| ! current_user_can( 'edit_users' )
 		) {
 			return;
 		}
 
-		$user_id = absint( wp_unslash( $_GET['wm_toggle_exclude'] ) );
+		$user_id = absint( wp_unslash( $_GET['intlwemo_toggle_exclude'] ) );
 
-		if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'wm_toggle_exclude_' . $user_id ) ) {
+		if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'intlwemo_toggle_exclude_' . $user_id ) ) {
 			wp_die( esc_html__( 'Invalid nonce.', 'interledger-web-monetization-integration' ) );
 		}
 
-		$excluded = get_option( 'wm_excluded_authors', array() );
+		$excluded = get_option( 'intlwemo_excluded_authors', array() );
 
 		if ( in_array( $user_id, $excluded, true ) ) {
 			// Enable WM: remove from excluded.
@@ -161,9 +161,9 @@ class UserMeta {
 			$excluded[] = $user_id;
 		}
 
-		update_option( 'wm_excluded_authors', array_values( $excluded ) );
+		update_option( 'intlwemo_excluded_authors', array_values( $excluded ) );
 
-		wp_safe_redirect( remove_query_arg( array( 'wm_toggle_exclude', '_wpnonce' ), wp_get_referer() ) );
+		wp_safe_redirect( remove_query_arg( array( 'intlwemo_toggle_exclude', '_wpnonce' ), wp_get_referer() ) );
 		exit;
 	}
 
@@ -177,7 +177,7 @@ class UserMeta {
 			return;
 		}
 
-		$excluded    = get_option( 'wm_excluded_authors', array() );
+		$excluded    = get_option( 'intlwemo_excluded_authors', array() );
 		$is_excluded = in_array( $user->ID, $excluded, true );
 
 		?>
@@ -189,7 +189,7 @@ class UserMeta {
 					<label for="wm_exclude_author">
 						<input type="checkbox" name="wm_exclude_author" id="wm_exclude_author" value="1" <?php checked( $is_excluded ); ?> />
 						<?php esc_html_e( 'Prevent this author from using their own wallet address (site fallback will be used).', 'interledger-web-monetization-integration' ); ?>
-						<?php wp_nonce_field( 'wm_toggle_exclude_' . $user->ID, 'wm_toggle_exclude_nonce' ); ?>
+						<?php wp_nonce_field( 'intlwemo_toggle_exclude_' . $user->ID, 'intlwemo_toggle_exclude_nonce' ); ?>
 					</label>
 				</td>
 			</tr>
@@ -205,22 +205,22 @@ class UserMeta {
 	 * If the user cannot edit the profile, the function returns early.
 	 * If the checkbox is checked, the user is added to the excluded authors list.
 	 * If the checkbox is unchecked, the user is removed from the excluded authors list.
-	 * The excluded authors list is stored in the 'wm_excluded_authors' option.
+	 * The excluded authors list is stored in the 'intlwemo_excluded_authors' option.
 	 * The function updates the option with the new list of excluded authors.
 	 */
 	public static function save_exclude_checkbox( int $user_id ): void {
 		if ( ! current_user_can( 'edit_user', $user_id ) ) {
 			return;
 		}
-		if ( ! isset( $_POST['wm_toggle_exclude_nonce'] ) ||
-			! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['wm_toggle_exclude_nonce'] ) ), 'wm_toggle_exclude_' . $user_id ) ) {
+		if ( ! isset( $_POST['intlwemo_toggle_exclude_nonce'] ) ||
+			! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['intlwemo_toggle_exclude_nonce'] ) ), 'intlwemo_toggle_exclude_' . $user_id ) ) {
 			return;
 		}
-		$excluded = get_option( 'wm_excluded_authors', array() );
+		$excluded = get_option( 'intlwemo_excluded_authors', array() );
 		if ( ! is_array( $excluded ) ) {
 			$excluded = array();
 		}
-		if ( isset( $_POST['wm_exclude_author'] ) ) {
+		if ( isset( $_POST['intlwemo_exclude_author'] ) ) {
 			if ( ! in_array( $user_id, $excluded, true ) ) {
 				$excluded[] = $user_id;
 			}
@@ -228,7 +228,7 @@ class UserMeta {
 			$excluded = array_diff( $excluded, array( $user_id ) );
 		}
 
-		update_option( 'wm_excluded_authors', array_values( $excluded ) );
+		update_option( 'intlwemo_excluded_authors', array_values( $excluded ) );
 	}
 
 	/**
@@ -247,18 +247,18 @@ class UserMeta {
 		if ( in_array( 'administrator', (array) $user->roles, true ) ) {
 			return;
 		}
-		if ( ! get_option( 'wm_enable_authors' ) ) {
+		if ( ! get_option( 'intlwemo_enable_authors' ) ) {
 			return;
 		}
 
-		$excluded    = get_option( 'wm_excluded_authors', array() );
+		$excluded    = get_option( 'intlwemo_excluded_authors', array() );
 		$is_excluded = in_array( $user->ID, $excluded, true );
 		if ( $is_excluded ) {
 			return;
 		}
 
-		$wallet       = get_user_meta( $user->ID, 'wm_wallet_address', true );
-		$is_connected = get_user_meta( $user->ID, 'wm_wallet_address_connected', true ) === '1';
+		$wallet       = get_user_meta( $user->ID, 'intlwemo_wallet_address', true );
+		$is_connected = get_user_meta( $user->ID, 'intlwemo_wallet_address_connected', true ) === '1';
 		?>
 		<h2><?php esc_html_e( 'Web Monetization', 'interledger-web-monetization-integration' ); ?></h2>
 		<table class="form-table" role="presentation">
@@ -274,7 +274,7 @@ class UserMeta {
 						esc_attr( $is_connected ? '1' : '0' )
 					);
 					?>
-					<?php wp_nonce_field( 'wm_save_wallet_address', 'wm_wallet_address_nonce' ); ?>
+					<?php wp_nonce_field( 'intlwemo_save_wallet_address', 'intlwemo_wallet_address_nonce' ); ?>
 					<p class="description"><?php esc_html_e( 'Enter your wallet address to enable Web Monetization.', 'interledger-web-monetization-integration' ); ?></p>
 				</td>
 			</tr>
@@ -293,23 +293,23 @@ class UserMeta {
 		if ( ! current_user_can( 'edit_user', $user_id ) ) {
 			return;
 		}
-		if ( ! isset( $_POST['wm_wallet_address_nonce'] ) ||
-			! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['wm_wallet_address_nonce'] ) ), 'wm_save_wallet_address' ) ) {
+		if ( ! isset( $_POST['intlwemo_wallet_address_nonce'] ) ||
+			! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['intlwemo_wallet_address_nonce'] ) ), 'intlwemo_save_wallet_address' ) ) {
 			return;
 		}
 
-		if ( isset( $_POST['wm_wallet_address'] ) ) {
+		if ( isset( $_POST['intlwemo_wallet_address'] ) ) {
 			update_user_meta(
 				$user_id,
-				'wm_wallet_address',
-				sanitize_text_field( wp_unslash( $_POST['wm_wallet_address'] ) )
+				'intlwemo_wallet_address',
+				sanitize_text_field( wp_unslash( $_POST['intlwemo_wallet_address'] ) )
 			);
 		}
-		if ( isset( $_POST['wm_wallet_address_connected'] ) ) {
+		if ( isset( $_POST['intlwemo_wallet_address_connected'] ) ) {
 			update_user_meta(
 				$user_id,
-				'wm_wallet_address_connected',
-				sanitize_text_field( wp_unslash( $_POST['wm_wallet_address_connected'] ) )
+				'intlwemo_wallet_address_connected',
+				sanitize_text_field( wp_unslash( $_POST['intlwemo_wallet_address_connected'] ) )
 			);
 		}
 	}

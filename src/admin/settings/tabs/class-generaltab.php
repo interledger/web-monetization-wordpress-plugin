@@ -1,18 +1,18 @@
 <?php
 /**
- * WebMonetization Module for Beaver Builder
+ * Interledger Web Monetization Module for General Settings Tab
  *
- * @package WebMonetization
+ * @package Interledger\WebMonetization
  */
 
-namespace WebMonetization\Admin\Settings\Tabs;
+namespace Interledger\WebMonetization\Admin\Settings\Tabs;
 
-use WebMonetization\Admin\Rendering\FieldRenderer;
+use Interledger\WebMonetization\Admin\Rendering\FieldRenderer;
 
 /**
  * Class GeneralTab
  *
- * @package WebMonetization\Admin\Settings\Tabs
+ * @package Interledger\WebMonetization\Admin\Settings\Tabs
  */
 class GeneralTab {
 
@@ -21,80 +21,80 @@ class GeneralTab {
 	 */
 	public static function register(): void {
 		register_setting(
-			'webmonetization_general',
-			'wm_enabled',
+			'intlwemo_general',
+			'intlwemo_enabled',
 			array(
 				'type'              => 'string',
 				'sanitize_callback' => 'sanitize_text_field',
 			)
 		);
 		register_setting(
-			'webmonetization_general',
-			'wm_wallet_address',
+			'intlwemo_general',
+			'intlwemo_wallet_address',
 			array(
 				'type'              => 'string',
 				'sanitize_callback' => 'sanitize_text_field',
 			)
 		);
 		register_setting(
-			'webmonetization_general',
-			'wm_wallet_address_connected',
+			'intlwemo_general',
+			'intlwemo_wallet_address_connected',
 			array(
 				'type'              => 'string',
 				'sanitize_callback' => 'sanitize_text_field',
 			)
 		);
 		register_setting(
-			'webmonetization_general',
-			'wm_enable_authors',
+			'intlwemo_general',
+			'intlwemo_enable_authors',
 			array(
 				'type'              => 'string',
 				'sanitize_callback' => 'sanitize_text_field',
 			)
 		);
 		register_setting(
-			'webmonetization_general',
-			'wm_multi_wallets_option',
+			'intlwemo_general',
+			'intlwemo_multi_wallets_option',
 			array(
 				'type'              => 'string',
 				'sanitize_callback' => 'sanitize_text_field',
 			)
 		);
 		register_setting(
-			'webmonetization_general',
-			'wm_post_type_settings',
+			'intlwemo_general',
+			'intlwemo_post_type_settings',
 			array(
 				'type'              => 'array',
 				'sanitize_callback' => 'sanitize_text_field', // You may want a custom sanitizer for arrays.
 			)
 		);
 		register_setting(
-			'webmonetization_general',
-			'wm_banner_enabled',
+			'intlwemo_general',
+			'intlwemo_banner_enabled',
 			array(
 				'type'              => 'string',
 				'sanitize_callback' => 'sanitize_text_field',
 			)
 		);
 		register_setting(
-			'webmonetization_general',
-			'wm_enable_country_wallets',
+			'intlwemo_general',
+			'intlwemo_enable_country_wallets',
 			array(
 				'type'              => 'string',
 				'sanitize_callback' => 'sanitize_text_field',
 			)
 		);
 		register_setting(
-			'webmonetization_general',
-			'wm_wallet_address_overrides',
+			'intlwemo_general',
+			'intlwemo_wallet_address_overrides',
 			array(
 				'type'              => 'array',
 				'sanitize_callback' => array( self::class, 'sanitize_wallet_overrides' ),
 			)
 		);
 		register_setting(
-			'webmonetization_settings_group',
-			'wm_wallet_address_overrides',
+			'intlwemo_settings_group',
+			'intlwemo_wallet_address_overrides',
 			array(
 				'type'              => 'array',
 				'sanitize_callback' => array( self::class, 'sanitize_wallet_overrides' ),
@@ -102,73 +102,73 @@ class GeneralTab {
 		);
 
 		add_settings_section(
-			'webmonetization_general_section',
+			'intlwemo_general_section',
 			'',
 			'__return_false',
-			'webmonetization_general'
+			'intlwemo_general'
 		);
 
 		add_settings_field(
-			'wm_enabled',
+			'intlwemo_enabled',
 			__( 'Enable Web Monetization', 'interledger-web-monetization-integration' ),
 			array( self::class, 'render_field_enabled' ),
-			'webmonetization_general',
-			'webmonetization_general_section'
+			'intlwemo_general',
+			'intlwemo_general_section'
 		);
 
 		add_settings_field(
-			'wm_wallet_address',
+			'intlwemo_wallet_address',
 			__( 'Enter your wallet address', 'interledger-web-monetization-integration' ),
 			array( self::class, 'render_field_wallet_address' ),
-			'webmonetization_general',
-			'webmonetization_general_section'
+			'intlwemo_general',
+			'intlwemo_general_section'
 		);
 
 		add_settings_field(
-			'wm_enable_authors',
+			'intlwemo_enable_authors',
 			__( 'Enable Authors', 'interledger-web-monetization-integration' ),
 			array( self::class, 'render_field_enable_authors' ),
-			'webmonetization_general',
-			'webmonetization_general_section'
+			'intlwemo_general',
+			'intlwemo_general_section'
 		);
 
 		add_settings_field(
-			'wm_multi_wallets_option',
+			'intlwemo_multi_wallets_option',
 			__( 'Set wallet behavior', 'interledger-web-monetization-integration' ),
 			array( self::class, 'render_field_multi_wallets' ),
-			'webmonetization_general',
-			'webmonetization_general_section'
+			'intlwemo_general',
+			'intlwemo_general_section'
 		);
 
 		add_settings_field(
-			'wm_post_type_settings',
+			'intlwemo_post_type_settings',
 			__( 'Set up Web Monetization per post type', 'interledger-web-monetization-integration' ),
 			array( self::class, 'render_post_type_settings' ),
-			'webmonetization_general',
-			'webmonetization_general_section'
+			'intlwemo_general',
+			'intlwemo_general_section'
 		);
 		add_settings_field(
-			'wm_banner_enabled',
+			'intlwemo_banner_enabled',
 			__( 'Enable the banner', 'interledger-web-monetization-integration' ),
 			array( self::class, 'render_field_banner_enabled' ),
-			'webmonetization_general',
-			'webmonetization_general_section'
+			'intlwemo_general',
+			'intlwemo_general_section'
 		);
 
 		add_settings_field(
-			'wm_enable_country_wallets',
+			'intlwemo_enable_country_wallets',
 			__( 'Enable country-specific wallet addresses', 'interledger-web-monetization-integration' ),
 			array( self::class, 'render_field_enable_country_wallets' ),
-			'webmonetization_general',
-			'webmonetization_general_section'
+			'intlwemo_general',
+			'intlwemo_general_section'
 		);
 
 		add_settings_field(
-			'wm_wallet_address_overrides',
+			'intlwemo_wallet_address_overrides',
 			'',
 			array( self::class, 'render_field_country_wallet_overrides_echo' ),
-			'webmonetization_general',
-			'webmonetization_general_section'
+			'intlwemo_general',
+			'intlwemo_general_section'
 		);
 	}
 
@@ -201,7 +201,7 @@ class GeneralTab {
 	 * Render the "Enable country-specific wallet addresses" field.
 	 */
 	public static function render_field_enable_country_wallets(): void {
-		$value = get_option( 'wm_enable_country_wallets', 0 );
+		$value = get_option( 'intlwemo_enable_country_wallets', 0 );
 
 		$geoip_available      = function_exists( 'geoip_detect2_get_info_from_current_ip' );
 		$cloudflare_available = '' !== sanitize_text_field( wp_unslash( $_SERVER['HTTP_CF_IPCOUNTRY'] ?? '' ) );
@@ -211,8 +211,8 @@ class GeneralTab {
 			$label .= ' ' . esc_html__( 'Note: GeoIP and Cloudflare country detection are not available.', 'interledger-web-monetization-integration' );
 		}
 		FieldRenderer::render_checkbox(
-			'wm_enable_country_wallets',
-			'wm_enable_country_wallets',
+			'intlwemo_enable_country_wallets',
+			'intlwemo_enable_country_wallets',
 			$value,
 			$label
 		);
@@ -232,15 +232,15 @@ class GeneralTab {
 	 * @return string HTML for the row.
 	 */
 	public static function render_field_country_wallet_overrides(): string {
-		$enabled = get_option( 'wm_enable_country_wallets', '0' ) === '1';
+		$enabled = get_option( 'intlwemo_enable_country_wallets', '0' ) === '1';
 
-		$wallet_overrides     = get_option( 'wm_wallet_address_overrides', array() );
+		$wallet_overrides     = get_option( 'intlwemo_wallet_address_overrides', array() );
 		$geoip_available      = function_exists( 'geoip_detect2_get_info_from_current_ip' );
 		$cloudflare_available = '' !== sanitize_text_field( wp_unslash( $_SERVER['HTTP_CF_IPCOUNTRY'] ?? '' ) );
 
 		ob_start();
 		?>
-		<div id="wm-country-wallets-wrapper" style="<?php echo $enabled ? '' : 'display:none;'; ?>">
+		<div id="intlwemo-country-wallets-wrapper" style="<?php echo $enabled ? '' : 'display:none;'; ?>">
 
 		<?php if ( ! $geoip_available && ! $cloudflare_available ) : ?>
 			<div class="notice notice-warning inline">
@@ -265,7 +265,7 @@ class GeneralTab {
 			</div>
 		<?php endif; ?>
 
-		<table id="wallet-country-table" class="widefat striped wm-post-type-settings">
+		<table id="intlwemo-wallet-country-table" class="widefat striped wm-post-type-settings">
 			<thead>
 				<tr>
 					<th><?php esc_html_e( 'Country Code', 'interledger-web-monetization-integration' ); ?><br>
@@ -290,7 +290,7 @@ class GeneralTab {
 		</table>
 
 		<p>
-			<button type="button" class="button" id="add-wallet-country-row"><?php esc_html_e( 'Add New Country Wallet', 'interledger-web-monetization-integration' ); ?></button>
+			<button type="button" class="button" id="intlwemo-add-wallet-country-row"><?php esc_html_e( 'Add New Country Wallet', 'interledger-web-monetization-integration' ); ?></button>
 		</p>
 		</div>
 		<?php
@@ -314,11 +314,11 @@ class GeneralTab {
 		ob_start();
 		?>
 		<tr style="<?php echo empty( $country ) ? 'display:none;' : ''; ?>">
-			<td><input type="text" name="wm_wallet_address_overrides[<?php echo esc_attr( strtoupper( $country ) ); ?>][country]" value="<?php echo esc_attr( strtoupper( $country ) ); ?>" maxlength="2" style="width: 80px;" /></td>
-			<td class="widefat row"><input type="text" name="wm_wallet_address_overrides[<?php echo esc_attr( strtoupper( $country ) ); ?>][wallet]" value="<?php echo esc_attr( $wallet['wallet'] ); ?>" <?php echo $is_connected ? 'readonly' : ''; ?> style="width: 400px;" /></td>
+			<td><input type="text" name="intlwemo_wallet_address_overrides[<?php echo esc_attr( strtoupper( $country ) ); ?>][country]" value="<?php echo esc_attr( strtoupper( $country ) ); ?>" maxlength="2" style="width: 80px;" /></td>
+			<td class="widefat row"><input type="text" name="intlwemo_wallet_address_overrides[<?php echo esc_attr( strtoupper( $country ) ); ?>][wallet]" value="<?php echo esc_attr( $wallet['wallet'] ); ?>" <?php echo $is_connected ? 'readonly' : ''; ?> style="width: 400px;" /></td>
 			<td><button type="button" class="button remove-row">×</button></td>
 		</tr>
-		<input type="hidden" name="wm_wallet_address_overrides[<?php echo esc_attr( strtoupper( $country ) ); ?>][connected]" value="<?php echo esc_attr( $wallet['connected'] ? '1' : '0' ); ?>" />
+		<input type="hidden" name="intlwemo_wallet_address_overrides[<?php echo esc_attr( strtoupper( $country ) ); ?>][connected]" value="<?php echo esc_attr( $wallet['connected'] ? '1' : '0' ); ?>" />
 		<?php
 		return ob_get_clean();
 	}
@@ -329,11 +329,11 @@ class GeneralTab {
 	 */
 	public static function render(): void {
 		?>
-		<form id="webmonetization-general-form" method="post" action="options.php">
+		<form id="intlwemo-general-form" method="post" action="options.php">
 			<?php
 
-			settings_fields( 'webmonetization_general' );
-			do_settings_sections( 'webmonetization_general' );
+			settings_fields( 'intlwemo_general' );
+			do_settings_sections( 'intlwemo_general' );
 			submit_button();
 			?>
 		</form>
@@ -344,10 +344,10 @@ class GeneralTab {
 	 * Render the "Enable Web Monetization" field.
 	 */
 	public static function render_field_enabled(): void {
-		$value = get_option( 'wm_enabled', 1 );
+		$value = get_option( 'intlwemo_enabled', 1 );
 		FieldRenderer::render_checkbox(
-			'wm_enabled',
-			'wm_enabled',
+			'intlwemo_enabled',
+			'intlwemo_enabled',
 			$value,
 			esc_html__( 'Enable Web Monetization globally.', 'interledger-web-monetization-integration' )
 		);
@@ -357,12 +357,12 @@ class GeneralTab {
 	 * Render the "Wallet Address" field.
 	 */
 	public static function render_field_wallet_address(): void {
-		$wallet       = get_option( 'wm_wallet_address', '' );
-		$is_connected = get_option( 'wm_wallet_address_connected', '' ) === '1';
+		$wallet       = get_option( 'intlwemo_wallet_address', '' );
+		$is_connected = get_option( 'intlwemo_wallet_address_connected', '' ) === '1';
 
 		FieldRenderer::render_text_input(
-			'wm_wallet_address',
-			'wm_wallet_address',
+			'intlwemo_wallet_address',
+			'intlwemo_wallet_address',
 			$wallet,
 			'e.g. https://walletprovider.com/MyWallet',
 			$is_connected
@@ -374,8 +374,8 @@ class GeneralTab {
 		) . '</p>';
 
 		FieldRenderer::render_hidden_input(
-			'wm_wallet_address_connected',
-			'wm_wallet_address_connected',
+			'intlwemo_wallet_address_connected',
+			'intlwemo_wallet_address_connected',
 			$is_connected ? '1' : '0'
 		);
 	}
@@ -384,10 +384,10 @@ class GeneralTab {
 	 * Render the "Enable Authors" field.
 	 */
 	public static function render_field_enable_authors(): void {
-		$value = get_option( 'wm_enable_authors', 0 );
+		$value = get_option( 'intlwemo_enable_authors', 0 );
 
 		$excluded_users_notice = '';
-		$excluded_users        = get_option( 'wm_excluded_authors', array() );
+		$excluded_users        = get_option( 'intlwemo_excluded_authors', array() );
 		if ( ! empty( $excluded_users ) ) {
 			$is_only_one_author_excluded = count( $excluded_users ) === 1;
 			$multiple_authors_text       = sprintf(
@@ -405,8 +405,8 @@ class GeneralTab {
 				'<a href="' . admin_url( 'users.php?wm_excluded_filter=excluded' ) . '">Users page</a></span>';
 		}
 		FieldRenderer::render_checkbox(
-			'wm_enable_authors',
-			'wm_enable_authors',
+			'intlwemo_enable_authors',
+			'intlwemo_enable_authors',
 			$value,
 			esc_html__(
 				'Let your authors enter their own wallet address.',
@@ -424,10 +424,10 @@ class GeneralTab {
 	 * Render the "Multi Wallets behavior" field.
 	 */
 	public static function render_field_multi_wallets(): void {
-		$value = get_option( 'wm_multi_wallets_option', 'one' );
+		$value = get_option( 'intlwemo_multi_wallets_option', 'one' );
 		FieldRenderer::render_radio_switch(
-			'wm_multi_wallets_option',
-			'wm_multi_wallets_option',
+			'intlwemo_multi_wallets_option',
+			'intlwemo_multi_wallets_option',
 			$value,
 			array(
 				// translators: %s is HTML markup for <strong>.
@@ -446,13 +446,13 @@ class GeneralTab {
 	 * Render the "Enable Banner" field.
 	 */
 	public static function render_field_banner_enabled(): void {
-		$value = get_option( 'wm_banner_enabled', 1 );
+		$value = get_option( 'intlwemo_banner_enabled', 1 );
 		FieldRenderer::render_checkbox(
-			'wm_banner_enabled',
-			'wm_banner_enabled',
+			'intlwemo_banner_enabled',
+			'intlwemo_banner_enabled',
 			$value,
 			__( 'Show a customizable banner to introduce Web Monetization to your website visitors. You can customize the banner on the ', 'interledger-web-monetization-integration' ) .
-			' <a href="' . admin_url( 'admin.php?page=web-monetization-settings&tab=widget' ) . '">' . __( 'Banner Settings', 'interledger-web-monetization-integration' ) . '</a> ' .
+			' <a href="' . admin_url( 'admin.php?page=interledger-web-monetization-settings&tab=widget' ) . '">' . __( 'Banner Settings', 'interledger-web-monetization-integration' ) . '</a> ' .
 			__( 'page', 'interledger-web-monetization-integration' )
 		);
 	}
@@ -461,7 +461,7 @@ class GeneralTab {
 	 * Render the post type settings.
 	 */
 	public static function render_post_type_settings(): void {
-		$settings      = get_option( 'wm_post_type_settings', array() );
+		$settings      = get_option( 'intlwemo_post_type_settings', array() );
 		$content_types = get_post_types( array( 'public' => true ), 'objects' );
 
 		$excluded_types = array(

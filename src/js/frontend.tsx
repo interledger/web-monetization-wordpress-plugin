@@ -1,9 +1,9 @@
 import '../scss/frontend.scss';
-const config = window.wm?.wmBannerConfig
-	? JSON.parse( window.wm.wmBannerConfig ) ?? {}
+const config = window.intlwemo?.wmBannerConfig
+	? JSON.parse( window.intlwemo.wmBannerConfig ) ?? {}
 	: {};
-const wmEnabled = window.wm.wmEnabled || false;
-const wmBuildUrl = window.wm.wmBuildUrl || '';
+const wmEnabled = window.intlwemo.wmEnabled || false;
+const wmBuildUrl = window.intlwemo.wmBuildUrl || '';
 
 if ( wmEnabled ) {
 	if ( document.readyState === 'loading' ) {

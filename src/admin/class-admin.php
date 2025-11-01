@@ -1,21 +1,21 @@
 <?php
 /**
- * Web Monetization Plugin
+ * Interledger Web Monetization admin class
  *
- * @package WebMonetization
+ * @package Interledger\WebMonetization
  */
 
-namespace WebMonetization\Admin;
+namespace Interledger\WebMonetization\Admin;
 
-use WebMonetization\Admin\Settings\SettingsPage;
-use WebMonetization\Admin\Settings\Tabs\WidgetSettingsTab;
-use WebMonetization\Admin\UserMeta;
+use Interledger\WebMonetization\Admin\Settings\SettingsPage;
+use Interledger\WebMonetization\Admin\Settings\Tabs\WidgetSettingsTab;
+use Interledger\WebMonetization\Admin\UserMeta;
 
 /**
  * Admin class for handling admin-related functionality.
  */
 class Admin {
-	const PAGE_SLUG = 'web-monetization-settings';
+	const PAGE_SLUG = 'interledger-web-monetization-settings';
 	/**
 	 * Constructor.
 	 */
@@ -30,9 +30,9 @@ class Admin {
 			array( $this, 'plugin_row_actions' )
 		);
 
-		add_action( 'wp_ajax_wm_save_banner_config', array( WidgetSettingsTab::class, 'save_banner_config' ) );
-		add_action( 'wp_ajax_wm_publish_banner_config', array( WidgetSettingsTab::class, 'publish_banner_config' ) );
-		add_action( 'wp_ajax_wm_save_wallet_connection', array( $this, 'save_wallet_connection_callback' ) );
+		add_action( 'wp_ajax_intlwemo_save_banner_config', array( WidgetSettingsTab::class, 'save_banner_config' ) );
+		add_action( 'wp_ajax_intlwemo_publish_banner_config', array( WidgetSettingsTab::class, 'publish_banner_config' ) );
+		add_action( 'wp_ajax_intlwemo_save_wallet_connection', array( $this, 'save_wallet_connection_callback' ) );
 
 		add_action( 'add_meta_boxes', array( $this, 'add_wallet_address_meta_box' ) );
 
@@ -53,7 +53,7 @@ class Admin {
 		if ( empty( $wallet_field ) ) {
 			wp_send_json_error( 'Invalid wallet address' );
 		}
-		if ( strpos( $wallet_field, 'wm_post_type_settings' ) === 0 ) {
+		if ( strpos( $wallet_field, 'intlwemo_post_type_settings' ) === 0 ) {
 			$this->update_wm_post_type_settings_option( $wallet_field );
 		} else {
 			$this->update_wm_wallet_address_connected_list_option( $wallet_field );
@@ -71,7 +71,7 @@ class Admin {
 	 */
 	private function update_wm_post_type_settings_option( string $string_field ): void {
 
-		$settings = get_option( 'wm_post_type_settings', array() );
+		$settings = get_option( 'intlwemo_post_type_settings', array() );
 
 		preg_match_all( '/\[([^\]]+)\]/', $string_field, $matches );
 		$keys = $matches[1];
@@ -80,7 +80,7 @@ class Admin {
 
 		if ( '' !== $type && isset( $settings[ $type ] ) ) {
 			$settings[ $type ]['connected'] = '1';
-			update_option( 'wm_post_type_settings', $settings );
+			update_option( 'intlwemo_post_type_settings', $settings );
 		}
 	}
 
@@ -93,11 +93,11 @@ class Admin {
 		 */
 	private function update_wm_wallet_address_connected_list_option( string $string_field ): void {
 
-		$settings = get_option( 'wm_wallet_address_connected_list', array() );
+		$settings = get_option( 'intlwemo_wallet_address_connected_list', array() );
 
 		if ( '' !== $string_field ) {
 			$settings[ $string_field ] = '1';
-			update_option( 'wm_wallet_address_connected_list', $settings );
+			update_option( 'intlwemo_wallet_address_connected_list', $settings );
 		}
 	}
 
@@ -107,8 +107,8 @@ class Admin {
 	 * @param int $post_id The post ID.
 	 */
 	public function save_post( $post_id ): void {
-		if ( ! isset( $_POST['wm_wallet_address_post_nonce'] ) ||
-			! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['wm_wallet_address_post_nonce'] ) ), 'save_post' ) ) {
+		if ( ! isset( $_POST['intlwemo_wallet_address_post_nonce'] ) ||
+			! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['intlwemo_wallet_address_post_nonce'] ) ), 'save_post' ) ) {
 			return;
 		}
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
@@ -117,18 +117,18 @@ class Admin {
 		if ( wp_is_post_revision( $post_id ) || wp_is_post_autosave( $post_id ) ) {
 			return;
 		}
-		if ( isset( $_POST['wm_wallet_address'] ) ) {
-			update_post_meta( $post_id, 'wm_wallet_address', sanitize_text_field( wp_unslash( $_POST['wm_wallet_address'] ) ) );
+		if ( isset( $_POST['intlwemo_wallet_address'] ) ) {
+			update_post_meta( $post_id, 'intlwemo_wallet_address', sanitize_text_field( wp_unslash( $_POST['intlwemo_wallet_address'] ) ) );
 		}
 
-		if ( isset( $_POST['wm_wallet_address_connected'] ) ) {
-			update_post_meta( $post_id, 'wm_wallet_address_connected', sanitize_text_field( wp_unslash( $_POST['wm_wallet_address_connected'] ) ) );
+		if ( isset( $_POST['intlwemo_wallet_address_connected'] ) ) {
+			update_post_meta( $post_id, 'intlwemo_wallet_address_connected', sanitize_text_field( wp_unslash( $_POST['intlwemo_wallet_address_connected'] ) ) );
 		}
 
-		if ( isset( $_POST['wm_disabled'] ) ) {
-			update_post_meta( $post_id, 'wm_disabled', '1' );
+		if ( isset( $_POST['intlwemo_disabled'] ) ) {
+			update_post_meta( $post_id, 'intlwemo_disabled', '1' );
 		} elseif ( isset( $_POST['_wp_http_referer'] ) ) {
-			delete_post_meta( $post_id, 'wm_disabled' );
+			delete_post_meta( $post_id, 'intlwemo_disabled' );
 		}
 	}
 
@@ -170,18 +170,18 @@ class Admin {
 		if (
 			current_user_can( 'publish_posts' ) &&
 			! current_user_can( 'edit_others_posts' ) &&
-			! get_option( 'wm_enable_authors' )
+			! get_option( 'intlwemo_enable_authors' )
 		) {
 			return;
 		}
 
-		$excluded    = get_option( 'wm_excluded_authors', array() );
+		$excluded    = get_option( 'intlwemo_excluded_authors', array() );
 		$is_excluded = in_array( $post->post_author, $excluded, true );
 		if ( $is_excluded ) {
 			return;
 		}
 		add_meta_box(
-			'wm-wallet-address-meta-box',
+			'intlwemo-wallet-address-meta-box',
 			__( 'Web Monetization', 'interledger-web-monetization-integration' ),
 			array( $this, 'render_wallet_address_meta_box' ),
 			$post_type,
@@ -196,11 +196,11 @@ class Admin {
 	 * @param \WP_Post $post The post object.
 	 */
 	public function render_wallet_address_meta_box( $post ): void {
-		$wallet_address = get_post_meta( $post->ID, 'wm_wallet_address', true );
-		$is_connected   = get_post_meta( $post->ID, 'wm_wallet_address_connected', true ) === '1';
-		$wm_disabled    = get_post_meta( $post->ID, 'wm_disabled', true );
+		$wallet_address = get_post_meta( $post->ID, 'intlwemo_wallet_address', true );
+		$is_connected   = get_post_meta( $post->ID, 'intlwemo_wallet_address_connected', true ) === '1';
+		$wm_disabled    = get_post_meta( $post->ID, 'intlwemo_disabled', true );
 
-		wp_nonce_field( 'save_post', 'wm_wallet_address_post_nonce' );
+		wp_nonce_field( 'save_post', 'intlwemo_wallet_address_post_nonce' );
 
 		echo '<p>';
 		echo '<label for="wm_wallet_address">' . esc_html__( 'Wallet Address:', 'interledger-web-monetization-integration' ) . '</label>';
@@ -227,28 +227,28 @@ class Admin {
 	public function enqueue_admin_assets( $hook ): void {
 
 		wp_enqueue_style(
-			'wm-admin-style',
+			'intlwemo-admin-style',
 			plugin_dir_url( dirname( __DIR__, 1 ) ) . 'build/admin.css',
 			array(),
-			WEB_MONETIZATION_PLUGIN_VERSION
+			INTLWEMO_PLUGIN_VERSION
 		);
 
-		if ( get_current_screen() && 'toplevel_page_web-monetization' !== get_current_screen()->base ) {
-			$custom_css = '#adminmenu [class*="web-monetization-settings"] .wp-menu-image:before { display: none; }
-			#adminmenu [class*="web-monetization-settings"] .wp-menu-image { display: flex; align-items: center; justify-content: center; }';
-			wp_add_inline_style( 'wm-admin-style', $custom_css );
+		if ( get_current_screen() && 'toplevel_page_interledger-web-monetization-settings' !== get_current_screen()->base ) {
+			$custom_css = '#adminmenu [class*="interledger-web-monetization-settings"] .wp-menu-image:before { display: none; }
+			#adminmenu [class*="interledger-web-monetization-settings"] .wp-menu-image { display: flex; align-items: center; justify-content: center; }';
+			wp_add_inline_style( 'intlwemo-admin-style', $custom_css );
 		}
-		if ( get_current_screen() && 'toplevel_page_web-monetization-settings' === get_current_screen()->base ) {
-			$custom_css_icon_fill = '#adminmenu [class*="web-monetization-settings"] .wp-menu-image svg { fill: #fff; }';
-			wp_add_inline_style( 'wm-admin-style', $custom_css_icon_fill );
+		if ( get_current_screen() && 'toplevel_page_interledger-web-monetization-settings' === get_current_screen()->base ) {
+			$custom_css_icon_fill = '#adminmenu [class*="interledger-web-monetization-settings"] .wp-menu-image svg { fill: #fff; }';
+			wp_add_inline_style( 'intlwemo-admin-style', $custom_css_icon_fill );
 		}
 
-		wp_register_script( 'wm-admin-menu-icon', '', array(), WEB_MONETIZATION_PLUGIN_VERSION, true );
-		wp_enqueue_script( 'wm-admin-menu-icon' );
+		wp_register_script( 'intlwemo-admin-menu-icon', '', array(), INTLWEMO_PLUGIN_VERSION, true );
+		wp_enqueue_script( 'intlwemo-admin-menu-icon' );
 
 		$custom_js = '
 			document.addEventListener("DOMContentLoaded", function() {
-				const img = document.querySelector("#adminmenu [class*=\"web-monetization-settings\"] .wp-menu-image");
+				const img = document.querySelector("#adminmenu [class*=\"interledger-web-monetization-settings\"] .wp-menu-image");
 				if (img) {
 					img.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 37 25" width="20" height="20" fill="currentColor">
 						<path d="M28.49 20.49l-.01 2.15H2.42l.03-14.54h3.45V5.7H.1v1.51l-.04 16.76h.01v.14l28.42.05h2.35v-4.5H28.49Z"/>
@@ -267,10 +267,10 @@ class Admin {
 				}
 			});
 		';
-		wp_add_inline_script( 'wm-admin-menu-icon', $custom_js, 'after' );
+		wp_add_inline_script( 'intlwemo-admin-menu-icon', $custom_js, 'after' );
 
 		$allowed_hooks = array(
-			'toplevel_page_web-monetization-settings',
+			'toplevel_page_interledger-web-monetization-settings',
 			'post.php',
 			'post-new.php',
 			'profile.php',
@@ -281,22 +281,22 @@ class Admin {
 		}
 
 		wp_enqueue_script(
-			'wm-admin-script',
+			'intlwemo-admin-script',
 			plugin_dir_url( dirname( __DIR__, 1 ) ) . 'build/admin.js',
 			array(),
-			WEB_MONETIZATION_PLUGIN_VERSION,
+			INTLWEMO_PLUGIN_VERSION,
 			false
 		);
 
-		$config = get_option( 'wm_banner_config', array() );
+		$config = get_option( 'intlwemo_banner_config', array() );
 
 		wp_localize_script(
-			'wm-admin-script',
-			'wm',
+			'intlwemo-admin-script',
+			'intlwemo',
 			array(
 				'wmBannerConfig' => wp_json_encode(
 					array(
-						'nonce'  => wp_create_nonce( 'wm_save_banner_config' ),
+						'nonce'  => wp_create_nonce( 'intlwemo_save_banner_config' ),
 						'config' => $config,
 					)
 				),
@@ -304,29 +304,29 @@ class Admin {
 			'after'
 		);
 		wp_localize_script(
-			'wm-admin-script',
-			'walletConnectData',
+			'intlwemo-admin-script',
+			'intlwemoWalletConnect',
 			array(
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 				'nonce'   => wp_create_nonce( 'wallet_connect_nonce' ),
 			),
 			'after'
 		);
-		wp_enqueue_script( 'wm-admin-script' );
+		wp_enqueue_script( 'intlwemo-admin-script' );
 
 		wp_enqueue_script(
-			'wm-widget',
+			'intlwemo-widget',
 			plugin_dir_url( dirname( __DIR__, 1 ) ) . 'build/widget.js',
 			array( 'wp-components', 'wp-element', 'wp-i18n' ),
-			WEB_MONETIZATION_PLUGIN_VERSION,
+			INTLWEMO_PLUGIN_VERSION,
 			true
 		);
 
 		wp_enqueue_style(
-			'wm-widget-style',
+			'intlwemo-widget-style',
 			plugin_dir_url( dirname( __DIR__, 1 ) ) . 'build/widget.css',
 			array(),
-			WEB_MONETIZATION_PLUGIN_VERSION
+			INTLWEMO_PLUGIN_VERSION
 		);
 	}
 }

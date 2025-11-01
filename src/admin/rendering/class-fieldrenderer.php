@@ -1,13 +1,13 @@
 <?php
 /**
- * Web Monetization settings rendering helper functions.
- * Creates the basic components that can be used to render elements and tabs in the Web Monetization settings panel
+ * Interledger Web Monetization settings rendering helper functions.
+ * Creates the basic components that can be used to render elements and tabs in the Interledger Web Monetization settings panel
  *
- * @package WebMonetization
+ * @package Interledger\WebMonetization
  */
 
 declare(strict_types=1);
-namespace WebMonetization\Admin\Rendering;
+namespace Interledger\WebMonetization\Admin\Rendering;
 
 /**
  * Class FieldRenderer
