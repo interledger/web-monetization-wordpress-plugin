@@ -1,16 +1,16 @@
 <?php
 /**
- * WebMonetization Module for Beaver Builder
+ * Interledger Web Monetization Module for Widget Settings Tab
  *
- * @package WebMonetization
+ * @package Interledger\WebMonetization
  */
 
-namespace WebMonetization\Admin\Settings\Tabs;
+namespace Interledger\WebMonetization\Admin\Settings\Tabs;
 
 /**
  * Class GeneralTab
  *
- * @package WebMonetization\Admin\Settings\Tabs
+ * @package Interledger\WebMonetization\Admin\Settings\Tabs
  */
 class WidgetSettingsTab {
 
@@ -19,8 +19,8 @@ class WidgetSettingsTab {
 	 */
 	public static function register(): void {
 		register_setting(
-			'webmonetization_display',
-			'webmonetization_custom_banner',
+			'intlwemo_display',
+			'intlwemo_custom_banner',
 			array(
 				'type'              => 'string',
 				'sanitize_callback' => 'sanitize_text_field',
@@ -28,18 +28,18 @@ class WidgetSettingsTab {
 		);
 
 		wp_localize_script(
-			'wm-widget',
-			'wmBannerConfig',
+			'intlwemo-widget',
+			'intlwemoBannerConfig',
 			array(
-				'nonce' => wp_create_nonce( 'wm_save_banner_config' ),
+				'nonce' => wp_create_nonce( 'intlwemo_save_banner_config' ),
 			)
 		);
 
 		add_settings_section(
-			'webmonetization_display_section',
+			'intlwemo_display_section',
 			'',
 			'__return_false',
-			'webmonetization_display'
+			'intlwemo_display'
 		);
 	}
 	/**
@@ -47,34 +47,34 @@ class WidgetSettingsTab {
 	 */
 	public static function render(): void {
 		?>
-		<div id="wm-banner-app"></div>
+		<div id="intlwemo-banner-app"></div>
 		<?php
 	}
 	/**
 	 * Save the banner configuration.
 	 */
 	public static function save_banner_config() {
-		check_ajax_referer( 'wm_save_banner_config' );
+		check_ajax_referer( 'intlwemo_save_banner_config' );
 
 		$config = json_decode( sanitize_text_field( wp_unslash( $_POST['config'] ?? '{}' ) ), true );
 		if ( ! is_array( $config ) ) {
 			wp_send_json_error( 'Invalid config' );
 		}
 
-		update_option( 'wm_banner_config', $config );
+		update_option( 'intlwemo_banner_config', $config );
 		wp_send_json_success();
 	}
 	/**
 	 * Publish the banner configuration.
 	 */
 	public static function publish_banner_config() {
-		check_ajax_referer( 'wm_save_banner_config' );
+		check_ajax_referer( 'intlwemo_save_banner_config' );
 		$config = json_decode( sanitize_text_field( wp_unslash( $_POST['config'] ?? '{}' ) ), true );
 		if ( ! is_array( $config ) ) {
 			wp_send_json_error( 'Invalid config' );
 		}
 
-		update_option( 'wm_banner_published', $config );
+		update_option( 'intlwemo_banner_published', $config );
 		wp_send_json_success();
 	}
 }

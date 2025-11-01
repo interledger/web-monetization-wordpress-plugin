@@ -1,15 +1,15 @@
 <?php
 /**
- * WebMonetization Admin Settings Page Class
+ * Interledger WebMonetization Admin Settings Page Class
  *
- * @package WebMonetization
+ * @package Interledger\WebMonetization
  */
 
-namespace WebMonetization\Admin\Settings;
+namespace Interledger\WebMonetization\Admin\Settings;
 
-use WebMonetization\Admin\Settings\Tabs\GeneralTab;
-use WebMonetization\Admin\Settings\Tabs\WidgetSettingsTab;
-use WebMonetization\Admin\Settings\Tabs\AboutTab;
+use Interledger\WebMonetization\Admin\Settings\Tabs\GeneralTab;
+use Interledger\WebMonetization\Admin\Settings\Tabs\WidgetSettingsTab;
+use Interledger\WebMonetization\Admin\Settings\Tabs\AboutTab;
 
 
 /**
@@ -19,7 +19,7 @@ use WebMonetization\Admin\Settings\Tabs\AboutTab;
  */
 class SettingsPage {
 
-	const PAGE_SLUG = 'web-monetization-settings';
+	const PAGE_SLUG = 'interledger-web-monetization-settings';
 
 	/**
 	 * Register the settings page and its tabs.
@@ -78,15 +78,15 @@ class SettingsPage {
 	 * Render the header for the settings page.
 	 */
 	public static function render_header(): void {
-		echo '<div class="wm-header">
-				<div class="wm-header-inner">
+		echo '<div class="intlwemo-header">
+				<div class="intlwemo-header-inner">
 					<img
-						class="wm-logo"
-						src="' . esc_attr( WEB_MONETIZATION_PLUGIN_DIR ) . 'assets/images/wm_logo.svg"
-						alt="' . esc_html__( 'Web Monetization Settings', 'web-monetization-by-interledger' ) . '"
+						class="intlwemo-logo"
+						src="' . esc_attr( INTLWEMO_PLUGIN_DIR ) . 'assets/images/wm_logo.svg"
+						alt="' . esc_html__( 'Web Monetization Settings', 'interledger-web-monetization-integration' ) . '"
 					/>
-					<h1 class="wm-title" >
-						' . esc_html__( 'Web Monetization Settings', 'web-monetization-by-interledger' ) . '
+					<h1 class="intlwemo-title" >
+						' . esc_html__( 'Web Monetization Settings', 'interledger-web-monetization-integration' ) . '
 					</h1>
 				</div>
 			</div>';

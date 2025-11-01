@@ -1,9 +1,9 @@
 import '../scss/frontend.scss';
-const config = window.wm?.wmBannerConfig
-	? JSON.parse( window.wm.wmBannerConfig ) ?? {}
+const config = window.intlwemo?.wmBannerConfig
+	? JSON.parse( window.intlwemo.wmBannerConfig ) ?? {}
 	: {};
-const wmEnabled = window.wm.wmEnabled || false;
-const wmBuildUrl = window.wm.wmBuildUrl || '';
+const wmEnabled = window.intlwemo.wmEnabled || false;
+const wmBuildUrl = window.intlwemo.wmBuildUrl || '';
 
 if ( wmEnabled ) {
 	if ( document.readyState === 'loading' ) {
@@ -76,14 +76,14 @@ function drawBanner( conf: BannerConfig ) {
 
 	const banner = document.createElement( 'div' );
 	banner.id = 'wm-banner';
-	banner.className = '_wm_tools_banner';
+	banner.className = '_intlwemo_tools_banner';
 
 	const position = conf.position ? conf.position.toLowerCase() : 'bottom';
-	banner.classList.add( `_wm_tools_banner_${ position }` );
+	banner.classList.add( `_intlwemo_tools_banner_${ position }` );
 
 	if ( conf.animation ) {
 		const animation = conf.animation && position === 'top' ? 'down' : 'up';
-		banner.classList.add( `_wm_tools_banner_${ animation }` );
+		banner.classList.add( `_intlwemo_tools_banner_${ animation }` );
 	}
 
 	// custom styles for the element
@@ -100,7 +100,7 @@ function drawBanner( conf: BannerConfig ) {
 	banner.style.borderRadius = bannerBorder;
 
 	const bannerHeader = document.createElement( 'div' );
-	bannerHeader.className = '_wm_tools_banner_header';
+	bannerHeader.className = '_intlwemo_tools_banner_header';
 
 	if ( config.title ) {
 		const title = document.createElement( 'h5' );
@@ -117,7 +117,7 @@ function drawBanner( conf: BannerConfig ) {
 	closeButton.appendChild( closeText );
 	closeButton.addEventListener( 'click', () => {
 		sessionStorage.setItem( '_wm_tools_closed_by_user', 'true' );
-		banner.classList.add( '_wm_tools_hidden' );
+		banner.classList.add( '_intlwemo_tools_hidden' );
 	} );
 	bannerHeader.appendChild( closeButton );
 	banner.appendChild( bannerHeader );
@@ -130,7 +130,7 @@ function drawBanner( conf: BannerConfig ) {
 
 	// WebMonetization link
 	const linkSpan = document.createElement( 'span' );
-	linkSpan.className = '_wm_link';
+	linkSpan.className = '_intlwemo_link';
 
 	const linkElement = document.createElement( 'a' );
 	linkElement.rel = 'noindex nofollow';

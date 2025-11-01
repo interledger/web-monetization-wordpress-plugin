@@ -19,10 +19,17 @@ declare module '*.svg' {
   export default content;
 }
 interface Window {
-  wm: {
+  intlwemo: {
     wmBannerConfig: string;
     wmEnabled?: boolean;
     wmBuildUrl?: string;
+  };
+  intlwemoWalletConnect: {
+    ajaxUrl: string;
+    nonce: string;
+  };
+  intlwemoBannerConfig: {
+    nonce: string;
   };
 }
 interface Document {

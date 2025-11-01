@@ -2,13 +2,13 @@
 /**
  * Web Monetization Plugin
  *
- * @package WebMonetization
+ * @package Interledger\WebMonetization
  */
 
-namespace WebMonetization;
+namespace Interledger\WebMonetization;
 
-use WebMonetization\Admin\Admin;
-use WebMonetization\Frontend;
+use Interledger\WebMonetization\Admin\Admin;
+use Interledger\WebMonetization\Frontend;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -34,7 +34,7 @@ class Core {
 			function () {
 				register_post_meta(
 					'',
-					'wm_wallet_address',
+					'intlwemo_wallet_address',
 					array(
 						'show_in_rest'  => true,
 						'single'        => true,
@@ -82,33 +82,33 @@ class Core {
 			foreach ( $sites as $site ) {
 				switch_to_blog( $site->blog_id );
 
-				add_option( 'wm_enabled', 1 );
-				add_option( 'wm_wallet_address', '' );
-				add_option( 'wm_enable_authors', 0 );
-				add_option( 'wm_multi_wallets_option', 'one' ); // Default to 'one' wallet per post.
-				add_option( 'wm_post_type_settings', array() ); // Default to no specific post type settings.
-				add_option( 'wm_banner_enabled', 1 ); // Default to enabled banner.
-				add_option( 'wm_excluded_authors', array() ); // Default to no excluded authors.
-				add_option( 'wm_banner_config', $default_wm_banner_config ); // Default banner configuration.
-				add_option( 'wm_banner_published', $default_wm_banner_config ); // Default to no published banner.
-				add_option( 'wm_enable_country_wallets', 0 ); // Default to disabled country-specific wallets.
-				add_option( 'wm_wallet_address_overrides', array() ); // Default to no wallet address overrides.
+				add_option( 'intlwemo_enabled', 1 );
+				add_option( 'intlwemo_wallet_address', '' );
+				add_option( 'intlwemo_enable_authors', 0 );
+				add_option( 'intlwemo_multi_wallets_option', 'one' ); // Default to 'one' wallet per post.
+				add_option( 'intlwemo_post_type_settings', array() ); // Default to no specific post type settings.
+				add_option( 'intlwemo_banner_enabled', 1 ); // Default to enabled banner.
+				add_option( 'intlwemo_excluded_authors', array() ); // Default to no excluded authors.
+				add_option( 'intlwemo_banner_config', $default_wm_banner_config ); // Default banner configuration.
+				add_option( 'intlwemo_banner_published', $default_wm_banner_config ); // Default to no published banner.
+				add_option( 'intlwemo_enable_country_wallets', 0 ); // Default to disabled country-specific wallets.
+				add_option( 'intlwemo_wallet_address_overrides', array() ); // Default to no wallet address overrides.
 
 				restore_current_blog();
 			}
 		} else {
 			// Single site.
-			add_option( 'wm_enabled', 1 );
-			add_option( 'wm_wallet_address', '' );
-			add_option( 'wm_enable_authors', 0 );
-			add_option( 'wm_multi_wallets_option', 'one' ); // Default to 'one' wallet per post.
-			add_option( 'wm_post_type_settings', array() ); // Default to no specific post type settings.
-			add_option( 'wm_banner_enabled', 1 ); // Default to enabled banner.
-			add_option( 'wm_excluded_authors', array() ); // Default to no excluded.
-			add_option( 'wm_banner_config', $default_wm_banner_config ); // Default banner configuration.
-			add_option( 'wm_banner_published', $default_wm_banner_config ); // Default to no published banner.
-			add_option( 'wm_enable_country_wallets', 0 ); // Default to disabled country-specific wallets.
-			add_option( 'wm_wallet_address_overrides', array() ); // Default to no wallet address overrides.
+			add_option( 'intlwemo_enabled', 1 );
+			add_option( 'intlwemo_wallet_address', '' );
+			add_option( 'intlwemo_enable_authors', 0 );
+			add_option( 'intlwemo_multi_wallets_option', 'one' ); // Default to 'one' wallet per post.
+			add_option( 'intlwemo_post_type_settings', array() ); // Default to no specific post type settings.
+			add_option( 'intlwemo_banner_enabled', 1 ); // Default to enabled banner.
+			add_option( 'intlwemo_excluded_authors', array() ); // Default to no excluded.
+			add_option( 'intlwemo_banner_config', $default_wm_banner_config ); // Default banner configuration.
+			add_option( 'intlwemo_banner_published', $default_wm_banner_config ); // Default to no published banner.
+			add_option( 'intlwemo_enable_country_wallets', 0 ); // Default to disabled country-specific wallets.
+			add_option( 'intlwemo_wallet_address_overrides', array() ); // Default to no wallet address overrides.
 		}
 	}
 	/**

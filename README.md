@@ -1,6 +1,6 @@
-# Web Monetization by Interledger for WordPress
+# Interledger Web Monetization Integration for WordPress
 
-**Web Monetization by Interledger** is a lightweight and extensible plugin that enables WordPress site owners and content creators to receive micro-payments using the [Web Monetization](https://webmonetization.org/). The plugin is designed to be compatible with Interledger wallets and supports flexible configuration across site, author, and content levels.
+**Interledger Web Monetization Integration** is a lightweight and extensible plugin that enables WordPress site owners and content creators to receive micro-payments using the [Web Monetization](https://webmonetization.org/). The plugin is designed to be compatible with Interledger wallets and supports flexible configuration across site, author, and content levels.
 
 ![WordPress Tested Up To](https://img.shields.io/badge/WordPress-6.8+-blue?logo=wordpress)  
 ![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)  
