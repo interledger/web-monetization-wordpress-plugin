@@ -244,9 +244,7 @@ class UserMeta {
 		if ( ! current_user_can( 'edit_user', $user->ID ) ) {
 			return;
 		}
-		if ( in_array( 'administrator', (array) $user->roles, true ) ) {
-			return;
-		}
+
 		if ( ! get_option( 'intlwemo_enable_authors' ) ) {
 			return;
 		}
@@ -261,16 +259,16 @@ class UserMeta {
 		$is_connected = get_user_meta( $user->ID, 'intlwemo_wallet_address_connected', true ) === '1';
 		?>
 		<h2><?php esc_html_e( 'Web Monetization', 'interledger-web-monetization-integration' ); ?></h2>
-		<table class="form-table" role="presentation">
+		<table class="form-table" role="presentation" id="intlwemo-wallet-address-profile-field">
 			<tr>
-				<th><label for="wm_wallet_address"><?php esc_html_e( 'Wallet Address', 'interledger-web-monetization-integration' ); ?></label></th>
+				<th><label for="intlwemo_wallet_address"><?php esc_html_e( 'Wallet Address', 'interledger-web-monetization-integration' ); ?></label></th>
 				<td>
-					<input type="text" name="wm_wallet_address" id="wm_wallet_address"
+					<input type="text" name="intlwemo_wallet_address" id="intlwemo_wallet_address"
 						value="<?php echo esc_attr( $wallet ); ?>"
 						class="regular-text" placeholder="eg: https://walletprovider.com/MyWallet" <?php echo $is_connected ? 'readonly' : ''; ?> />
 					<?php
 					printf(
-						'<input type="hidden" id="wm_wallet_address_connected" name="wm_wallet_address_connected" value="%1$s">',
+						'<input type="hidden" id="intlwemo_wallet_address_connected" name="intlwemo_wallet_address_connected" value="%1$s">',
 						esc_attr( $is_connected ? '1' : '0' )
 					);
 					?>
