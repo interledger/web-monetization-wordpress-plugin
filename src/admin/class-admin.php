@@ -139,7 +139,8 @@ class Admin {
 	 * @return array The modified plugin action links.
 	 */
 	public function plugin_row_actions( $links ) {
-		array_unshift( $links, '<a href="/wp-admin/admin.php?page=' . self::PAGE_SLUG . '">Settings</a>' );
+		$settings_url = admin_url( 'admin.php?page=' . self::PAGE_SLUG );
+		array_unshift( $links, '<a href="' . esc_url( $settings_url ) . '">Settings</a>' );
 		return $links;
 	}
 
@@ -203,16 +204,16 @@ class Admin {
 		wp_nonce_field( 'save_post', 'intlwemo_wallet_address_post_nonce' );
 
 		echo '<p>';
-		echo '<label for="wm_wallet_address">' . esc_html__( 'Wallet Address:', 'interledger-web-monetization-integration' ) . '</label>';
-		echo '<input type="text" id="wm_wallet_address" name="wm_wallet_address" value="' . esc_attr( $wallet_address ) . '" class="widefat" ' . ( $is_connected ? ' readonly' : '' ) . ' />';
+		echo '<label for="intlwemo_wallet_address">' . esc_html__( 'Wallet Address:', 'interledger-web-monetization-integration' ) . '</label>';
+		echo '<input type="text" id="intlwemo_wallet_address" name="intlwemo_wallet_address" value="' . esc_attr( $wallet_address ) . '" class="widefat" ' . ( $is_connected ? ' readonly' : '' ) . ' />';
 		printf(
-			'<input type="hidden" id="wm_wallet_address_connected"  name="wm_wallet_address_connected" value="%1$s">',
+			'<input type="hidden" id="intlwemo_wallet_address_connected"  name="intlwemo_wallet_address_connected" value="%1$s">',
 			esc_attr( $is_connected ? '1' : '0' )
 		);
 		echo '</p>';
 		echo '<p>';
-		echo '<label for="wm_disabled">';
-		echo '<input type="checkbox" id="wm_disabled" name="wm_disabled" value="1" ' . checked( '1' === $wm_disabled, true, false ) . ' />';
+		echo '<label for="intlwemo_disabled">';
+		echo '<input type="checkbox" id="intlwemo_disabled" name="intlwemo_disabled" value="1" ' . checked( '1' === $wm_disabled, true, false ) . ' />';
 		echo ' ' . esc_html__( 'Disable Web Monetization for this post ', 'interledger-web-monetization-integration' );
 
 		echo '</label>';
