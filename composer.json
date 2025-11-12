@@ -8,12 +8,12 @@
   },
   "autoload": {
     "psr-4": {
-      "WebMonetization\\": "src/"
+      "Interledger\\WebMonetization\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "WebMonetization\\Tests\\": "tests/"
+      "Interledger\\WebMonetization\\Tests\\": "tests/"
     }
   },
   "require-dev": {
