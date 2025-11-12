@@ -11,7 +11,7 @@ Add a web monetization-compatible wallet address to monetize your site, posts, a
 
 == Description ==
 
-**Web Monetization** connects you with your audience, turning engagement into revenue. No friction, no barriers, no limits. **Web Monetization for WordPress** adds a `<link rel="monetization">` tag to your site’s `<head>` and lets you define **which wallet gets paid** at the **site-wide**, **author**, or **per-post** level. It’s built to work with Interledger-compatible wallets and is designed for performance, clarity, and extensibility.
+**Web Monetization** connects you with your audience, turning engagement into revenue. No friction, no barriers, no limits. **Interledger Web Monetization Integration** adds a `<link rel="monetization">` tag to your site’s `<head>` - or more- and lets you define **which wallet gets paid** at the **site-wide**, **author**, or **per-post** level. It’s built to work with Interledger-compatible wallets and is designed for performance, clarity, and extensibility.
 
 **Highlights**
 - Add a Web Monetization tag to your pages automatically
@@ -31,7 +31,7 @@ Web Monetization is an open web standard. It connects publishers with their audi
 - No external calls are made by default.
 
 = Performance =
-- Minimal footprint: a single `<link rel="monetization">` is added to the head.
+- Minimal footprint: a single or multiple  `<link rel="monetization">` tags are added to the head.
 - Built to play nicely with caching and modern themes.
 
 == Features ==
@@ -49,7 +49,7 @@ Web Monetization is an open web standard. It connects publishers with their audi
 
 = From your WordPress Dashboard =
 1. Go to **Plugins → Add New**.
-2. Search for **“Web Monetization for WordPress”**.
+2. Search for **“Interledger Web Monetization Integration”**.
 3. Install and **Activate**.
 
 = Manual Installation =
@@ -60,7 +60,7 @@ Web Monetization is an open web standard. It connects publishers with their audi
 == Frequently Asked Questions ==
 
 = Do I need an external service? =
-No. By default the plugin adds markup only. You’ll configure your **Interledger-compatible wallet address** (often a “payment pointer”).
+No. By default the plugin adds markup only. You’ll configure your **Interledger-compatible wallet address** (often named a “payment pointer”).
 
 = Where do I configure wallets? =
 Go to **Settings → Web Monetization**. You can set a site-wide wallet, allow authors to set their own, and override per post/page.
@@ -111,4 +111,4 @@ Initial release.
 
 == License ==
 
-This plugin is licensed under the **GPLv2 or later**.
+This plugin is licensed under the **Apache-2.0**.

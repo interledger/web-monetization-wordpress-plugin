@@ -154,6 +154,11 @@ class Frontend {
 	 * @return array The modified ActivityPub object.
 	 */
 	public function activitypub_activity_object_array( $object_array ) {
+		// Ensure we have an array to work with.
+		if ( ! is_array( $object_array ) ) {
+			return $object_array;
+		}
+
 		if ( ! $this->is_enabled() ) {
 			return $object_array;
 		}
@@ -169,7 +174,7 @@ class Frontend {
 		if ( isset( $object_array['id'] ) && class_exists( '\Activitypub\Collection\Actors' ) && method_exists( '\Activitypub\Collection\Actors', 'get_id_by_resource' ) ) {
 			$user_id = \Activitypub\Collection\Actors::get_id_by_resource( $object_array['id'] );
 		}
-		if ( is_numeric( $user_id ) ) {
+		if ( is_numeric( $user_id ) && $user_id > 0 ) {
 			$author_wallet = get_user_meta( $user_id, 'intlwemo_wallet_address', true );
 
 			if ( ! $author_wallet ) {
@@ -191,7 +196,7 @@ class Frontend {
 
 			$wallets = $this->get_wallets_for_post( get_post( $post_id ) );
 			if ( empty( $wallets['list'] ) ) {
-				return null;
+				return $object_array;
 			}
 
 			$urls = array_map(
