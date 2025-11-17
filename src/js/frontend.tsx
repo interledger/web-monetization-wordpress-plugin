@@ -195,16 +195,38 @@ const getFontFamily = ( family: string, forElement: string = 'banner' ) => {
 
 const getWebMonetizationLinkHref = () => {
 	const userAgent = navigator.userAgent;
+	const siteDomain = window.location.hostname;
+	const utmParams = `?utm_source=${ encodeURIComponent(
+		siteDomain
+	) }&utm_campaign=wordpress_plugin`;
+
 	if ( userAgent.includes( 'Firefox' ) ) {
-		return 'https://addons.mozilla.org/en-US/firefox/addon/web-monetization-extension/';
+		return (
+			'https://addons.mozilla.org/en-US/firefox/addon/web-monetization-extension/' +
+			utmParams
+		);
 	} else if (
 		userAgent.includes( 'Chrome' ) &&
 		! userAgent.includes( 'Edg' ) &&
 		! userAgent.includes( 'OPR' )
 	) {
-		return 'https://chromewebstore.google.com/detail/web-monetization/oiabcfomehhigdepbbclppomkhlknpii';
+		return (
+			'https://chromewebstore.google.com/detail/web-monetization/oiabcfomehhigdepbbclppomkhlknpii' +
+			utmParams
+		);
 	} else if ( userAgent.includes( 'Edg' ) ) {
-		return 'https://microsoftedge.microsoft.com/addons/detail/web-monetization/imjgemgmeoioefpmfefmffbboogighjl';
+		return (
+			'https://microsoftedge.microsoft.com/addons/detail/web-monetization/imjgemgmeoioefpmfefmffbboogighjl' +
+			utmParams
+		);
+	} else if (
+		userAgent.includes( 'Safari' ) &&
+		! userAgent.includes( 'Chrome' )
+	) {
+		return (
+			'https://apps.apple.com/app/web-monetization/id6754325288' +
+			utmParams
+		);
 	}
 	return 'https://webmonetization.org/';
 };

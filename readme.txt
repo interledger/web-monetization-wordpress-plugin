@@ -27,8 +27,10 @@ Add a web monetization-compatible wallet address to monetize your site, posts, a
 Web Monetization is an open web standard. It connects publishers with their audiences and enables continuous payments to their websites.
 
 = Privacy =
-- No tracking or analytics.
-- No external calls are made by default.
+- No user data is collected or stored by this plugin.
+- No cookies are set.
+- Extension download links include analytics parameters (UTM tags) to track aggregate click sources. No personal information is transmitted.
+- Optional country targeting requires the GeoIP Detection plugin.
 
 = Performance =
 - Minimal footprint: a single or multiple  `<link rel="monetization">` tags are added to the head.
