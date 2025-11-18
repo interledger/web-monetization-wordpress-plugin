@@ -30,7 +30,6 @@
 	background: none;
 	border: none;
 	cursor: pointer;
-	color: var(--text-color);
 	width: 24px;
 	height: 24px;
 	display: flex;
@@ -38,8 +37,17 @@
 	justify-content: center;
 	border-radius: 4px;
 	transition: all 0.2s ease;
-	outline: none;
 	padding: 0;
+}
+
+._intlwemo_tools_banner_header .close-button:hover {
+	background: rgba(0, 0, 0, 0.1);
+}
+
+/* Provide a visible focus indicator for keyboard users */
+._intlwemo_tools_banner_header .close-button:focus-visible {
+	outline: 2px solid #005fcc;
+	outline-offset: 2px;
 }
 
 ._intlwemo_tools_banner h5 {

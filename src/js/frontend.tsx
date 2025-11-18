@@ -114,6 +114,7 @@ function drawBanner( conf: BannerConfig ) {
 
 	const closeButton = document.createElement( 'button' );
 	closeButton.className = 'close-button';
+	closeButton.setAttribute( 'type', 'button' );
 	closeButton.setAttribute( 'aria-label', 'Close banner' );
 	closeButton.addEventListener( 'click', () => {
 		sessionStorage.setItem( '_wm_tools_closed_by_user', 'true' );
@@ -128,6 +129,8 @@ function drawBanner( conf: BannerConfig ) {
 	closeSvg.setAttribute( 'fill', 'none' );
 	closeSvg.setAttribute( 'stroke', 'currentColor' );
 	closeSvg.setAttribute( 'stroke-width', '2' );
+	closeSvg.setAttribute( 'width', '24' );
+	closeSvg.setAttribute( 'height', '24' );
 
 	const line1 = document.createElementNS(
 		'http://www.w3.org/2000/svg',
