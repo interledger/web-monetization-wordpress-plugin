@@ -3,7 +3,7 @@ Contributors: interledger
 Tags: web monetization, open-payments, interledger, micropayments, payments
 Requires at least: 6.8
 Tested up to: 6.8
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 Requires PHP: 7.4
 License: Apache-2.0
 License URI: http://www.apache.org/licenses/LICENSE-2.0.txt
@@ -27,8 +27,10 @@ Add a web monetization-compatible wallet address to monetize your site, posts, a
 Web Monetization is an open web standard. It connects publishers with their audiences and enables continuous payments to their websites.
 
 = Privacy =
-- No tracking or analytics.
-- No external calls are made by default.
+- No user data is collected or stored by this plugin.
+- No cookies are set.
+- Extension download links include analytics parameters (UTM tags) to track aggregate click sources. No personal information is transmitted.
+- Optional country targeting requires the GeoIP Detection plugin.
 
 = Performance =
 - Minimal footprint: a single or multiple  `<link rel="monetization">` tags are added to the head.
@@ -89,6 +91,11 @@ Yes. A `.pot` file is included.
 
 == Changelog ==
 
+= 1.0.1 =
+* Improved banner close button accessibility with semantic button element and SVG icon.
+* Added Safari browser support for Web Monetization extension download links.
+* Added UTM tracking parameters to extension download links for analytics.
+
 = 1.0.0 =
 * Initial release.
 * Site-wide, author, and per-post wallet configuration.
@@ -99,6 +106,9 @@ Yes. A `.pot` file is included.
 * Translation-ready.
 
 == Upgrade Notice ==
+
+= 1.0.1 =
+Bug fixes and improvements including better accessibility and Safari browser support for web monetization extension.
 
 = 1.0.0 =
 Initial release.

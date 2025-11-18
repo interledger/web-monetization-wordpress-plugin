@@ -1,6 +1,6 @@
 {
   "name": "interledger-web-monetization-integration",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Implements the open Web Monetization standard in WordPress. Developed and maintained by the Interledger Foundation.",
   "author": "Interledger Foundation",
   "license": "Apache-2.0",

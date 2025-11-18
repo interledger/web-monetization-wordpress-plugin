@@ -112,13 +112,48 @@ function drawBanner( conf: BannerConfig ) {
 		bannerHeader.appendChild( emptySpan );
 	}
 
-	const closeButton = document.createElement( 'span' );
-	const closeText = document.createTextNode( 'x' );
-	closeButton.appendChild( closeText );
+	const closeButton = document.createElement( 'button' );
+	closeButton.className = 'close-button';
+	closeButton.setAttribute( 'type', 'button' );
+	closeButton.setAttribute( 'aria-label', 'Close banner' );
 	closeButton.addEventListener( 'click', () => {
 		sessionStorage.setItem( '_wm_tools_closed_by_user', 'true' );
 		banner.classList.add( '_intlwemo_tools_hidden' );
 	} );
+
+	const closeSvg = document.createElementNS(
+		'http://www.w3.org/2000/svg',
+		'svg'
+	);
+	closeSvg.setAttribute( 'viewBox', '0 0 24 24' );
+	closeSvg.setAttribute( 'fill', 'none' );
+	closeSvg.setAttribute( 'stroke', 'currentColor' );
+	closeSvg.setAttribute( 'stroke-width', '2' );
+	closeSvg.setAttribute( 'width', '24' );
+	closeSvg.setAttribute( 'height', '24' );
+
+	const line1 = document.createElementNS(
+		'http://www.w3.org/2000/svg',
+		'line'
+	);
+	line1.setAttribute( 'x1', '18' );
+	line1.setAttribute( 'y1', '6' );
+	line1.setAttribute( 'x2', '6' );
+	line1.setAttribute( 'y2', '18' );
+
+	const line2 = document.createElementNS(
+		'http://www.w3.org/2000/svg',
+		'line'
+	);
+	line2.setAttribute( 'x1', '6' );
+	line2.setAttribute( 'y1', '6' );
+	line2.setAttribute( 'x2', '18' );
+	line2.setAttribute( 'y2', '18' );
+
+	closeSvg.appendChild( line1 );
+	closeSvg.appendChild( line2 );
+	closeButton.appendChild( closeSvg );
+
 	bannerHeader.appendChild( closeButton );
 	banner.appendChild( bannerHeader );
 
@@ -195,16 +230,38 @@ const getFontFamily = ( family: string, forElement: string = 'banner' ) => {
 
 const getWebMonetizationLinkHref = () => {
 	const userAgent = navigator.userAgent;
+	const siteDomain = window.location.hostname;
+	const utmParams = `?utm_source=${ encodeURIComponent(
+		siteDomain
+	) }&utm_campaign=wordpress_plugin`;
+
 	if ( userAgent.includes( 'Firefox' ) ) {
-		return 'https://addons.mozilla.org/en-US/firefox/addon/web-monetization-extension/';
+		return (
+			'https://addons.mozilla.org/en-US/firefox/addon/web-monetization-extension/' +
+			utmParams
+		);
 	} else if (
 		userAgent.includes( 'Chrome' ) &&
 		! userAgent.includes( 'Edg' ) &&
 		! userAgent.includes( 'OPR' )
 	) {
-		return 'https://chromewebstore.google.com/detail/web-monetization/oiabcfomehhigdepbbclppomkhlknpii';
+		return (
+			'https://chromewebstore.google.com/detail/web-monetization/oiabcfomehhigdepbbclppomkhlknpii' +
+			utmParams
+		);
 	} else if ( userAgent.includes( 'Edg' ) ) {
-		return 'https://microsoftedge.microsoft.com/addons/detail/web-monetization/imjgemgmeoioefpmfefmffbboogighjl';
+		return (
+			'https://microsoftedge.microsoft.com/addons/detail/web-monetization/imjgemgmeoioefpmfefmffbboogighjl' +
+			utmParams
+		);
+	} else if (
+		userAgent.includes( 'Safari' ) &&
+		! userAgent.includes( 'Chrome' )
+	) {
+		return (
+			'https://apps.apple.com/app/web-monetization/id6754325288' +
+			utmParams
+		);
 	}
 	return 'https://webmonetization.org/';
 };
