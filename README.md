@@ -50,7 +50,8 @@
 
 - No external services are required by default.
 - Optional country targeting requires the free and GPL-compatible [GeoIP Detection plugin](https://wordpress.org/plugins/geoip-detect/).
-- No tracking or analytics are included.
+- No user data is collected or stored by this plugin.
+- Extension download links include analytics parameters (UTM tags) to track aggregate click sources for measuring plugin effectiveness. No personal information is transmitted.
 
 ---
 
