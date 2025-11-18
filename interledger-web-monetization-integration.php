@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Interledger Web Monetization Integration
  * Description: Implements the open Web Monetization standard in WordPress. Developed and maintained by the Interledger Foundation.
- * Version:     1.0.0
+ * Version:     1.0.1
  * Author:      Interledger Foundation
  * Author URI:  https://interledger.org
  * License: Apache-2.0

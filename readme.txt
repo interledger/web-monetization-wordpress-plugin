@@ -3,7 +3,7 @@ Contributors: interledger
 Tags: web monetization, open-payments, interledger, micropayments, payments
 Requires at least: 6.8
 Tested up to: 6.8
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 Requires PHP: 7.4
 License: Apache-2.0
 License URI: http://www.apache.org/licenses/LICENSE-2.0.txt
@@ -91,6 +91,11 @@ Yes. A `.pot` file is included.
 
 == Changelog ==
 
+= 1.0.1 =
+* Improved banner close button accessibility with semantic button element and SVG icon.
+* Added Safari browser support for Web Monetization extension download links.
+* Added UTM tracking parameters to extension download links for analytics.
+
 = 1.0.0 =
 * Initial release.
 * Site-wide, author, and per-post wallet configuration.
@@ -101,6 +106,9 @@ Yes. A `.pot` file is included.
 * Translation-ready.
 
 == Upgrade Notice ==
+
+= 1.0.1 =
+Bug fixes and improvements including better accessibility and Safari browser support for web monetization extension.
 
 = 1.0.0 =
 Initial release.
