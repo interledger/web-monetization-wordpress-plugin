@@ -479,11 +479,7 @@ class GeneralTab {
 
 		foreach ( $content_types as $post_type ) {
 			$type_name = $post_type->name;
-
-			if (
-				! in_array( $type_name, $excluded_types, true ) &&
-				post_type_supports( $type_name, 'custom-fields' )
-			) {
+			if ( ! in_array( $type_name, $excluded_types, true ) ) {
 				$supported_types[] = $post_type;
 			}
 		}
