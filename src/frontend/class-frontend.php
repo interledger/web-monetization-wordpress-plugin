@@ -195,7 +195,6 @@ class Frontend {
 			}
 
 			if ( ! $post_id && is_object( $user_id ) && 'WP_Error' === get_class( $user_id ) ) {
-				echo '<!-- ActivityPub Error: ' . esc_html( $user_id->get_error_message() ) . ' -->';
 				$site_wallet = $this->get_wallet_for_front_page();
 				if ( $site_wallet ) {
 					$urls                         = $this->get_wallets_from_value( $site_wallet, array() );
