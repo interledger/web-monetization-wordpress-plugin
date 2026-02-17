@@ -12,6 +12,8 @@
 
 - ✅ Add a Web Monetization `<link rel="monetization">` tag in your site `<head>`
 - ✅ Support for **site-wide**, **author-specific**, and **post-level** wallet addresses
+- ✅ **ActivityPub integration**: automatically includes monetization data in ActivityPub profiles and posts
+- ✅ **RSS/Atom feed support**: adds monetization links to feed items
 - ✅ Visual indicator in admin UI for wallet connection status
 - ✅ Multi-wallet mode: show all configured wallet addresses or just the top-priority one
 - ✅ Country-based wallet overrides (via optional GeoIP plugin)
@@ -43,6 +45,24 @@
 | **Author**    | Each author can set their own wallet (if allowed)                      |
 | **Post/Page** | Override wallet per individual post                                    |
 | **Country**   | Show different wallets for visitors from specific countries (optional) |
+
+---
+
+## 🌐 ActivityPub & Feed Integration
+
+This plugin seamlessly integrates Web Monetization with the **ActivityPub** protocol and **RSS/Atom feeds**:
+
+### ActivityPub Support
+- Automatically adds the Web Monetization namespace to ActivityPub JSON-LD contexts
+- Includes `monetization` property in ActivityPub actor profiles and post objects
+- Supports multiple wallet addresses per profile/post
+- Works with the [ActivityPub plugin](https://wordpress.org/plugins/activitypub/)
+
+### Feed Support
+- Adds `<link rel="monetization">` tags to RSS 2.0 feeds (using `atom:link` format)
+- Includes monetization links in Atom feeds
+- Per-item monetization based on post/author wallet configuration
+- Site-wide monetization in feed headers
 
 ---
 

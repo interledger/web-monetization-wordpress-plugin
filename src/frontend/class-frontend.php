@@ -174,6 +174,8 @@ class Frontend {
 		if ( isset( $object_array['id'] ) && class_exists( '\Activitypub\Collection\Actors' ) && method_exists( '\Activitypub\Collection\Actors', 'get_id_by_resource' ) ) {
 			$user_id = \Activitypub\Collection\Actors::get_id_by_resource( $object_array['id'] );
 		}
+
+		$urls = array();
 		if ( is_numeric( $user_id ) && $user_id > 0 ) {
 			$author_wallet = get_user_meta( $user_id, 'intlwemo_wallet_address', true );
 
@@ -182,7 +184,6 @@ class Frontend {
 			}
 			$wallets = is_string( $author_wallet ) ? explode( ' ', $author_wallet ) : array();
 
-			$urls = array();
 			foreach ( $wallets as $wallet ) {
 				$urls = $this->get_wallets_from_value( $wallet, $urls );
 			}
@@ -197,8 +198,10 @@ class Frontend {
 			if ( ! $post_id && is_object( $user_id ) && 'WP_Error' === get_class( $user_id ) ) {
 				$site_wallet = $this->get_wallet_for_front_page();
 				if ( $site_wallet ) {
-					$urls                         = $this->get_wallets_from_value( $site_wallet, array() );
-					$object_array['monetization'] = ( count( $urls ) === 1 ) ? $urls[0] : $urls;
+					$urls = $this->get_wallets_from_value( $site_wallet, array() );
+					if ( $urls ) {
+						$object_array['monetization'] = ( count( $urls ) === 1 ) ? $urls[0] : $urls;
+					}
 				}
 				return $object_array;
 
@@ -210,13 +213,9 @@ class Frontend {
 				return $object_array;
 			}
 
-			$urls = array_map(
-				function ( $wa ) {
-					return esc_url_raw( $this->clean_wallet_address( $wa ), array( 'https' ) );
-				},
-				$wallets['list']
-			);
-			$urls = array_values( array_filter( $urls ) );
+			foreach ( $wallets['list'] as $wallet ) {
+				$urls = $this->get_wallets_from_value( $wallet, $urls );
+			}
 		}
 
 		if ( $urls ) {
@@ -382,13 +381,23 @@ class Frontend {
 		return "<{$element_type} rel=\"monetization\" href=\"{$url}\" />" . PHP_EOL;
 	}
 	/**
-	 * Get wallets specific for a post, considering post meta and author settings.
+	 * Get wallets specific to this post, based on post meta, respecting author exclusion settings.
+	 *
+	 * Post-specific wallets are read from post meta only; author settings are used
+	 * solely to determine whether monetization for this post should be disabled.
 	 *
 	 * @param \WP_Post $post The post object.
-	 * @return array An array containing the list of wallets and a disabled flag.
+	 * @return array An array containing the list of post-specific wallets and a disabled flag.
 	 */
 	private function get_wallets_specific_for_this_post_only( $post ): array {
 		$list = array();
+
+		if ( ! ( $post instanceof \WP_Post ) ) {
+			return array(
+				'list'     => array(),
+				'disabled' => false,
+			);
+		}
 
 		$disabled = get_post_meta( $post->ID, 'intlwemo_disabled', true ) === '1';
 
