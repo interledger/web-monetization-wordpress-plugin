@@ -112,3 +112,28 @@ Want to contribute? See [`CONTRIBUTING.md`](CONTRIBUTING.md) for guidelines.
 This plugin is licensed under the [Apache-2.0](http://www.apache.org/licenses/LICENSE-2.0.txt).
 
 © Interledger Foundation
+
+---
+
+## 📋 Changelog
+
+### 1.0.2
+* Fixed ActivityPub integration to properly handle multiple space-separated wallet addresses in post meta.
+* Removed incorrect site wallet fallback when post ID cannot be resolved in ActivityPub contexts.
+* Improved wallet normalization for better multi-wallet support.
+* Fixed post type settings field name to use proper plugin prefix (intlwemo_post_type_settings).
+* Improved consistency with plugin naming conventions.
+
+### 1.0.1
+* Improved banner close button accessibility with semantic button element and SVG icon.
+* Added Safari browser support for Web Monetization extension download links.
+* Added UTM tracking parameters to extension download links for analytics.
+
+### 1.0.0
+* Initial release.
+* Site-wide, author, and per-post wallet configuration.
+* Multi-wallet mode (all vs. top-priority).
+* Exclude users from monetization.
+* Admin UI status indicator.
+* Hooks & filters for developers.
+* Translation-ready.
