@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-02-17T10:46:15+00:00\n"
+"POT-Creation-Date: 2026-02-19T08:56:23+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: interledger-web-monetization-integration\n"
@@ -89,8 +89,8 @@ msgid "Prevent this author from using their own wallet address (site fallback wi
 msgstr ""
 
 #: src/admin/class-usermeta.php:264
-#: src/admin/settings/tabs/class-generaltab.php:274
-#: src/admin/settings/tabs/class-generaltab.php:492
+#: src/admin/settings/tabs/class-generaltab.php:331
+#: src/admin/settings/tabs/class-generaltab.php:549
 msgid "Wallet Address"
 msgstr ""
 
@@ -160,98 +160,98 @@ msgstr ""
 msgid "Enable country-specific wallet addresses"
 msgstr ""
 
-#: src/admin/settings/tabs/class-generaltab.php:209
+#: src/admin/settings/tabs/class-generaltab.php:266
 msgid "Enable country-specific wallet addresses. If enabled, you can set different wallet addresses based on the visitor's country."
 msgstr ""
 
-#: src/admin/settings/tabs/class-generaltab.php:211
+#: src/admin/settings/tabs/class-generaltab.php:268
 msgid "Note: GeoIP and Cloudflare country detection are not available."
 msgstr ""
 
 #. translators: %s is the URL to the GeoIP Detection plugin.
-#: src/admin/settings/tabs/class-generaltab.php:252
+#: src/admin/settings/tabs/class-generaltab.php:309
 #, php-format
 msgid "Country detection requires the <a href=\"%s\" target=\"_blank\" rel=\"noopener\">GeoIP Detection plugin</a>, or the site must be <a href=\"https://www.cloudflare.com/\" target=\"_blank\" rel=\"noopener\">running behind Cloudflare</a>"
 msgstr ""
 
-#: src/admin/settings/tabs/class-generaltab.php:271
+#: src/admin/settings/tabs/class-generaltab.php:328
 msgid "Country Code"
 msgstr ""
 
-#: src/admin/settings/tabs/class-generaltab.php:272
+#: src/admin/settings/tabs/class-generaltab.php:329
 msgid "(e.g. US, GB, FR)"
 msgstr ""
 
-#: src/admin/settings/tabs/class-generaltab.php:293
+#: src/admin/settings/tabs/class-generaltab.php:350
 msgid "Add New Country Wallet"
 msgstr ""
 
-#: src/admin/settings/tabs/class-generaltab.php:352
+#: src/admin/settings/tabs/class-generaltab.php:409
 msgid "Enable Web Monetization globally."
 msgstr ""
 
-#: src/admin/settings/tabs/class-generaltab.php:371
+#: src/admin/settings/tabs/class-generaltab.php:428
 msgid "Multiple wallet addresses can be added here separated by a space"
 msgstr ""
 
 #. translators: %d is the number of excluded authors
-#: src/admin/settings/tabs/class-generaltab.php:395
+#: src/admin/settings/tabs/class-generaltab.php:452
 #, php-format
 msgid "are %d authors"
 msgstr ""
 
-#: src/admin/settings/tabs/class-generaltab.php:399
+#: src/admin/settings/tabs/class-generaltab.php:456
 msgid "Note: There "
 msgstr ""
 
-#: src/admin/settings/tabs/class-generaltab.php:401
+#: src/admin/settings/tabs/class-generaltab.php:458
 msgid "is 1 author"
 msgstr ""
 
-#: src/admin/settings/tabs/class-generaltab.php:404
+#: src/admin/settings/tabs/class-generaltab.php:461
 msgid " excluded from Web Monetization. You can view them on the - filtered - "
 msgstr ""
 
-#: src/admin/settings/tabs/class-generaltab.php:411
+#: src/admin/settings/tabs/class-generaltab.php:468
 msgid "Let your authors enter their own wallet address."
 msgstr ""
 
-#: src/admin/settings/tabs/class-generaltab.php:415
+#: src/admin/settings/tabs/class-generaltab.php:472
 msgid "Admins can disallow specific authors from the "
 msgstr ""
 
-#: src/admin/settings/tabs/class-generaltab.php:419
+#: src/admin/settings/tabs/class-generaltab.php:476
 msgid "Users page"
 msgstr ""
 
-#: src/admin/settings/tabs/class-generaltab.php:439
+#: src/admin/settings/tabs/class-generaltab.php:496
 msgid "Example:"
 msgstr ""
 
-#: src/admin/settings/tabs/class-generaltab.php:440
+#: src/admin/settings/tabs/class-generaltab.php:497
 msgid "If you choose to only use one wallet field and if the author has their own wallet address, only that one will be used."
 msgstr ""
 
-#: src/admin/settings/tabs/class-generaltab.php:441
+#: src/admin/settings/tabs/class-generaltab.php:498
 msgid "If you choose to use all wallets and if all of the wallets are defined, they will all be included and used simultaneously."
 msgstr ""
 
-#: src/admin/settings/tabs/class-generaltab.php:454
+#: src/admin/settings/tabs/class-generaltab.php:511
 msgid "Show a customizable banner to introduce Web Monetization to your website visitors. You can customize the banner on the "
 msgstr ""
 
-#: src/admin/settings/tabs/class-generaltab.php:455
+#: src/admin/settings/tabs/class-generaltab.php:512
 msgid "Banner Settings"
 msgstr ""
 
-#: src/admin/settings/tabs/class-generaltab.php:456
+#: src/admin/settings/tabs/class-generaltab.php:513
 msgid "page"
 msgstr ""
 
-#: src/admin/settings/tabs/class-generaltab.php:486
+#: src/admin/settings/tabs/class-generaltab.php:543
 msgid "Enable Web Monetization per post type and provide a wallet address."
 msgstr ""
 
-#: src/admin/settings/tabs/class-generaltab.php:491
+#: src/admin/settings/tabs/class-generaltab.php:548
 msgid "Post Type"
 msgstr ""

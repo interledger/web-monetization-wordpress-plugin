@@ -2,7 +2,7 @@
 Contributors: interledger
 Tags: web monetization, open-payments, interledger, micropayments, payments
 Requires at least: 6.8
-Tested up to: 6.8
+Tested up to: 6.9.1
 Stable tag: 1.0.2
 Requires PHP: 7.4
 License: Apache-2.0
@@ -95,6 +95,8 @@ Yes. A `.pot` file is included.
 * Fixed ActivityPub integration to properly handle multiple space-separated wallet addresses in post meta.
 * Removed incorrect site wallet fallback when post ID cannot be resolved in ActivityPub contexts.
 * Improved wallet normalization for better multi-wallet support.
+* Fixed post type settings field name to use proper plugin prefix (intlwemo_post_type_settings).
+* Improved consistency with plugin naming conventions.
 
 = 1.0.1 =
 * Improved banner close button accessibility with semantic button element and SVG icon.
@@ -113,7 +115,7 @@ Yes. A `.pot` file is included.
 == Upgrade Notice ==
 
 = 1.0.2 =
-Bug fixes for ActivityPub integration and improved multi-wallet handling.
+Bug fixes for ActivityPub integration, improved multi-wallet handling, and post type settings field name consistency.
 
 = 1.0.1 =
 Bug fixes and improvements including better accessibility and Safari browser support for web monetization extension.

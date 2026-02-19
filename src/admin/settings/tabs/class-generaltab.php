@@ -65,7 +65,7 @@ class GeneralTab {
 			'intlwemo_post_type_settings',
 			array(
 				'type'              => 'array',
-				'sanitize_callback' => 'sanitize_text_field', // You may want a custom sanitizer for arrays.
+				'sanitize_callback' => array( self::class, 'sanitize_post_type_settings' ),
 			)
 		);
 		register_setting(
@@ -192,6 +192,63 @@ class GeneralTab {
 					'connected' => $connected ? '1' : '0',
 				);
 			}
+		}
+
+		return $output;
+	}
+
+	/**
+	 * Sanitize the post type settings input.
+	 *
+	 * @param array $input The input data.
+	 * @return array Sanitized output.
+	 */
+	public static function sanitize_post_type_settings( $input ) {
+		if ( ! is_array( $input ) ) {
+			return array();
+		}
+
+		$content_types  = get_post_types( array( 'public' => true ), 'objects' );
+		$excluded_types = array(
+			'attachment',
+			'custom_css',
+			'customize_changeset',
+			'revision',
+			'nav_menu_item',
+			'oembed_cache',
+			'user_request',
+			'wp_block',
+		);
+
+		$supported_post_types = array();
+		foreach ( $content_types as $post_type ) {
+			if ( ! in_array( $post_type->name, $excluded_types, true ) ) {
+				$supported_post_types[] = $post_type->name;
+			}
+		}
+
+		$output = array();
+
+		foreach ( $input as $post_type => $settings ) {
+			if ( ! is_array( $settings ) ) {
+				continue;
+			}
+
+			$post_type = sanitize_key( $post_type );
+
+			if ( ! in_array( $post_type, $supported_post_types, true ) ) {
+				continue;
+			}
+
+			$enabled   = isset( $settings['enabled'] ) ? (bool) $settings['enabled'] : false;
+			$wallet    = isset( $settings['wallet'] ) ? sanitize_text_field( $settings['wallet'] ) : '';
+			$connected = isset( $settings['connected'] ) ? (bool) $settings['connected'] : false;
+
+			$output[ $post_type ] = array(
+				'enabled'   => $enabled,
+				'wallet'    => $wallet,
+				'connected' => $connected ? '1' : '0',
+			);
 		}
 
 		return $output;
@@ -506,7 +563,7 @@ class GeneralTab {
 			echo '<tr>';
 			echo '<td  style="width: 80px;" >';
 			printf(
-				'<label><input type="checkbox" name="wm_post_type_settings[%1$s][enabled]" value="1" %2$s> %3$s</label>',
+				'<label><input type="checkbox" name="intlwemo_post_type_settings[%1$s][enabled]" value="1" %2$s> %3$s</label>',
 				esc_attr( $key ),
 				checked( $enabled, true, false ),
 				esc_html( $label )
@@ -514,14 +571,14 @@ class GeneralTab {
 			echo '</td>';
 			echo '<td>';
 			printf(
-				'<input type="text" name="wm_post_type_settings[%1$s][wallet]" value="%2$s" class="regular-text" placeholder="e.g. %3$s" %4$s>',
+				'<input type="text" name="intlwemo_post_type_settings[%1$s][wallet]" value="%2$s" class="regular-text" placeholder="e.g. %3$s" %4$s>',
 				esc_attr( $key ),
 				esc_attr( $wallet ),
 				esc_attr( $wa_placeholder ),
 				$is_connected ? 'readonly' : ''
 			);
 			printf(
-				'<input type="hidden" name="wm_post_type_settings[%1$s][connected]" value="%2$s">',
+				'<input type="hidden" name="intlwemo_post_type_settings[%1$s][connected]" value="%2$s">',
 				esc_attr( $key ),
 				esc_attr( $is_connected ? '1' : '0' )
 			);
