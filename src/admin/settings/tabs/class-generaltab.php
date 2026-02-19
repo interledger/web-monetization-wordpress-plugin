@@ -208,7 +208,7 @@ class GeneralTab {
 			return array();
 		}
 
-		$content_types = get_post_types( array( 'public' => true ), 'objects' );
+		$content_types  = get_post_types( array( 'public' => true ), 'objects' );
 		$excluded_types = array(
 			'attachment',
 			'custom_css',
