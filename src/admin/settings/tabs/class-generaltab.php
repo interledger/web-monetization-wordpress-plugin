@@ -208,9 +208,38 @@ class GeneralTab {
 			return array();
 		}
 
+		$content_types = get_post_types( array( 'public' => true ), 'objects' );
+		$excluded_types = array(
+			'attachment',
+			'custom_css',
+			'customize_changeset',
+			'revision',
+			'nav_menu_item',
+			'oembed_cache',
+			'user_request',
+			'wp_block',
+		);
+
+		$supported_post_types = array();
+		foreach ( $content_types as $post_type ) {
+			if ( ! in_array( $post_type->name, $excluded_types, true ) ) {
+				$supported_post_types[] = $post_type->name;
+			}
+		}
+
 		$output = array();
 
 		foreach ( $input as $post_type => $settings ) {
+			if ( ! is_array( $settings ) ) {
+				continue;
+			}
+
+			$post_type = sanitize_key( $post_type );
+
+			if ( ! in_array( $post_type, $supported_post_types, true ) ) {
+				continue;
+			}
+
 			$enabled   = isset( $settings['enabled'] ) ? (bool) $settings['enabled'] : false;
 			$wallet    = isset( $settings['wallet'] ) ? sanitize_text_field( $settings['wallet'] ) : '';
 			$connected = isset( $settings['connected'] ) ? (bool) $settings['connected'] : false;
