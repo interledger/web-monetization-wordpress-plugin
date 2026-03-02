@@ -459,7 +459,7 @@ class GeneralTab {
 					$multiple_authors_text
 				) .
 				esc_html__( ' excluded from Web Monetization. You can view them on the - filtered - ', 'interledger-web-monetization-integration' ) .
-				'<a href="' . admin_url( 'users.php?wm_excluded_filter=excluded' ) . '">Users page</a></span>';
+				'<a href="' . admin_url( 'users.php?intlwemo_excluded_filter=excluded' ) . '">Users page</a></span>';
 		}
 		FieldRenderer::render_checkbox(
 			'intlwemo_enable_authors',

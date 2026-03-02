@@ -118,7 +118,17 @@ class Frontend {
 			return null;
 		}
 
-		$author_wallet = get_user_meta( $author_id, 'intlwemo_wallet_address', true );
+		$author_disabled = 0;
+		$author_wallet   = false;
+		if ( get_option( 'intlwemo_enable_authors', false ) ) {
+			$excluded = get_option( 'intlwemo_excluded_authors', array() );
+			if ( in_array( (int) $author_id, $excluded, true ) ) {
+				$author_disabled = 1;
+			}
+			if ( ! $author_disabled ) {
+				$author_wallet = get_user_meta( $author_id, 'intlwemo_wallet_address', true );
+			}
+		}
 		if ( ! $author_wallet ) {
 			return null;
 		}
@@ -176,9 +186,25 @@ class Frontend {
 		}
 
 		$urls = array();
-		if ( is_numeric( $user_id ) && $user_id > 0 ) {
-			$author_wallet = get_user_meta( $user_id, 'intlwemo_wallet_address', true );
+		if ( is_numeric( $user_id ) && 0 <= $user_id ) {
+			$int_user_id = (int) $user_id;
+			if ( 0 === $int_user_id ) {
+				$author_wallet = $this->get_wallet_for_front_page();
+			} else {
+				$author_wallet   = false;
+				$author_disabled = 0;
 
+				if ( get_option( 'intlwemo_enable_authors', false ) ) {
+					$excluded = get_option( 'intlwemo_excluded_authors', array() );
+					if ( in_array( $int_user_id, $excluded, true ) ) {
+						$author_disabled = 1;
+					}
+
+					if ( ! $author_disabled ) {
+						$author_wallet = get_user_meta( $int_user_id, 'intlwemo_wallet_address', true );
+					}
+				}
+			}
 			if ( ! $author_wallet ) {
 				return $object_array;
 			}
@@ -206,8 +232,31 @@ class Frontend {
 				return $object_array;
 
 			}
+			$mode = get_option( 'intlwemo_multi_wallets_option', 'one' );
+			$urls = array();
 
-			$wallets = $this->get_wallets_specific_for_this_post_only( get_post( $post_id ) );
+			$post = get_post( $post_id );
+			if ( ! $post instanceof \WP_Post || ! $post ) {
+				return $object_array;
+			}
+			if ( 'all' === $mode ) {
+				$wallets = $this->get_wallets_for_post( $post, array( 'author' ) );
+			} else {
+				$wallets = $this->get_wallets_specific_for_this_post_only( $post );
+				if ( empty( $wallets['list'] ) ) {
+
+					// Post type wallet.
+					if ( $post instanceof \WP_Post ) {
+						$post_type_wallets = get_option( 'intlwemo_post_type_settings', array() );
+						$config            = $post_type_wallets[ $post->post_type ] ?? null;
+						if ( $config && ! empty( $config['enabled'] ) && ! empty( $config['wallet'] ) ) {
+							$wallets = array(
+								'list' => array( $config['wallet'] ),
+							);
+						}
+					}
+				}
+			}
 
 			if ( empty( $wallets['list'] ) ) {
 				return $object_array;
@@ -383,8 +432,8 @@ class Frontend {
 	/**
 	 * Get wallets specific to this post, based on post meta, respecting author exclusion settings.
 	 *
-	 * Post-specific wallets are read from post meta only; author settings are used
-	 * solely to determine whether monetization for this post should be disabled.
+	 * Post-specific wallets are read from post meta only when author features are enabled
+	 * and the author is not excluded. If the author is excluded, no post wallet is returned.
 	 *
 	 * @param \WP_Post $post The post object.
 	 * @return array An array containing the list of post-specific wallets and a disabled flag.
@@ -411,16 +460,16 @@ class Frontend {
 
 		if ( get_option( 'intlwemo_enable_authors', false ) ) {
 			$excluded = get_option( 'intlwemo_excluded_authors', array() );
-			if ( in_array( $post->post_author, $excluded, true ) ) {
+			if ( in_array( (int) $post->post_author, $excluded, true ) ) {
 				$author_disabled = 1;
 			}
-		}
 
-		if ( ! $author_disabled ) {
-			// Post-specific wallet.
-			$post_wallet = get_post_meta( $post->ID, 'intlwemo_wallet_address', true );
-			if ( $post_wallet ) {
-				$list['article'] = $post_wallet;
+			if ( ! $author_disabled ) {
+				// Post-specific wallet.
+				$post_wallet = get_post_meta( $post->ID, 'intlwemo_wallet_address', true );
+				if ( $post_wallet ) {
+					$list['article'] = $post_wallet;
+				}
 			}
 		}
 
@@ -434,7 +483,7 @@ class Frontend {
 	 * Get wallets for a post with logic.
 	 *
 	 * @param \WP_Post $post The post object.
-	 * @param array    $excludes An array of wallet types to exclude (e.g., 'site').
+	 * @param array    $excludes An array of wallet types to exclude (e.g., 'site', 'author').
 	 * @return array An array containing the wallets and a disabled flag.
 	 */
 	private function get_wallets_for_post( $post, $excludes = array() ): array {
@@ -449,9 +498,9 @@ class Frontend {
 		}
 		$author_disabled = 0;
 
-		if ( get_option( 'intlwemo_enable_authors', false ) ) {
+		if ( get_option( 'intlwemo_enable_authors', false ) && ! in_array( 'author', $excludes, true ) ) {
 			$excluded = get_option( 'intlwemo_excluded_authors', array() );
-			if ( in_array( $post->post_author, $excluded, true ) ) {
+			if ( in_array( (int) $post->post_author, $excluded, true ) ) {
 				$author_disabled = 1;
 			}
 		}
@@ -464,7 +513,7 @@ class Frontend {
 			}
 
 			// Author wallet.
-			if ( get_option( 'intlwemo_enable_authors', false ) ) {
+			if ( get_option( 'intlwemo_enable_authors', false ) && ! in_array( 'author', $excludes, true ) ) {
 				$author_wallet = get_user_meta( $post->post_author, 'intlwemo_wallet_address', true );
 				if ( $author_wallet ) {
 					$list['author'] = $author_wallet;

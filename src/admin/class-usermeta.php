@@ -53,7 +53,7 @@ class UserMeta {
 			? sanitize_text_field( wp_unslash( $_GET['intlwemo_excluded_filter'] ) )
 			: '';
 		?>
-		<select name="wm_excluded_filter"  onchange="this.form.submit()">
+		<select name="intlwemo_excluded_filter"  onchange="this.form.submit()">
 			<option value=""><?php esc_html_e( 'All Users', 'interledger-web-monetization-integration' ); ?></option>
 			<option value="excluded" <?php selected( $selected, 'excluded' ); ?>><?php esc_html_e( 'Excluded Users Only', 'interledger-web-monetization-integration' ); ?></option>
 			<option value="included" <?php selected( $selected, 'included' ); ?>><?php esc_html_e( 'Non-Excluded Users Only', 'interledger-web-monetization-integration' ); ?></option>
