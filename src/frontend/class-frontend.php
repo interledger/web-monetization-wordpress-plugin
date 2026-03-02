@@ -125,9 +125,9 @@ class Frontend {
 			if ( in_array( (int) $author_id, $excluded, true ) ) {
 				$author_disabled = 1;
 			}
-		}
-		if ( ! $author_disabled ) {
-			$author_wallet = get_user_meta( $author_id, 'intlwemo_wallet_address', true );
+			if ( ! $author_disabled ) {
+				$author_wallet = get_user_meta( $author_id, 'intlwemo_wallet_address', true );
+			}
 		}
 		if ( ! $author_wallet ) {
 			return null;
@@ -462,16 +462,16 @@ class Frontend {
 
 		if ( get_option( 'intlwemo_enable_authors', false ) ) {
 			$excluded = get_option( 'intlwemo_excluded_authors', array() );
-			if ( in_array( $post->post_author, $excluded, true ) ) {
+			if ( in_array( (int) $post->post_author, $excluded, true ) ) {
 				$author_disabled = 1;
 			}
-		}
 
-		if ( ! $author_disabled ) {
-			// Post-specific wallet.
-			$post_wallet = get_post_meta( $post->ID, 'intlwemo_wallet_address', true );
-			if ( $post_wallet ) {
-				$list['article'] = $post_wallet;
+			if ( ! $author_disabled ) {
+				// Post-specific wallet.
+				$post_wallet = get_post_meta( $post->ID, 'intlwemo_wallet_address', true );
+				if ( $post_wallet ) {
+					$list['article'] = $post_wallet;
+				}
 			}
 		}
 
