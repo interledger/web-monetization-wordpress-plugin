@@ -199,10 +199,10 @@ class Frontend {
 					if ( in_array( $int_user_id, $excluded, true ) ) {
 						$author_disabled = 1;
 					}
-				}
 
-				if ( ! $author_disabled ) {
-					$author_wallet = get_user_meta( $int_user_id, 'intlwemo_wallet_address', true );
+					if ( ! $author_disabled ) {
+						$author_wallet = get_user_meta( $int_user_id, 'intlwemo_wallet_address', true );
+					}
 				}
 			}
 			if ( ! $author_wallet ) {
@@ -244,8 +244,6 @@ class Frontend {
 			} else {
 				$wallets = $this->get_wallets_specific_for_this_post_only( $post );
 				if ( empty( $wallets['list'] ) ) {
-					$mode = get_option( 'intlwemo_multi_wallets_option', 'one' );
-					$urls = array();
 
 					// Post type wallet.
 					if ( $post instanceof \WP_Post ) {
