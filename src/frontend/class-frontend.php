@@ -483,7 +483,7 @@ class Frontend {
 	 * Get wallets for a post with logic.
 	 *
 	 * @param \WP_Post $post The post object.
-	 * @param array    $excludes An array of wallet types to exclude (e.g., 'site').
+	 * @param array    $excludes An array of wallet types to exclude (e.g., 'site', 'author').
 	 * @return array An array containing the wallets and a disabled flag.
 	 */
 	private function get_wallets_for_post( $post, $excludes = array() ): array {
@@ -498,7 +498,7 @@ class Frontend {
 		}
 		$author_disabled = 0;
 
-		if ( get_option( 'intlwemo_enable_authors', false ) ) {
+		if ( get_option( 'intlwemo_enable_authors', false ) && ! in_array( 'author', $excludes, true ) ) {
 			$excluded = get_option( 'intlwemo_excluded_authors', array() );
 			if ( in_array( (int) $post->post_author, $excluded, true ) ) {
 				$author_disabled = 1;
@@ -513,7 +513,7 @@ class Frontend {
 			}
 
 			// Author wallet.
-			if ( get_option( 'intlwemo_enable_authors', false ) ) {
+			if ( get_option( 'intlwemo_enable_authors', false ) && ! in_array( 'author', $excludes, true ) ) {
 				$author_wallet = get_user_meta( $post->post_author, 'intlwemo_wallet_address', true );
 				if ( $author_wallet ) {
 					$list['author'] = $author_wallet;
