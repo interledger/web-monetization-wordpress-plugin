@@ -187,7 +187,8 @@ class Frontend {
 
 		$urls = array();
 		if ( is_numeric( $user_id ) && 0 <= $user_id ) {
-			if ( 0 === $user_id ) {
+			$int_user_id = (int) $user_id;
+			if ( 0 === $int_user_id ) {
 				$author_wallet = $this->get_wallet_for_front_page();
 			} else {
 				$author_wallet   = false;
@@ -195,13 +196,13 @@ class Frontend {
 
 				if ( get_option( 'intlwemo_enable_authors', false ) ) {
 					$excluded = get_option( 'intlwemo_excluded_authors', array() );
-					if ( in_array( $user_id, $excluded, true ) ) {
+					if ( in_array( $int_user_id, $excluded, true ) ) {
 						$author_disabled = 1;
 					}
 				}
 
 				if ( ! $author_disabled ) {
-					$author_wallet = get_user_meta( $user_id, 'intlwemo_wallet_address', true );
+					$author_wallet = get_user_meta( $int_user_id, 'intlwemo_wallet_address', true );
 				}
 			}
 			if ( ! $author_wallet ) {
@@ -233,23 +234,28 @@ class Frontend {
 			}
 			$mode = get_option( 'intlwemo_multi_wallets_option', 'one' );
 			$urls = array();
+
+			$post = get_post( $post_id );
+			if ( ! $post instanceof \WP_Post || ! $post ) {
+				return $object_array;
+			}
 			if ( 'all' === $mode ) {
-				$wallets = $this->get_wallets_for_post( get_post( $post_id ), array( 'author' ) );
+				$wallets = $this->get_wallets_for_post( $post, array( 'author' ) );
 			} else {
-				$wallets = $this->get_wallets_specific_for_this_post_only( get_post( $post_id ) );
+				$wallets = $this->get_wallets_specific_for_this_post_only( $post );
 				if ( empty( $wallets['list'] ) ) {
 					$mode = get_option( 'intlwemo_multi_wallets_option', 'one' );
 					$urls = array();
 
 					// Post type wallet.
-					$post              = get_post( $post_id );
-					$post_type_wallets = get_option( 'intlwemo_post_type_settings', array() );
-					$config            = $post_type_wallets[ $post->post_type ] ?? null;
-					if ( $config && ! empty( $config['enabled'] ) && ! empty( $config['wallet'] ) ) {
-						$wallets = array(
-							'list'     => array( $config['wallet'] ),
-							'disabled' => false,
-						);
+					if ( $post instanceof \WP_Post ) {
+						$post_type_wallets = get_option( 'intlwemo_post_type_settings', array() );
+						$config            = $post_type_wallets[ $post->post_type ] ?? null;
+						if ( $config && ! empty( $config['enabled'] ) && ! empty( $config['wallet'] ) ) {
+							$wallets = array(
+								'list' => array( $config['wallet'] ),
+							);
+						}
 					}
 				}
 			}

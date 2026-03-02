@@ -24,6 +24,7 @@ delete_option( 'intlwemo_banner_config' );
 delete_option( 'intlwemo_banner_published' );
 delete_option( 'intlwemo_enable_country_wallets' );
 delete_option( 'intlwemo_wallet_address_overrides' );
+delete_option( 'intlwemo_wallet_address_connected_list' );
 
 delete_metadata( 'user', 0, 'intlwemo_wallet_address', '', true );
 delete_metadata( 'post', 0, 'intlwemo_disabled', '', true );
