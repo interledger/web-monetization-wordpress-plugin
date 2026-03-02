@@ -432,8 +432,8 @@ class Frontend {
 	/**
 	 * Get wallets specific to this post, based on post meta, respecting author exclusion settings.
 	 *
-	 * Post-specific wallets are read from post meta only; author settings are used
-	 * solely to determine whether monetization for this post should be disabled.
+	 * Post-specific wallets are read from post meta only when author features are enabled
+	 * and the author is not excluded. If the author is excluded, no post wallet is returned.
 	 *
 	 * @param \WP_Post $post The post object.
 	 * @return array An array containing the list of post-specific wallets and a disabled flag.
