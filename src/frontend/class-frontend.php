@@ -118,7 +118,17 @@ class Frontend {
 			return null;
 		}
 
-		$author_wallet = get_user_meta( $author_id, 'intlwemo_wallet_address', true );
+		$author_disabled = 0;
+		$author_wallet   = false;
+		if ( get_option( 'intlwemo_enable_authors', false ) ) {
+			$excluded = get_option( 'intlwemo_excluded_authors', array() );
+			if ( in_array( (int) $author_id, $excluded, true ) ) {
+				$author_disabled = 1;
+			}
+		}
+		if ( ! $author_disabled ) {
+			$author_wallet = get_user_meta( $author_id, 'intlwemo_wallet_address', true );
+		}
 		if ( ! $author_wallet ) {
 			return null;
 		}
@@ -176,9 +186,24 @@ class Frontend {
 		}
 
 		$urls = array();
-		if ( is_numeric( $user_id ) && $user_id > 0 ) {
-			$author_wallet = get_user_meta( $user_id, 'intlwemo_wallet_address', true );
+		if ( is_numeric( $user_id ) && 0 <= $user_id ) {
+			if ( 0 === $user_id ) {
+				$author_wallet = $this->get_wallet_for_front_page();
+			} else {
+				$author_wallet   = false;
+				$author_disabled = 0;
 
+				if ( get_option( 'intlwemo_enable_authors', false ) ) {
+					$excluded = get_option( 'intlwemo_excluded_authors', array() );
+					if ( in_array( $user_id, $excluded, true ) ) {
+						$author_disabled = 1;
+					}
+				}
+
+				if ( ! $author_disabled ) {
+					$author_wallet = get_user_meta( $user_id, 'intlwemo_wallet_address', true );
+				}
+			}
 			if ( ! $author_wallet ) {
 				return $object_array;
 			}
@@ -206,8 +231,28 @@ class Frontend {
 				return $object_array;
 
 			}
+			$mode = get_option( 'intlwemo_multi_wallets_option', 'one' );
+			$urls = array();
+			if ( 'all' === $mode ) {
+				$wallets = $this->get_wallets_for_post( get_post( $post_id ), array( 'author' ) );
+			} else {
+				$wallets = $this->get_wallets_specific_for_this_post_only( get_post( $post_id ) );
+				if ( empty( $wallets['list'] ) ) {
+					$mode = get_option( 'intlwemo_multi_wallets_option', 'one' );
+					$urls = array();
 
-			$wallets = $this->get_wallets_specific_for_this_post_only( get_post( $post_id ) );
+					// Post type wallet.
+					$post              = get_post( $post_id );
+					$post_type_wallets = get_option( 'intlwemo_post_type_settings', array() );
+					$config            = $post_type_wallets[ $post->post_type ] ?? null;
+					if ( $config && ! empty( $config['enabled'] ) && ! empty( $config['wallet'] ) ) {
+						$wallets = array(
+							'list'     => array( $config['wallet'] ),
+							'disabled' => false,
+						);
+					}
+				}
+			}
 
 			if ( empty( $wallets['list'] ) ) {
 				return $object_array;
@@ -451,7 +496,7 @@ class Frontend {
 
 		if ( get_option( 'intlwemo_enable_authors', false ) ) {
 			$excluded = get_option( 'intlwemo_excluded_authors', array() );
-			if ( in_array( $post->post_author, $excluded, true ) ) {
+			if ( in_array( (int) $post->post_author, $excluded, true ) ) {
 				$author_disabled = 1;
 			}
 		}
