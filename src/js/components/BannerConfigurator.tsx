@@ -8,6 +8,7 @@ import { FontSize } from './FontSize';
 import { controlOptions, FontsType } from '../presets';
 import eyeSvg from '../../../assets/images/eye.svg';
 import { Select } from './Select';
+import { getExtensionHref } from '../utils';
 
 const borderOptions = [
 	{ label: 'No border', value: 'none' },
@@ -26,21 +27,6 @@ const defaultConfig: BannerConfig = {
 	borderStyle: 'rounded',
 	font: 'Arial',
 	fontSize: 17,
-};
-const getWebMonetizationLinkHref = () => {
-	const userAgent = navigator.userAgent;
-	if ( userAgent.includes( 'Firefox' ) ) {
-		return 'https://addons.mozilla.org/en-US/firefox/addon/web-monetization-extension/';
-	} else if (
-		userAgent.includes( 'Chrome' ) &&
-		! userAgent.includes( 'Edg' ) &&
-		! userAgent.includes( 'OPR' )
-	) {
-		return 'https://chromewebstore.google.com/detail/web-monetization/oiabcfomehhigdepbbclppomkhlknpii';
-	} else if ( userAgent.includes( 'Edg' ) ) {
-		return 'https://microsoftedge.microsoft.com/addons/detail/web-monetization/imjgemgmeoioefpmfefmffbboogighjl';
-	}
-	return 'https://webmonetization.org/';
 };
 
 export default function BannerConfigurator() {
@@ -194,7 +180,9 @@ export default function BannerConfigurator() {
 		debouncedSave( config );
 	}, [ debouncedSave, config ] ); // track config changes
 
-	const monetizationLinkHref = getWebMonetizationLinkHref();
+	const monetizationLinkHref = getExtensionHref({
+		utm_medium: 'tools.config.wp-plugin',
+	});
 
 	let buttonValue = 'Publish Banner Changes';
 	if ( publishStatus === 'loading' ) {
